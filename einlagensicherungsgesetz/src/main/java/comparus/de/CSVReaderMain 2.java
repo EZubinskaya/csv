@@ -25,7 +25,7 @@ public class CSVReaderMain1 {
         Map<String,CVSClient> fullFile = generateMapOfData(readFile1, readFile2);
         reCalculateD(fullFile, A);
 
-        reCalculateE(fullFile);
+        String[] E = reCalculateE(fullFile);
         System.out.println(fullFile);
     }
 
@@ -35,7 +35,7 @@ public class CSVReaderMain1 {
         CSVReader reader = new CSVReader(new FileReader(file), '\n', '\'');
         List<String[]> myEntries = reader.readAll();
         if(A == null) {
-            A = myEntries.get(0);
+            A = myEntries.get(0)[0].split("\\*");
         }
         int j = 1;
         for (int i = j ;i<myEntries.size(); i++) {
@@ -76,29 +76,41 @@ public class CSVReaderMain1 {
         return resultMap;
     }
 
-    private static void reCalculateE(Map<String, CVSClient> fullFile) {
+    private static String[] reCalculateE(Map<String, CVSClient> fullFile) {
+        String[] E = new String[15];
+        E[0] = "E";
+        E[1] = A[1];
+
+        for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+            CVSClient cvsClient = entry.getValue();
+            String[] D = cvsClient.getD();
+            for(int i=0;i<D.length;i++){
+                E[i] += D[i];
+            }
+        }
+        return E;
     }
 
     private static void reCalculateD(Map<String, CVSClient> fullFile, String[] A) {
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-            String[] clientB = entry.getKey().split("]\\*");
+            String clientBStr = entry.getKey().split("]\\*")[0];
+            String[] clientB = clientBStr.split("\\*");
             CVSClient cvsClient = entry.getValue();
             List<String[]> CList = cvsClient.getClientsB();
             String[] D = cvsClient.getD();
-            D[3] = calculateD3(CList);
-            D[4] = calculateD4(clientB, CList, Double.valueOf(D[3]));
-            D[5] = calculateD5D7(Double.parseDouble(D[3]), Double.parseDouble(D[4]));
-            D[6] = calculateD6(Double.valueOf(A[4]), CList);
-            D[7] = calculateD5D7(Double.parseDouble(D[5]), Double.parseDouble(D[6]));
+            D[2] = calculateD3(CList);
+            D[3] = calculateD4(clientB, CList, Double.valueOf(D[2]));
+            D[4] = calculateD5D7(Double.parseDouble(D[2]), Double.parseDouble(D[3]));
+            D[5] = calculateD6(Double.valueOf(A[3]), CList);
+            D[6] = calculateD5D7(Double.parseDouble(D[4]), Double.parseDouble(D[5]));
+            D[7] = "0";
             D[8] = "0";
-            D[9] = "0";
-            D[10] = String.valueOf(calculateD1011(31, 50, 11, 50, CList, clientB));
-            D[11] = String.valueOf(calculateD1011(31, 50, 21, 50, CList, clientB));
-            D[12] = calculateD12(D, CList, A[6]);
-            D[13] = "0";
-            D[14] = calculateD14(CList);
-            D[15] = "0";
-
+            D[9] = String.valueOf(calculateD1011(30, 49, 10, 49, CList, clientB));
+            D[10] = String.valueOf(calculateD1011(30, 49, 20, 49, CList, clientB));
+            D[11] = calculateD12(D, CList, A[5]);
+            D[12] = "0";
+            D[13] = calculateD14(CList);
+            D[14] = "0";
         }
     }
 
@@ -114,7 +126,7 @@ public class CSVReaderMain1 {
     }
 
     private static String calculateD4(String[] clientB, List<String[]> CList, double D3) {
-        if(clientB[14].contains("Y")) {
+        if(clientB[13].contains("Y")) {
             double sumD4 = 0;
             for (String[] elStr : CList) {
                 double el = Double.parseDouble(elStr[19]);
@@ -158,8 +170,8 @@ public class CSVReaderMain1 {
         double sum = 0;
         for(int i = 0; i < CList.size(); i++ ) {
             String[] curr = CList.get(i);
-            if(curr[20].contains("Y") && Double.parseDouble(curr[19]) > 0) {
-                sum += Double.parseDouble(curr[19]);
+            if(curr[19].contains("Y") && Double.parseDouble(curr[18]) > 0) {
+                sum += Double.parseDouble(curr[18]);
             }
         }
         return String.valueOf(sum);
@@ -203,7 +215,7 @@ public class CSVReaderMain1 {
 
     private static double calculateD1011(int ifFrom, int ifTo, int elseFrom, int elseTo, List<String[]> CList, String[] clientB) {
 
-        if(specificPositionSymbol(ifFrom,ifTo, clientB[14].split(""))) {
+        if(specificPositionSymbol(ifFrom,ifTo, clientB[13].split(""))) {
             double sumD10 = 0;
             for (String[] elStr : CList) {
                 double el = Double.parseDouble(elStr[19]);
@@ -239,20 +251,20 @@ public class CSVReaderMain1 {
                 max = cur;
             }
         }
-        double D3_D10_D14 = Double.valueOf(D[3]) - Double.valueOf(D[10]) - Double.valueOf(D[14]);
+        double D3_D10_D14 = Double.valueOf(D[2].replace(",", ".")) - Double.valueOf(D[9].replace(",", ".")) - Double.valueOf(D[13].replace(",", "."));
         double calc = 0;
         if(D3_D10_D14 > max) {
             calc = max;
         } else {
             calc = D3_D10_D14;
         }
-        return String.valueOf(calc - Double.valueOf(D[6]) - Double.valueOf(D[9]));
+        return String.valueOf(calc - Double.valueOf(D[5]) - Double.valueOf(D[8]));
     }
 
     private static String calculateD14(List<String[]> CList) {
-        int sumD14 = 0;
+        double sumD14 = 0;
         for (String[] elStr : CList) {
-            int el = Integer.parseInt(elStr[19]);
+            double el = Double.parseDouble(elStr[19].replace(",", "."));
             if(el < 0) {
                 sumD14 += el;
             }
