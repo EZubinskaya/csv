@@ -23,10 +23,22 @@ public class CSVReaderMain1 {
         Map<String,CVSClient> readFile2 = readCSVFileByString(file2);
 
         Map<String,CVSClient> fullFile = generateMapOfData(readFile1, readFile2);
-        reCalculateD(fullFile, A);
-
+        Map<String,CVSClient>  D = reCalculateD(fullFile, A);//TODO
         String[] E = reCalculateE(fullFile);
-        System.out.println(fullFile);
+        List<String> all = generateListOfData(A, fullFile, E);
+        System.out.println(all);
+    }
+
+    private static List<String> generateListOfData(String[] a, Map<String, CVSClient> fullFile, String[] e) {
+        List<String> fullData = new ArrayList<String>();
+        fullData.add(String.join("*", A));
+        for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+            fullData.add(entry.getKey());
+            fullData.addAll(entry.getValue().listStringClientsB());
+            fullData.add(String.join("*", entry.getValue().getD()));
+        }
+        fullData.add(String.join("*", e));
+        return fullData;
     }
 
     private static Map<String,CVSClient> readCSVFileByString(String file) throws IOException {
@@ -80,18 +92,24 @@ public class CSVReaderMain1 {
         String[] E = new String[15];
         E[0] = "E";
         E[1] = A[1];
-
+        Double[] EVar = new Double[15];
+        for (int i = 0; i<EVar.length; i++) {
+            EVar[i] = Double.valueOf(0);
+        }
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
             CVSClient cvsClient = entry.getValue();
             String[] D = cvsClient.getD();
-            for(int i=0;i<D.length;i++){
-                E[i] += D[i];
+            for(int i=2;i<D.length;i++){
+                EVar[i] += Double.valueOf(D[i].replace(",", "."));
             }
+        }
+        for(int i = 2; i<EVar.length; i++) {
+            E[i] = String.valueOf(EVar[i]);
         }
         return E;
     }
 
-    private static void reCalculateD(Map<String, CVSClient> fullFile, String[] A) {
+    private static Map<String, CVSClient> reCalculateD(Map<String, CVSClient> fullFile, String[] A) {
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
             String clientBStr = entry.getKey().split("]\\*")[0];
             String[] clientB = clientBStr.split("\\*");
@@ -110,8 +128,9 @@ public class CSVReaderMain1 {
             D[11] = calculateD12(D, CList, A[5]);
             D[12] = "0";
             D[13] = calculateD14(CList);
-            D[14] = "0";
+            D[14] = "101";
         }
+        return fullFile;
     }
 
     private static String calculateD3(List<String[]> CList) {
