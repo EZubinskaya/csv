@@ -2,12 +2,11 @@ package comparus.de;
 
 import com.opencsv.CSVReader;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by ekaterina on 8/31/17.
@@ -19,14 +18,83 @@ public class CSVReaderMain1 {
 
         String file1 = "/Users/ekaterina/Desktop/einlagensicherungsgesetz/src/main/resources/Pseudodatei aufbereitet B11.csv";
         String file2 = "/Users/ekaterina/Desktop/einlagensicherungsgesetz/src/main/resources/example.csv";
+        String file3 = "/Users/ekaterina/Desktop/einlagensicherungsgesetz/src/main/resources/example.csv";
+
         Map<String,CVSClient> readFile1 = readCSVFileByString(file1);
         Map<String,CVSClient> readFile2 = readCSVFileByString(file2);
 
         Map<String,CVSClient> fullFile = generateMapOfData(readFile1, readFile2);
-        Map<String,CVSClient>  D = reCalculateD(fullFile, A);//TODO
+        reCalculateD(fullFile, A);//TODO
         String[] E = reCalculateE(fullFile);
         List<String> all = generateListOfData(A, fullFile, E);
         System.out.println(all);
+        List<String> metadata = generateMetadata(file3, E, fullFile);
+    }
+
+    private static List<String> generateMetadata(String file, String[] E, Map<String,CVSClient> fullFile) throws IOException {
+        List<String> metadata = new ArrayList<String>();
+        metadata.set(0, "M");
+        metadata.set(1, A[1]);
+        Date date = new Date();
+        String currentDate = new SimpleDateFormat("yyMMdd").format(date);
+        metadata.set(2, currentDate);
+        for(int i = 3; i < 147; i++ ) {
+            if(i >= 3 && i <= 16) {
+                metadata.set(i, E[i-1]);
+            }
+            if(i > 16 && i <= 66) {
+                double sumD = 0;
+                for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+                    List<String[]> B = entry.getValue().clientsB;
+                    for (String[] el : B) {
+                        if(el[i].equals("Y")) {
+                            sumD += Double.valueOf(entry.getValue().getD()[2].replace(",", "."));
+                        }
+                    }
+                }
+                metadata.set(i, String.valueOf(sumD));
+            }
+            if(i > 66 && i <= 116) {
+                int sumC = 0;
+                for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+                    List<String[]> C = entry.getValue().clientsB;
+                    for (String[] el : C) {
+                        if(el[19].equals("Y")) {
+                            sumC += Double.valueOf(el[18].replace(",", "."));
+                        }
+                    }
+                }
+                metadata.set(i, String.valueOf(sumC));
+            }
+            if(i == 117){
+                int sum = 0;
+                for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+                    List<String[]> C = entry.getValue().clientsB;
+                    for (String[] el : C) {
+                        if(el[21].contains("BE")) {
+                            sum += Double.valueOf(el[18].replace(",", "."));
+                        }
+                    }
+                }
+                metadata.set(i, String.valueOf(sum));
+            }
+            if(i >= 118 && i <= 145){
+                metadata.set(i, String.valueOf(0));
+            }
+            if(i == 146){
+                int sum = 0;
+                for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+                    List<String[]> C = entry.getValue().clientsB;
+                    for (String[] el : C) {
+                        if(el[21].contains("CY")) {
+                            sum += Double.valueOf(el[18].replace(",", "."));
+                        }
+                    }
+                }
+                metadata.set(i, String.valueOf(sum));
+            }
+        }
+        return metadata;
     }
 
     private static List<String> generateListOfData(String[] a, Map<String, CVSClient> fullFile, String[] e) {
