@@ -1,12 +1,14 @@
 package comparus.de;
 
 import com.opencsv.CSVReader;
+import org.apache.commons.lang3.math.NumberUtils;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by ekaterina on 8/31/17.
@@ -16,9 +18,9 @@ public class CSVReaderMain1 {
     private static String[] A = null;
     public static void main(String[] args) throws IOException {
 
-        String file1 = "/Users/ekaterina/Desktop/einlagensicherungsgesetz/src/main/resources/Pseudodatei aufbereitet B11.csv";
-        String file2 = "/Users/ekaterina/Desktop/einlagensicherungsgesetz/src/main/resources/example.csv";
-        String file3 = "/Users/ekaterina/Desktop/einlagensicherungsgesetz/src/main/resources/example.csv";
+        String file1 = "einlagensicherungsgesetz/src/main/resources/Pseudodatei aufbereitet B11.csv";
+        String file2 = "einlagensicherungsgesetz/src/main/resources/example.csv";
+        String file3 = "einlagensicherungsgesetz/src/main/resources/example.csv";
 
         Map<String,CVSClient> readFile1 = readCSVFileByString(file1);
         Map<String,CVSClient> readFile2 = readCSVFileByString(file2);
@@ -27,82 +29,83 @@ public class CSVReaderMain1 {
         reCalculateD(fullFile, A);//TODO
         String[] E = reCalculateE(fullFile);
         List<String> all = generateListOfData(A, fullFile, E);
-        System.out.println(all);
+        System.out.println(all.stream().collect(Collectors.joining("\n")));
         List<String> metadata = generateMetadata(file3, E, fullFile);
+        System.out.println(metadata);
     }
 
     private static List<String> generateMetadata(String file, String[] E, Map<String,CVSClient> fullFile) throws IOException {
-        List<String> metadata = new ArrayList<String>();
-        metadata.set(0, "M");
-        metadata.set(1, A[1]);
+        List<String> metadata = new ArrayList<>(147);
+        metadata.add("M");
+        metadata.add(A[1]);
         Date date = new Date();
         String currentDate = new SimpleDateFormat("yyMMdd").format(date);
-        metadata.set(2, currentDate);
-        for(int i = 3; i < 147; i++ ) {
-            if(i >= 3 && i <= 16) {
-                metadata.set(i, E[i-1]);
-            }
-            if(i > 16 && i <= 66) {
-                double sumD = 0;
-                for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-                    List<String[]> B = entry.getValue().clientsB;
-                    for (String[] el : B) {
-                        if(el[i].equals("Y")) {
-                            sumD += Double.valueOf(entry.getValue().getD()[2].replace(",", "."));
-                        }
-                    }
-                }
-                metadata.set(i, String.valueOf(sumD));
-            }
-            if(i > 66 && i <= 116) {
-                int sumC = 0;
-                for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-                    List<String[]> C = entry.getValue().clientsB;
-                    for (String[] el : C) {
-                        if(el[19].equals("Y")) {
-                            sumC += Double.valueOf(el[18].replace(",", "."));
-                        }
-                    }
-                }
-                metadata.set(i, String.valueOf(sumC));
-            }
-            if(i == 117){
-                int sum = 0;
-                for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-                    List<String[]> C = entry.getValue().clientsB;
-                    for (String[] el : C) {
-                        if(el[21].contains("BE")) {
-                            sum += Double.valueOf(el[18].replace(",", "."));
-                        }
-                    }
-                }
-                metadata.set(i, String.valueOf(sum));
-            }
-            if(i >= 118 && i <= 145){
-                metadata.set(i, String.valueOf(0));
-            }
-            if(i == 146){
-                int sum = 0;
-                for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-                    List<String[]> C = entry.getValue().clientsB;
-                    for (String[] el : C) {
-                        if(el[21].contains("CY")) {
-                            sum += Double.valueOf(el[18].replace(",", "."));
-                        }
-                    }
-                }
-                metadata.set(i, String.valueOf(sum));
-            }
-        }
-        return metadata;
-    }
+		metadata.add(currentDate);
+
+		for (int i = 4; i < 17; i++) {
+			metadata.add(E[i - 2]);
+		}
+
+		for (int i = 17; i < 67; i++) {
+
+			BigDecimal sumD = BigDecimal.ZERO;
+			for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
+				String[] B = entry.getValue().getClientB();
+				if (B[13].substring(i-17, i-16).equals("Y")) {
+						sumD =  sumD.add(createNumValue(entry.getValue().getD()[2]));
+				}
+			}
+			metadata.add(decimalToString(sumD));
+		}
+		for (int i = 67; i < 117; i++) {
+
+            BigDecimal sumC = BigDecimal.ZERO;
+			for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
+				List<String[]> C = entry.getValue().getClientsC();
+				for (String[] el : C) {
+					if (el[20].substring(i-67, i-66).equals("Y")) {
+						sumC = sumC.add( createNumValue(el[19]));
+					}
+				}
+			}
+			metadata.add(decimalToString(sumC));
+		}
+
+		BigDecimal sum118 = BigDecimal.ZERO;
+		for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
+			List<String[]> C = entry.getValue().getClientsC();
+			for (String[] el : C) {
+				if (el[21].contains("BE")) {
+					sum118 = sum118.add(createNumValue(el[19]));
+				}
+			}
+		}
+		metadata.add(decimalToString(sum118));
+
+		for (int i = 118; i < 146; i++) {
+			metadata.add("0");
+		}
+
+        BigDecimal sum146 = BigDecimal.ZERO;
+		for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
+			List<String[]> C = entry.getValue().getClientsC();
+			for (String[] el : C) {
+				if (el[21].contains("CY")) {
+                    sum146 = sum146.add(createNumValue(el[19]));
+				}
+			}
+		}
+		metadata.add(decimalToString(sum146));
+
+		return metadata;
+	}
 
     private static List<String> generateListOfData(String[] a, Map<String, CVSClient> fullFile, String[] e) {
         List<String> fullData = new ArrayList<String>();
         fullData.add(String.join("*", A));
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-            fullData.add(entry.getKey());
-            fullData.addAll(entry.getValue().listStringClientsB());
+            fullData.add(String.join("*", entry.getValue().getClientB()));
+            fullData.addAll(entry.getValue().listStringClientsC());
             fullData.add(String.join("*", entry.getValue().getD()));
         }
         fullData.add(String.join("*", e));
@@ -121,7 +124,11 @@ public class CSVReaderMain1 {
         for (int i = j ;i<myEntries.size(); i++) {
             String currentEllement = myEntries.get(i)[0];
             if(currentEllement.startsWith("B")) {
-                String key = currentEllement;
+                String[] bValue = currentEllement.split("\\*");
+
+                // UNIQUE KEY - B3 - Last Name, B4 - First Name and B12 - Birthday
+                String key = bValue[2] + bValue[3] + bValue[11];
+
                 List<String[]> CValues = new ArrayList<String[]>();
                 String[] DValue = null;
                 j = i+1;
@@ -133,7 +140,7 @@ public class CSVReaderMain1 {
                     DValue = myEntries.get(j)[0].split("\\*");
                     j++;
                 }
-                clients.put(key, new CVSClient(CValues, DValue));
+                clients.put(key, new CVSClient(bValue, CValues, DValue));
             }
         }
         return clients;
@@ -144,9 +151,9 @@ public class CSVReaderMain1 {
         for (Map.Entry<String, CVSClient> entry : readFile1.entrySet()){
             if (readFile2.get(entry.getKey()) != null) {
                 List<String[]> clients = new ArrayList<String[]>();
-                clients.addAll(entry.getValue().getClientsB());
-                clients.addAll(readFile2.get(entry.getKey()).getClientsB());
-                resultMap.put(entry.getKey(), new CVSClient(clients, entry.getValue().getD()));
+                clients.addAll(entry.getValue().getClientsC());
+                clients.addAll(readFile2.get(entry.getKey()).getClientsC());
+                resultMap.put(entry.getKey(), new CVSClient(entry.getValue().getClientB(), clients, entry.getValue().getD()));
                 readFile2.remove(entry.getKey());
             } else {
                 resultMap.put(entry.getKey(), entry.getValue());
@@ -160,93 +167,99 @@ public class CSVReaderMain1 {
         String[] E = new String[15];
         E[0] = "E";
         E[1] = A[1];
-        Double[] EVar = new Double[15];
-        for (int i = 0; i<EVar.length; i++) {
-            EVar[i] = Double.valueOf(0);
+        BigDecimal[] eVar = new BigDecimal[15];
+        for (int i = 0; i<eVar.length; i++) {
+			eVar[i] = BigDecimal.ZERO;
         }
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
             CVSClient cvsClient = entry.getValue();
             String[] D = cvsClient.getD();
-            for(int i=2;i<D.length;i++){
-                EVar[i] += Double.valueOf(D[i].replace(",", "."));
+            for(int i=2;i<eVar.length;i++){ // use eVar array length !!!
+				eVar[i] = eVar[i].add(createNumValue(D[i]));
             }
         }
-        for(int i = 2; i<EVar.length; i++) {
-            E[i] = String.valueOf(EVar[i]);
+        for(int i = 2; i<eVar.length; i++) {
+            E[i] = decimalToString(eVar[i]);
         }
         return E;
     }
 
     private static Map<String, CVSClient> reCalculateD(Map<String, CVSClient> fullFile, String[] A) {
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-            String clientBStr = entry.getKey().split("]\\*")[0];
-            String[] clientB = clientBStr.split("\\*");
+            String[] clientB = entry.getValue().getClientB();
             CVSClient cvsClient = entry.getValue();
-            List<String[]> CList = cvsClient.getClientsB();
+            List<String[]> CList = cvsClient.getClientsC();
             String[] D = cvsClient.getD();
             D[2] = calculateD3(CList);
-            D[3] = calculateD4(clientB, CList, Double.valueOf(D[2]));
-            D[4] = calculateD5D7(Double.parseDouble(D[2]), Double.parseDouble(D[3]));
-            D[5] = calculateD6(Double.valueOf(A[3]), CList);
-            D[6] = calculateD5D7(Double.parseDouble(D[4]), Double.parseDouble(D[5]));
+            D[3] = calculateD4(clientB, CList, createNumValue(D[2]));
+            D[4] = calculateD5D7(createNumValue(D[2]), createNumValue(D[3]));
+            D[5] = calculateD6(createNumValue(A[3]), createNumValue(D[4]), CList);
+            D[6] = calculateD5D7(createNumValue(D[4]), createNumValue(D[5]));
             D[7] = "0";
             D[8] = "0";
-            D[9] = String.valueOf(calculateD1011(30, 49, 10, 49, CList, clientB));
-            D[10] = String.valueOf(calculateD1011(30, 49, 20, 49, CList, clientB));
+            D[9] = calculateD1011(30, 49, 10, 49, CList, clientB);
+            D[10] = calculateD1011(30, 49, 20, 49, CList, clientB);
             D[11] = calculateD12(D, CList, A[5]);
             D[12] = "0";
             D[13] = calculateD14(CList);
-            D[14] = "101";
+            D[14] = "0"; // why 101
         }
         return fullFile;
     }
 
+    //INDEXES IN ARRAY START FROM 0!  19 -> arr[18]
     private static String calculateD3(List<String[]> CList) {
-        double sumD3 = 0;
+        BigDecimal sumD3 = BigDecimal.ZERO;
         for (String[] elStr : CList) {
-            double el = Double.parseDouble(elStr[19].replace(",", "."));
-            if(el > 0) {
-                sumD3 += el;
+            BigDecimal el = createNumValue(elStr[19]);
+            if (el.signum() == 1)/*positive*/ {
+              sumD3 = sumD3.add(el);
             }
         }
-        return String.valueOf(sumD3);
+        return decimalToString(sumD3);
     }
 
-    private static String calculateD4(String[] clientB, List<String[]> CList, double D3) {
+    private static String calculateD4(String[] clientB, List<String[]> CList, BigDecimal D3) {
         if(clientB[13].contains("Y")) {
-            double sumD4 = 0;
+            BigDecimal sumD4 = BigDecimal.ZERO;
             for (String[] elStr : CList) {
-                double el = Double.parseDouble(elStr[19]);
-                if(el > 0) {
-                    sumD4 += el;
+                BigDecimal el = createNumValue(elStr[19]);
+                if (el.signum() == 1)/*positive*/ {
+                    sumD4 = sumD4.add(el);
                 }
             }
-            return String.valueOf(sumD4);
+            return decimalToString(sumD4);
         }
 
-        if(D3 < 2000 && C20AllStartWithY(CList)) {
-            String.valueOf(D3);
+        //not 2000 !!
+        //COMPARING BIGDECIMALS - -1 less, 0 - eq, 1 - more
+        if(compare(D3, 20) == -1 && C20AllStartWithY(CList)) {
+            decimalToString(D3);
         }
 
-        if(C20AllContainsY(CList)) {
+        if(C20ContainsYin1To20pos(CList)) {
             return calculateositiveC19ForAllContainsC20Y(CList);
         }
 
-        return "0";
+        return decimalToString(BigDecimal.valueOf(0, 2));
     }
 
+
+    //field C20 not C1!
     private static boolean C20AllStartWithY(List<String[]> CList) {
         for(String[] elStr : CList) {
-            if(!elStr[0].startsWith("Y")) {
+            if(!elStr[20].startsWith("Y")) {
                 return false;
             }
         }
         return true;
     }
 
-    private static boolean C20AllContainsY(List<String[]> CList) {
+
+    //ONLY FIRST TWENTY POSITIONS!
+    private static boolean C20ContainsYin1To20pos(List<String[]> CList) {
         for(String[] elStr : CList) {
-            if(!elStr.toString().contains("Y")) {
+            if(elStr[20].substring(0,20).contains("Y")) {
                 return true;
             }
         }
@@ -254,109 +267,127 @@ public class CSVReaderMain1 {
     }
 
     private static String calculateositiveC19ForAllContainsC20Y(List<String[]> CList) {
-        double sum = 0;
-        for(int i = 0; i < CList.size(); i++ ) {
-            String[] curr = CList.get(i);
-            if(curr[19].contains("Y") && Double.parseDouble(curr[18]) > 0) {
-                sum += Double.parseDouble(curr[18]);
+        BigDecimal sum = BigDecimal.ZERO;
+        for(String[] cStr : CList) {
+            BigDecimal C18 = createNumValue(cStr[19]);
+            if((cStr[20].substring(0,20).contains("Y")) && C18.signum() == 1) {
+                sum  = sum.add(C18);
             }
         }
-        return String.valueOf(sum);
+        return decimalToString(sum);
     }
 
-    private static String calculateD5D7(double s, double s1) {
-        return String.valueOf(s-s1);
+    private static String calculateD5D7(BigDecimal s, BigDecimal s1) {
+        return decimalToString(s.subtract(s1));
     }
 
-    private static String calculateD6(double A4, List<String[]> CList) {
-        double maxA4C5 = 0;
-        for (int i = 0; i< CList.size(); i++) {
-            double cur = A4 * Double.valueOf(CList.get(i)[5]);
-            if (cur > maxA4C5) {
-                maxA4C5 = cur;
+
+    //MAX AMOUNT IS A4 * C5 for D6 (account per person)
+	//C5 MUST BE SAME FOR ALL C-RECORDS
+    private static String calculateD6(BigDecimal A4, BigDecimal D5, List<String[]> CList) {
+        BigDecimal maxA4C5 = A4; // default - single account
+        for(String[] cStr : CList) {
+            maxA4C5 = A4.multiply(createNumValue(cStr[5]));
+            if (D5.compareTo(maxA4C5) == 1) { //if more than max amount - cap to max amount
+                return decimalToString(maxA4C5);
             }
         }
-        return String.valueOf(maxA4C5);
+        return decimalToString(D5);
     }
 
-    private static boolean specificPositionSymbol (int from, int to, String[] B14BySymbol) {
-        for(int i = from; i < to; i++) {
-            if(B14BySymbol[i].equals("Y")) {
-                return true;
-            }
+    private static boolean specificPositionSymbol (int from, int to, String value) {
+        if(value.substring(from, to+1).equals("Y")) {
+            return true;
         }
         return false;
     }
 
+    //el[19] - not 20!
     private static boolean specificPositionSymbolByC (int from, int to, List<String[]> CList) {
         for(String[] el : CList) {
-            String[] C20 = el[20].split("");
-            for(int i = from; i < to; i ++) {
-                if(C20[i].equals("Y")) {
+                if(el[20].substring(from, to+1).contains("Y")) {
                     return true;
                 }
-            }
+
         }
         return false;
     }
 
-    private static double calculateD1011(int ifFrom, int ifTo, int elseFrom, int elseTo, List<String[]> CList, String[] clientB) {
+    private static String calculateD1011(int ifFrom, int ifTo, int elseFrom, int elseTo, List<String[]> CList, String[] clientB) {
+		BigDecimal sumD10 = BigDecimal.ZERO;
 
-        if(specificPositionSymbol(ifFrom,ifTo, clientB[13].split(""))) {
-            double sumD10 = 0;
-            for (String[] elStr : CList) {
-                double el = Double.parseDouble(elStr[19]);
-                if(el > 0) {
-                    sumD10 += el;
+        if(specificPositionSymbol(ifFrom,ifTo, clientB[13])) {
+            for (String[] cStr : CList) {
+                BigDecimal el = createNumValue(cStr[19]);
+                if(el.signum() == 1) {
+                    sumD10 = sumD10.add(el);
                 }
             }
-            return sumD10;
+            return decimalToString(sumD10);
         }
 
         if(specificPositionSymbolByC(elseFrom,elseTo, CList)) {
-            double sumD10 = 0;
-            for(String[] el : CList) {
-                String[] С20 = el[20].split("");
-                for(int i = elseFrom; i < elseTo; i ++) {
-                    if(С20[i].equals("Y")) {
-                        sumD10 += Double.valueOf(el[19]);
-                    }
-                }
-            }
-            return sumD10;
+            for(String[] cStr : CList) {
+				if(cStr[20].substring(elseFrom, elseTo).contains("Y")) {
+					sumD10.add(createNumValue(cStr[19]));
+				}
+			}
+
+		    return decimalToString(sumD10);
         }
 
-        return 0;
+        return decimalToString(BigDecimal.valueOf(0, 2));
     }
 
+	//C5 MUST BE SAME FOR ALL C-RECORDS
     private static String calculateD12(String[] D, List<String[]> CList, String A6) {
-        double max = 0;
-        for (String[] el: CList) {
-            double C5 = Double.valueOf(el[5]);
-            double cur = C5*Double.valueOf(A6);
-            if(cur > max) {
+        BigDecimal max = BigDecimal.ZERO;
+        for (String[] cStr: CList) {
+            BigDecimal C5 = createNumValue(cStr[5]);
+            BigDecimal cur = C5.multiply(createNumValue(A6));
+            if(cur.compareTo(max) == 1) {
                 max = cur;
             }
         }
-        double D3_D10_D14 = Double.valueOf(D[2].replace(",", ".")) - Double.valueOf(D[9].replace(",", ".")) - Double.valueOf(D[13].replace(",", "."));
-        double calc = 0;
-        if(D3_D10_D14 > max) {
+        BigDecimal D3_D10_D14 = createNumValue(D[2]).subtract(createNumValue(D[9])).subtract(createNumValue(D[13]));
+        BigDecimal calc;
+        if(D3_D10_D14.compareTo(max) == 1) {
             calc = max;
         } else {
             calc = D3_D10_D14;
         }
-        return String.valueOf(calc - Double.valueOf(D[5]) - Double.valueOf(D[8]));
+        return decimalToString(calc.subtract(createNumValue(D[5])).subtract(createNumValue(D[8])));
     }
 
     private static String calculateD14(List<String[]> CList) {
-        double sumD14 = 0;
-        for (String[] elStr : CList) {
-            double el = Double.parseDouble(elStr[19].replace(",", "."));
-            if(el < 0) {
-                sumD14 += el;
+        BigDecimal sumD14 = BigDecimal.ZERO;
+        for (String[] cStr : CList) {
+            BigDecimal el = createNumValue(cStr[19]);
+            if(el.signum() == -1) {
+                sumD14 = sumD14.add(el);
             }
         }
-        return String.valueOf(sumD14);
+        return decimalToString(sumD14);
+    }
+
+    private static BigDecimal createNumValue(String value) {
+        BigDecimal result = BigDecimal.ZERO;
+        String sanitized = value.replace(",", ".");
+        if (NumberUtils.isCreatable(sanitized))     {
+           result = NumberUtils.createBigDecimal(sanitized);
+        }
+        return result;
+    }
+
+    private static int compare(BigDecimal a, int b) {
+       return a.compareTo(new BigDecimal(b));
+    }
+
+    private static String decimalToString(BigDecimal decimal) {
+        if (decimal.signum() == 0) {
+            return "0";
+        }
+        return String.valueOf(decimal).replace(".", ",");
     }
 
 }
