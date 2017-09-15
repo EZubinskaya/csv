@@ -5,8 +5,11 @@ import org.junit.Assert;
 import org.junit.Test;
 import java.io.FileReader;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static comparus.de.CSVReaderMain.*;
 
 /**
  * Created by ekaterina on 9/5/17.
@@ -16,6 +19,7 @@ public class CSVReaderMainTest {
     static String file1 = "src/test/resources/example1.csv";
     static String file2 = "src/test/resources/example2.csv";
     static String file3 = "src/test/resources/example3.csv";
+    static String[] AVersion5 = null;
 
     @Test
     public void fileTheSameTest() throws IOException {
@@ -170,5 +174,103 @@ public class CSVReaderMainTest {
         Assert.assertEquals(fullFile.get("12620667BECAAC7DC708CE2C6AB300D2 XX2021973").getClientsC().size(),2);
         Assert.assertEquals(fullFile.get("361C15BFAF64225DE5AD11166D3BE2CB XX23041980").getClientsC().size(),2);
         Assert.assertEquals(fullFile.get("62C30CED3DFEAE112B6DBC131FEBF7A5 XX X10051950").getClientsC().size(),1);
+    }
+
+    //Version 5.1
+    private Map<String,CVSClient> getClientVersion5_1 () throws IOException {
+        String file = "src/test/resources/exampleExtraData.csv";
+        List<String> inputDataFile = new ArrayList<>();
+        CSVReader reader = new CSVReader(new FileReader(file), '\n', '\'');
+        List<String[]>  inputDataArrayFile = reader.readAll();
+        for(String[] el : inputDataArrayFile) {
+            inputDataFile.add(el[0]);
+        }
+
+        Map<String,CVSClient> readFile1 = CSVReaderMain.readCSVFileByString(file);
+        Map<String,CVSClient> readFile2 = new HashMap<>();
+        Map<String,CVSClient> fullFile = CSVReaderMain.generateMapOfData(readFile1, readFile2);
+        String[] A = inputDataArrayFile.get(0)[0].split("\\*");
+        CSVReaderMain.reCalculateD(fullFile, A);
+        String[] E = CSVReaderMain.reCalculateE(fullFile, A);
+
+        Map<String, String> A_ExtraData = CSVReaderMain.readExtraDataA();
+        Map<String, B_ExtraData> B_ExtraData = readExtraDataB();
+        Map<String, C_ExtraData> C_ExtraData = readExtraDataC();
+        String[] AVersion5_1 = geeratedAVersion5_1 (A,  A_ExtraData);
+        AVersion5 = AVersion5_1;
+
+        Map<String,CVSClient> fullFileVersion5_1 = generateVersion5(fullFile, E, AVersion5_1, B_ExtraData, C_ExtraData);
+        reCalculateDVersion5_1(fullFileVersion5_1, AVersion5_1);
+        return fullFileVersion5_1;
+    }
+
+    @Test
+    public void D12Test() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        String[] clientB = fullFileVersion5_1.get("1BC055D5B1275F553C0D719137B9E9F XX X4031936").getClientB();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F553C0D719137B9E9F XX X4031936").getClientsC();
+        String[] D = fullFileVersion5_1.get("1BC055D5B1275F553C0D719137B9E9F XX X4031936").getD();
+        List<String> curDList = new LinkedList<>();
+        curDList.addAll(Arrays.asList(D));
+        BigDecimal D12B = BigDecimalcalculateD12B(D, AVersion5, CList);
+        System.out.println(D12B);
+        Assert.assertEquals(D12B,BigDecimal.ZERO);
+
+    }
+
+    @Test
+    public void D12Test2() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        String[] clientB = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getClientB();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getClientsC();
+        String[] D = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getD();
+        List<String> curDList = new LinkedList<>();
+        curDList.addAll(Arrays.asList(D));
+        BigDecimal D12B = BigDecimalcalculateD12B(D, AVersion5, CList);
+        System.out.println(D12B);
+        Assert.assertEquals(D12B,BigDecimal.ZERO);
+
+    }
+
+    @Test
+    public void D12CTest1() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        String[] clientB = fullFileVersion5_1.get("1BC055D5B1275F553C0D719137B9E9F XX X4031936").getClientB();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F553C0D719137B9E9F XX X4031936").getClientsC();
+        String[] D = fullFileVersion5_1.get("1BC055D5B1275F553C0D719137B9E9F XX X4031936").getD();
+
+        BigDecimal D12C =BigDecimalcalculateD12C(D, AVersion5, CList);
+
+        System.out.println(D12C);
+        Assert.assertEquals(D12C,BigDecimal.ZERO);
+
+    }
+
+    @Test
+    public void D12CTest2() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        String[] clientB = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getClientB();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getClientsC();
+        String[] D = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getD();
+
+        BigDecimal D12C =BigDecimalcalculateD12C(D, AVersion5, CList);
+
+        System.out.println(D12C);
+        Assert.assertEquals(D12C,new BigDecimal("-10500000"));
+
+    }
+
+    @Test
+    public void D12CTest3() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        String[] clientB = fullFileVersion5_1.get("1BC055D5B1275F553C0D971913B9E9F XX X4031936").getClientB();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F553C0D971913B9E9F XX X4031936").getClientsC();
+        String[] D = fullFileVersion5_1.get("1BC055D5B1275F553C0D971913B9E9F XX X4031936").getD();
+
+        BigDecimal D12C =BigDecimalcalculateD12C(D, AVersion5, CList);
+
+        System.out.println(D12C);
+        Assert.assertEquals(D12C,new BigDecimal("-10500000"));
+
     }
 }
