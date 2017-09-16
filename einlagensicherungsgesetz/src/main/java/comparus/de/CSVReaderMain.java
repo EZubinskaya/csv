@@ -2,11 +2,9 @@ package comparus.de;
 
 import com.opencsv.CSVReader;
 import com.opencsv.CSVWriter;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -22,33 +20,33 @@ public class CSVReaderMain {
     static List<String[]> bTheSame = new ArrayList<>();
     public static void main(String[] args) throws IOException {
 
-//        String inputFileForMerge1 = System.getProperty("file1");
-//        String inputFileForMerge2 = System.getProperty("file2");
-//        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
-//
-//        String taskNumber = System.getProperty("EinreicherdateiB11");
+        String inputFileForMerge1 = System.getProperty("file1");
+        String inputFileForMerge2 = System.getProperty("file2");
+        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
+        String A_Additional_5 = System.getProperty("A_Additional5");
+        String B_Additional_5 = System.getProperty("B_Additional5");
+        String C_Additional_5 = System.getProperty("C_Additional5");
+        String taskNumber = System.getProperty("EinreicherdateiB11");
 
         String task1ResultFileName = "EinreicherdateiB11_Gesamt_4.1.csv";
         String task2ResultFileName = "Meldedatei_Gesamt_4.1.csv";
         String task3ResultFileName = "EinreicherdateiB11_Gesamt_5.1.csv";
 
         // TEST DATA
-        String inputFileForMerge1 =  "src/main/resources/example1.csv";
-        String inputFileForMerge2 = "src/main/resources/as/Pcs_0000000883170901.v";
-        String inputFileAfterMerge =  "src/main/resources/example1.csv";
-
-        String taskNumber = "Task2";
-
-
+//        String inputFileForMerge1 =  "src/main/resources/example1.csv";
+//        String inputFileForMerge2 = "src/main/resources/as/Pcs_0000000883170901.v";
+//        String inputFileAfterMerge =  "src/main/resources/example1.csv";
+//        String taskNumber = "Task3";
+//        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
+//        String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
+//        String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
 
         if(taskNumber.equalsIgnoreCase("Task1") && inputFileForMerge1!= null & inputFileForMerge2 != null) {
             Map<String,CVSClient> readFile1 = readCSVFileByString(inputFileForMerge1);
-//            Map<String,CVSClient> readFile12 = readCSVFileByString(inputFileForMerge2);
-            Map<String,CVSClient> readFile2 = new HashMap<>();
+            Map<String,CVSClient> readFile2 = readCSVFileByString(inputFileForMerge2);
             Map<String,CVSClient> fullFile = generateMapOfData(readFile1, readFile2);
             reCalculateD(fullFile, A);
             String[] E = reCalculateE(fullFile, A);
-            List<String> metadata = generateMetadata( E, fullFile);
             List<String[]> allData = generateListOfDataArray(A, fullFile, E);
             writeCSV(allData, task1ResultFileName);
         } else if(taskNumber.equalsIgnoreCase("Task2") && inputFileAfterMerge != null) {
@@ -56,8 +54,17 @@ public class CSVReaderMain {
             List<String> metadata = generateMetadata(E, fullFile);
             List<String[]> allMetadata = generateMetadataArray(metadata);
             writeCSV(allMetadata, task2ResultFileName);
-        } else if(taskNumber.equalsIgnoreCase("Task3")) {
-
+        } else if(taskNumber.equalsIgnoreCase("Task3") && inputFileAfterMerge != null) {
+            Map<String,CVSClient> fullFile = readCSVFileByString(inputFileAfterMerge);
+            Map<String, String> A_ExtraData = readExtraDataA(A_Additional_5);
+            Map<String, B_ExtraData> B_ExtraData = readExtraDataB(B_Additional_5);
+            Map<String, C_ExtraData> C_ExtraData = readExtraDataC(C_Additional_5);
+            String[] AVersion5_1 = geeratedAVersion5_1 (A,  A_ExtraData);
+            Map<String,CVSClient> fullFileVersion5_1 = generateVersion5(fullFile, E, AVersion5_1, B_ExtraData, C_ExtraData);
+            reCalculateDVersion5_1(fullFileVersion5_1, AVersion5_1);
+            String[] EVersion5_1 = reCalculateEVersion5_1(fullFileVersion5_1);
+            List<String[]> allDataVersion5_1 = generateListOfDataArray(AVersion5_1, fullFileVersion5_1, EVersion5_1);
+            writeCSV(allDataVersion5_1, task3ResultFileName);
         } else if (taskNumber.equalsIgnoreCase("Task4")) {
 
         } else if (taskNumber.equalsIgnoreCase("Task5")) {
@@ -66,16 +73,6 @@ public class CSVReaderMain {
 
         }
 
-
-//        Map<String, String> A_ExtraData = readExtraDataA();
-//        Map<String, B_ExtraData> B_ExtraData = readExtraDataB();
-//        Map<String, C_ExtraData> C_ExtraData = readExtraDataC();
-//        String[] AVersion5_1 = geeratedAVersion5_1 (A,  A_ExtraData);
-//        Map<String,CVSClient> fullFileVersion5_1 = generateVersion5(fullFile, E, AVersion5_1, B_ExtraData, C_ExtraData);
-//        reCalculateDVersion5_1(fullFileVersion5_1, AVersion5_1);
-//        String[] EVersion5_1 = reCalculateEVersion5_1(fullFileVersion5_1, AVersion5_1);
-//        List<String[]> allDataVersion5_1 = generateListOfDataArray(AVersion5_1, fullFileVersion5_1, EVersion5_1);
-//        writeCSV(allDataVersion5_1, "MERGE Version 5.1.csv");
     }
 
     static void writeCSV(List<String[]> all, String outputFile ) throws IOException {
@@ -282,7 +279,6 @@ public class CSVReaderMain {
         return fullFile;
     }
 
-    //INDEXES IN ARRAY START FROM 0!  19 -> arr[18]
     private static String calculateD3(List<String[]> CList) {
         BigDecimal sumD3 = BigDecimal.ZERO;
         for (String[] elStr : CList) {
@@ -327,18 +323,6 @@ public class CSVReaderMain {
         return true;
     }
 
-
-    //ONLY FIRST TWENTY POSITIONS!
-    private static boolean C20ContainsYin1To20pos(List<String[]> CList) {
-        for(String[] elStr : CList) {
-            if(elStr[20].substring(0,20).contains("Y")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    //FROM 2 to TWENTY POSITIONS!
     private static boolean C2C20ContainsYin1To20pos(List<String[]> CList) {
         for(String[] elStr : CList) {
             if(elStr[20].substring(1,20).contains("Y")) {
@@ -346,17 +330,6 @@ public class CSVReaderMain {
             }
         }
         return false;
-    }
-
-    private static String calculateositiveC19ForAllContainsC20Y(List<String[]> CList) {
-        BigDecimal sum = BigDecimal.ZERO;
-        for(String[] cStr : CList) {
-            BigDecimal C18 = createNumValue(cStr[19]);
-            if((cStr[20].substring(0,20).contains("Y")) && C18.signum() == 1) {
-                sum  = sum.add(C18);
-            }
-        }
-        return decimalToString(sum);
     }
 
     private static String calculateositiveC19ForAllContainsC2C20Y(List<String[]> CList) {
@@ -373,7 +346,6 @@ public class CSVReaderMain {
     private static String calculateD5D7(BigDecimal s, BigDecimal s1) {
         return decimalToString(s.subtract(s1));
     }
-
 
     //MAX AMOUNT IS A4 * C5 for D6 (account per person)
     //C5 MUST BE SAME FOR ALL C-RECORDS
@@ -486,7 +458,7 @@ public class CSVReaderMain {
         return String.valueOf(decimal).replace(".", ",");
     }
 
-//    Version 5
+    //    Version 5
     private static BigDecimal calculateHW1(String[] D) {
         BigDecimal sumHW1 = BigDecimal.ZERO;
         BigDecimal maxD6D9 = createNumValue(D[5]).max(createNumValue(D[8]));
@@ -495,7 +467,7 @@ public class CSVReaderMain {
         return sumHW1;
     }
 
-    private static BigDecimal calculateHW2(List<String[]> CList) {
+    static BigDecimal calculateHW2(List<String[]> CList) {
         if(C21ContainsYin19posAndC2701Or90(CList)) {
             return calculateositiveC19ForAllContainsC20YPosition19(CList);
         }
@@ -523,7 +495,7 @@ public class CSVReaderMain {
         return sum;
     }
 
-    private static BigDecimal calculateHW3(List<String[]> CList) {
+    static BigDecimal calculateHW3(List<String[]> CList) {
         BigDecimal sumHW3 = BigDecimal.ZERO;
         if(HW3C19ForAllC2790C21In11And19IsN(CList)) {
             sumHW3.add(calculateositiveC19ForHW3C19ForAllC2790C21In11And19IsN(CList));
@@ -604,7 +576,7 @@ public class CSVReaderMain {
         return sum;
     }
 
-    private static BigDecimal calculateHW5(List<String[]> CList) {
+    static BigDecimal calculateHW5(List<String[]> CList) {
         BigDecimal sumHW5 = BigDecimal.ZERO;
         if(C19WhereC27Is90AndC21IsNInPosition11(CList)) {
             sumHW5.add(calculateC19WhereC27Is90AndC21IsNInPosition11(CList));
@@ -728,32 +700,7 @@ public class CSVReaderMain {
         return false;
     }
 
-    static String[] reCalculateEVersion5(Map<String, CVSClient> fullFile, String[] A) {
-        String[] E = new String[18];
-        E[0] = "E";
-        E[1] = A[1];
-        BigDecimal[] eVar = new BigDecimal[18];
-        for (int i = 0; i<eVar.length; i++) {
-            eVar[i] = BigDecimal.ZERO;
-        }
-        for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-            CVSClient cvsClientVersion41 = entry.getValue();
-            String[] D = cvsClientVersion41.getD();
-            for(int i=2;i<eVar.length;i++){ // use
-                if(i != 13) {
-                    eVar[i] = eVar[i].add(createNumValue(D[i]));
-
-                }
-            }
-        }
-        for(int i = 2; i<eVar.length; i++) {
-            E[i] = decimalToString(eVar[i]);
-        }
-        return E;
-    }
-
-    public static Map<String,String> readExtraDataA () throws IOException {
-        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
+    public static Map<String,String> readExtraDataA (String A_Additional_5) throws IOException {
         Map<String,String> A = new LinkedHashMap<>();
         CSVReader reader = new CSVReader(new FileReader(A_Additional_5), '\n', '\'');
         List<String[]> myEntries = reader.readAll();
@@ -765,8 +712,7 @@ public class CSVReaderMain {
         return A;
     }
 
-    public static Map<String,B_ExtraData> readExtraDataB () throws IOException {
-        String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
+    public static Map<String,B_ExtraData> readExtraDataB (String B_Additional_5) throws IOException {
         Map<String,B_ExtraData> B = new LinkedHashMap<>();
         CSVReader reader = new CSVReader(new FileReader(B_Additional_5), '\n', '\'');
         List<String[]> myEntries = reader.readAll();
@@ -779,8 +725,7 @@ public class CSVReaderMain {
         return B;
     }
 
-     static Map<String,C_ExtraData> readExtraDataC() throws IOException {
-        String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
+     static Map<String,C_ExtraData> readExtraDataC(String C_Additional_5) throws IOException {
         Map<String,C_ExtraData> C = new LinkedHashMap<>();
         CSVReader reader = new CSVReader(new FileReader(C_Additional_5), '\n', '\'');
         List<String[]> myEntries = reader.readAll();
@@ -833,9 +778,9 @@ public class CSVReaderMain {
                 String[] currentC = clientC.get(i);
                 C_ExtraData c_extraData = C_Additional.get(currentC[2]);
                 //TODO
-                currentC[20] = currentC[20];
                 currentC[21] = currentC[21].substring(0,14) + c_extraData.getC21_Pos15() + c_extraData.getC21_Pos16() + c_extraData.getC21_Pos17()
                         + c_extraData.getC21_Pos18() + c_extraData.getC21_Pos19() + currentC[21].substring(19);
+                currentC[20] = C20(currentC[20], currentC[21], BVersion5_1[13], BVersion5_1[15]);
 
                 List<String> curClientCList = new LinkedList<>();
                 curClientCList.addAll(Arrays.asList(currentC));
@@ -856,7 +801,7 @@ public class CSVReaderMain {
         return fullFileVersion5_1;
     }
 
-    private static void C20(String C20, String C21, String B14, String B16) {
+    private static String C20(String C20, String C21, String B14, String B16) {
         String position12 = "";
         if(C20.substring(1,2).equals("Y") && C21.substring(9,10).equals("Y")) {
             position12="Y";
@@ -891,9 +836,10 @@ public class CSVReaderMain {
         } else {
             position16="N";
         }
+        return C20;
     }
 
-    static String[] reCalculateEVersion5_1(Map<String, CVSClient> fullFileVersion5_1, String[] AVersion5_1) {
+    static String[] reCalculateEVersion5_1(Map<String, CVSClient> fullFileVersion5_1) {
         String[] E = new String[18];
         E[0] = "E";
         E[1] = A[1];
@@ -926,6 +872,7 @@ public class CSVReaderMain {
             CVSClient cvsClientVersion= entry.getValue();
             List<String[]> CList = cvsClientVersion.getClientsC();
             String[] D = cvsClientVersion.getD();
+            D[4] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
             List<String> curDList = new LinkedList<>();
             curDList.addAll(Arrays.asList(D));
             BigDecimal D12B = BigDecimalcalculateD12B(D, AVersion5_1, CList);

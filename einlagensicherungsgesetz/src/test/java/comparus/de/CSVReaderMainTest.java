@@ -178,6 +178,10 @@ public class CSVReaderMainTest {
 
     //Version 5.1
     private Map<String,CVSClient> getClientVersion5_1 () throws IOException {
+        String A_Additional_5 = "src/test/resources/extraData/A_Additional_5.0.csv";
+        String B_Additional_5 = "src/test/resources/extraData/B_Additional_5.0.csv";
+        String C_Additional_5 = "src/test/resources/extraData/C_Additional_5.0.csv";
+
         String file = "src/test/resources/exampleExtraData.csv";
         List<String> inputDataFile = new ArrayList<>();
         CSVReader reader = new CSVReader(new FileReader(file), '\n', '\'');
@@ -193,9 +197,9 @@ public class CSVReaderMainTest {
         CSVReaderMain.reCalculateD(fullFile, A);
         String[] E = CSVReaderMain.reCalculateE(fullFile, A);
 
-        Map<String, String> A_ExtraData = CSVReaderMain.readExtraDataA();
-        Map<String, B_ExtraData> B_ExtraData = readExtraDataB();
-        Map<String, C_ExtraData> C_ExtraData = readExtraDataC();
+        Map<String, String> A_ExtraData = CSVReaderMain.readExtraDataA(A_Additional_5);
+        Map<String, B_ExtraData> B_ExtraData = readExtraDataB(B_Additional_5);
+        Map<String, C_ExtraData> C_ExtraData = readExtraDataC(C_Additional_5);
         String[] AVersion5_1 = geeratedAVersion5_1 (A,  A_ExtraData);
         AVersion5 = AVersion5_1;
 
@@ -261,16 +265,93 @@ public class CSVReaderMainTest {
     }
 
     @Test
-    public void D12CTest3() throws IOException {
+    public void reCalculateDTest() throws IOException {
         Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
-        String[] clientB = fullFileVersion5_1.get("1BC055D5B1275F553C0D971913B9E9F XX X4031936").getClientB();
+        String[] clientB = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getClientB();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getClientsC();
+        String[] D = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getD();
+        Assert.assertEquals(D[0], "D");
+        Assert.assertEquals(D[1], "7230");
+        Assert.assertEquals(D[2], "71");
+        Assert.assertEquals(D[3], "0");
+        Assert.assertEquals(D[4], "0");
+        Assert.assertEquals(D[5], "-100000");
+        Assert.assertEquals(D[6], "100071");
+        Assert.assertEquals(D[7], "0");
+        Assert.assertEquals(D[8], "0");
+        Assert.assertEquals(D[9], "0");
+        Assert.assertEquals(D[10], "0");
+        Assert.assertEquals(D[11], "100000");
+        Assert.assertEquals(D[12], "0");
+        Assert.assertEquals(D[13], "-10500000");
+        Assert.assertEquals(D[14], "0");
+        Assert.assertEquals(D[15], "0");
+        Assert.assertEquals(D[16], "-71");
+        Assert.assertEquals(D[17], "0");
+    }
+
+    @Test
+    public void reCalculateeTest() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        String[] E = reCalculateEVersion5_1(fullFileVersion5_1);
+        Assert.assertEquals(E[0], "E");
+        Assert.assertEquals(E[1], "181");
+        Assert.assertEquals(E[2], "200074,24");
+        Assert.assertEquals(E[3], "100001,62");
+        Assert.assertEquals(E[4], "100001,62");
+        Assert.assertEquals(E[5], "-54099998,38");
+        Assert.assertEquals(E[6], "54200071");
+        Assert.assertEquals(E[7], "0");
+        Assert.assertEquals(E[8], "0");
+        Assert.assertEquals(E[9], "0");
+        Assert.assertEquals(E[10], "0");
+        Assert.assertEquals(E[11], "54300001,62");
+        Assert.assertEquals(E[12], "0");
+        Assert.assertEquals(E[13], "-64600000,00");
+        Assert.assertEquals(E[14], "0");
+        Assert.assertEquals(E[15], "0");
+        Assert.assertEquals(E[16], "-100072,62");
+        Assert.assertEquals(E[17], "0");
+    }
+
+    @Test
+    public void calculateHW5Test1() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getClientsC();
+        BigDecimal sumHW5 = calculateHW5(CList);
+        Assert.assertEquals(sumHW5, BigDecimal.ZERO);
+    }
+
+
+    @Test
+    public void calculateHW5Test2() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
         List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F553C0D971913B9E9F XX X4031936").getClientsC();
-        String[] D = fullFileVersion5_1.get("1BC055D5B1275F553C0D971913B9E9F XX X4031936").getD();
+        BigDecimal sumHW5 = calculateHW5(CList);
+        Assert.assertEquals(sumHW5, BigDecimal.ZERO);
+    }
 
-        BigDecimal D12C =BigDecimalcalculateD12C(D, AVersion5, CList);
+    @Test
+    public void calculateHW3Test1() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F553C0D971913B9E9F XX X4031936").getClientsC();
+        BigDecimal sumHW3 = calculateHW3(CList);
+        Assert.assertEquals(sumHW3, BigDecimal.ZERO);
+    }
 
-        System.out.println(D12C);
-        Assert.assertEquals(D12C,new BigDecimal("-10500000"));
+    @Test
+    public void calculateHW3Test2() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getClientsC();
+        BigDecimal sumHW3 = calculateHW3(CList);
+        Assert.assertEquals(sumHW3, BigDecimal.ZERO);
+    }
 
+    @Test
+    public void calculateHW2Test1() throws IOException {
+        Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
+        List<String[]> CList = fullFileVersion5_1.get("1BC055D5B1275F55C0D9719137B9E9F XX X4031936").getClientsC();
+        BigDecimal sumHW2 = calculateHW2(CList);
+        Assert.assertEquals(sumHW2, new BigDecimal("62"));
     }
 }
