@@ -17,44 +17,65 @@ import java.util.*;
 public class CSVReaderMain {
 
     private static String[] A = null;
+    private static String[] E = null;
 
     static List<String[]> bTheSame = new ArrayList<>();
     public static void main(String[] args) throws IOException {
 
-        String file1 = "src/main/resources/example1.csv";
-        String file2 = "src/main/resources/as/P_0000000883170901.csv";
-        String file3 = "src/main/resources/Pseudodatei aufbereitet MERGE.csv";
+//        String inputFileForMerge1 = System.getProperty("file1");
+//        String inputFileForMerge2 = System.getProperty("file2");
+//        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
+//
+//        String taskNumber = System.getProperty("EinreicherdateiB11");
 
-        String fileVersion5 = "src/main/resources/example3.csv";
+        String task1ResultFileName = "EinreicherdateiB11_Gesamt_4.1.csv";
+        String task2ResultFileName = "Meldedatei_Gesamt_4.1.csv";
+        String task3ResultFileName = "EinreicherdateiB11_Gesamt_5.1.csv";
 
-//        String file1 = System.getProperty("file1");
-//        String file2 = System.getProperty("file2");
-//        String file3 = System.getProperty("Meldedatei");
+        // TEST DATA
+        String inputFileForMerge1 =  "src/main/resources/example1.csv";
+        String inputFileForMerge2 = "src/main/resources/as/Pcs_0000000883170901.v";
+        String inputFileAfterMerge =  "src/main/resources/example1.csv";
 
-        Map<String,CVSClient> readFile1 = readCSVFileByString(file1);
-//        Map<String,CVSClient> readFile2 = readCSVFileByString(file2);
-//        Map<String,CVSClient> readFile1 = readCSVFileByString(file3);
-        Map<String,CVSClient> readFile2 = new HashMap<>();
+        String taskNumber = "Task2";
 
-        Map<String,CVSClient> fullFile = generateMapOfData(readFile1, readFile2);
-        reCalculateD(fullFile, A);
-        String[] E = reCalculateE(fullFile, A);
-        List<String> metadata = generateMetadata(file3, E, fullFile);
-        List<String[]> allData = generateListOfDataArray(A, fullFile, E);
-        writeCSV(allData, "Pseudodatei aufbereitet MERGE.csv");
-        List<String[]> allMetadata = generateMetadataArray(metadata);
-        writeCSV(allMetadata, "Metadata MERGE.csv");
 
-        //Version5.1
-        Map<String, String> A_ExtraData = readExtraDataA();
-        Map<String, B_ExtraData> B_ExtraData = readExtraDataB();
-        Map<String, C_ExtraData> C_ExtraData = readExtraDataC();
-        String[] AVersion5_1 = geeratedAVersion5_1 (A,  A_ExtraData);
-        Map<String,CVSClient> fullFileVersion5_1 = generateVersion5(fullFile, E, AVersion5_1, B_ExtraData, C_ExtraData);
-        reCalculateDVersion5_1(fullFileVersion5_1, AVersion5_1);
-        String[] EVersion5_1 = reCalculateEVersion5_1(fullFileVersion5_1, AVersion5_1);
-        List<String[]> allDataVersion5_1 = generateListOfDataArray(AVersion5_1, fullFileVersion5_1, EVersion5_1);
-        writeCSV(allDataVersion5_1, "MERGE Version 5.1.csv");
+
+        if(taskNumber.equalsIgnoreCase("Task1") && inputFileForMerge1!= null & inputFileForMerge2 != null) {
+            Map<String,CVSClient> readFile1 = readCSVFileByString(inputFileForMerge1);
+//            Map<String,CVSClient> readFile12 = readCSVFileByString(inputFileForMerge2);
+            Map<String,CVSClient> readFile2 = new HashMap<>();
+            Map<String,CVSClient> fullFile = generateMapOfData(readFile1, readFile2);
+            reCalculateD(fullFile, A);
+            String[] E = reCalculateE(fullFile, A);
+            List<String> metadata = generateMetadata( E, fullFile);
+            List<String[]> allData = generateListOfDataArray(A, fullFile, E);
+            writeCSV(allData, task1ResultFileName);
+        } else if(taskNumber.equalsIgnoreCase("Task2") && inputFileAfterMerge != null) {
+            Map<String,CVSClient> fullFile = readCSVFileByString(inputFileAfterMerge);
+            List<String> metadata = generateMetadata(E, fullFile);
+            List<String[]> allMetadata = generateMetadataArray(metadata);
+            writeCSV(allMetadata, task2ResultFileName);
+        } else if(taskNumber.equalsIgnoreCase("Task3")) {
+
+        } else if (taskNumber.equalsIgnoreCase("Task4")) {
+
+        } else if (taskNumber.equalsIgnoreCase("Task5")) {
+
+        } else {
+
+        }
+
+
+//        Map<String, String> A_ExtraData = readExtraDataA();
+//        Map<String, B_ExtraData> B_ExtraData = readExtraDataB();
+//        Map<String, C_ExtraData> C_ExtraData = readExtraDataC();
+//        String[] AVersion5_1 = geeratedAVersion5_1 (A,  A_ExtraData);
+//        Map<String,CVSClient> fullFileVersion5_1 = generateVersion5(fullFile, E, AVersion5_1, B_ExtraData, C_ExtraData);
+//        reCalculateDVersion5_1(fullFileVersion5_1, AVersion5_1);
+//        String[] EVersion5_1 = reCalculateEVersion5_1(fullFileVersion5_1, AVersion5_1);
+//        List<String[]> allDataVersion5_1 = generateListOfDataArray(AVersion5_1, fullFileVersion5_1, EVersion5_1);
+//        writeCSV(allDataVersion5_1, "MERGE Version 5.1.csv");
     }
 
     static void writeCSV(List<String[]> all, String outputFile ) throws IOException {
@@ -66,7 +87,7 @@ public class CSVReaderMain {
         csvWriter.close();
     }
 
-    static List<String> generateMetadata(String file, String[] E, Map<String, CVSClient> fullFile) throws IOException {
+    static List<String> generateMetadata(String[] E, Map<String, CVSClient> fullFile) throws IOException {
         List<String> metadata = new ArrayList<>(147);
         metadata.add("M");
         metadata.add(A[1]);
@@ -167,6 +188,9 @@ public class CSVReaderMain {
         List<String[]> myEntries = reader.readAll();
         if(A == null) {
             A = myEntries.get(0)[0].split("\\*");
+        }
+        if((myEntries.get(myEntries.size()-1)[0]).startsWith("E")) {
+            E = myEntries.get(myEntries.size()-1)[0].split("\\*");
         }
         int j = 1;
         for (int i = j ;i<myEntries.size(); i++) {

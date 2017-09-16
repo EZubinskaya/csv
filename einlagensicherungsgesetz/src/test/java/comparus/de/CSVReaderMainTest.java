@@ -125,7 +125,7 @@ public class CSVReaderMainTest {
         CSVReaderMain.reCalculateD(fullFile, A1);
         String[] E = CSVReaderMain.reCalculateE(fullFile, A1);
 
-        List<String> metadata = CSVReaderMain.generateMetadata(file3, E, fullFile);
+        List<String> metadata = CSVReaderMain.generateMetadata( E, fullFile);
 
         List<String[]> allMetadata = CSVReaderMain.generateMetadataArray(metadata);
         String metada[] = allMetadata.get(0);
