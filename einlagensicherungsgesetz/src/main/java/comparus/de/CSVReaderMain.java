@@ -785,7 +785,6 @@ public class CSVReaderMain {
                 String[] currentC = clientC.get(i);
                 C_ExtraData c_extraData = C_Additional.get(currentC[2]);
                 //TODO
-                currentC[20] = C20_Version5_1(currentC[20], currentC[21], BVersion5_1[13], BVersion5_1[15]);
 
                 currentC[21] = currentC[21].substring(0,14) +
                         c_extraData.getC21_Pos15() +
@@ -794,6 +793,8 @@ public class CSVReaderMain {
                         c_extraData.getC21_Pos18() +
                         c_extraData.getC21_Pos19() +
                         currentC[21].substring(19);
+
+                currentC[20] = C20_Version5_1(currentC[20], currentC[21], BVersion5_1[13], BVersion5_1[15]);
 
                 List<String> curClientCList = new LinkedList<>();
                 curClientCList.addAll(Arrays.asList(currentC));
@@ -885,9 +886,10 @@ public class CSVReaderMain {
             List<String[]> CList = cvsClientVersion.getClientsC();
             String[] D = cvsClientVersion.getD();
 
-            //TODO D[4] or D[3] ?????
-            D[4] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
 
+            D[3] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
+            //TODO ? 
+            // recalculate  D[9] and D[10] ???? (B14 and C20 changed)
 
             List<String> curDList = new LinkedList<>();
 
