@@ -367,6 +367,13 @@ public class CSVReaderMain {
         return false;
     }
 
+    private static boolean isYSymbolSet(int pos, String value) {
+        if(value.charAt(pos) == 'Y') {
+            return true;
+        }
+        return false;
+    }
+
     private static boolean specificPositionSymbolByC (int from, int to, List<String[]> CList) {
         for(String[] el : CList) {
             if(el[20].substring(from, to+1).contains("Y")) {
@@ -778,9 +785,15 @@ public class CSVReaderMain {
                 String[] currentC = clientC.get(i);
                 C_ExtraData c_extraData = C_Additional.get(currentC[2]);
                 //TODO
-                currentC[21] = currentC[21].substring(0,14) + c_extraData.getC21_Pos15() + c_extraData.getC21_Pos16() + c_extraData.getC21_Pos17()
-                        + c_extraData.getC21_Pos18() + c_extraData.getC21_Pos19() + currentC[21].substring(19);
-                currentC[20] = C20(currentC[20], currentC[21], BVersion5_1[13], BVersion5_1[15]);
+                currentC[20] = C20_Version5_1(currentC[20], currentC[21], BVersion5_1[13], BVersion5_1[15]);
+
+                currentC[21] = currentC[21].substring(0,14) +
+                        c_extraData.getC21_Pos15() +
+                        c_extraData.getC21_Pos16() +
+                        c_extraData.getC21_Pos17() +
+                        c_extraData.getC21_Pos18() +
+                        c_extraData.getC21_Pos19() +
+                        currentC[21].substring(19);
 
                 List<String> curClientCList = new LinkedList<>();
                 curClientCList.addAll(Arrays.asList(currentC));
@@ -791,8 +804,7 @@ public class CSVReaderMain {
                 curClientCList.add(c_extraData.getC26());
                 curClientCList.add(c_extraData.getC27());
 
-                String[] curCVersion5_1 = new String[currentC.length];
-                curCVersion5_1 = curClientCList.toArray(curCVersion5_1);
+                String[] curCVersion5_1 = curClientCList.toArray(new String[]{});
                 clientC.set(i,curCVersion5_1);
              }
             fullFileVersion5_1.put(key,value);
@@ -801,42 +813,42 @@ public class CSVReaderMain {
         return fullFileVersion5_1;
     }
 
-    private static String C20(String C20, String C21, String B14, String B16) {
-        String position12 = "";
-        if(C20.substring(1,2).equals("Y") && C21.substring(9,10).equals("Y")) {
-            position12="Y";
+    private static String C20_Version5_1(String C20, String C21, String B14, String B16) {
+        StringBuilder result = new StringBuilder();
+        result.append(C20.substring(0,11));
+
+        if(isYSymbolSet(1, C20) && isYSymbolSet(9, C21)) {
+            result.append('Y');
         } else {
-            position12="N";
+            result.append('N');
         }
 
-        String position13 = "";
-        if(Character.toString(B14.charAt(1)).equals("Y") && Character.toString(C21.charAt(17)).equals("N") && !B16.equals("20")) {
-            position13="Y";
+        if(isYSymbolSet(1, B14) && !isYSymbolSet(17, C21) && !B16.equals("20")) {
+            result.append('Y');
         } else {
-            position13="N";
+            result.append('N');
         }
 
-        String position14 = "";
-        if(Character.toString(B14.charAt(4)).equals("Y") && Character.toString(C21.charAt(17)).equals("N")) {
-            position14="Y";
+        if(isYSymbolSet(4, B14) &&  !isYSymbolSet(17, C21)) {
+            result.append('Y');
         } else {
-            position14="N";
+            result.append('N');
         }
 
-        String position15 = "";
-        if(Character.toString(B14.charAt(5)).equals("Y") && Character.toString(C21.charAt(17)).equals("N")) {
-            position15="Y";
+        if(isYSymbolSet(5, B14) &&  !isYSymbolSet(17, C21)) {
+            result.append('Y');
         } else {
-            position15="N";
+            result.append('N');
         }
 
-        String position16 = "";
-        if(Character.toString(B14.charAt(9)).equals("Y") && Character.toString(C21.charAt(17)).equals("N")) {
-            position16="Y";
+        if(isYSymbolSet(9, B14) &&  !isYSymbolSet(17, C21)) {
+            result.append('Y');
         } else {
-            position16="N";
+            result.append('N');
         }
-        return C20;
+
+        result.append(C20.substring(16));
+        return result.toString();
     }
 
     static String[] reCalculateEVersion5_1(Map<String, CVSClient> fullFileVersion5_1) {
@@ -848,8 +860,8 @@ public class CSVReaderMain {
             eVar[i] = BigDecimal.ZERO;
         }
         for (Map.Entry<String, CVSClient> entry : fullFileVersion5_1.entrySet()){
-            CVSClient cvsClientVersion41 = entry.getValue();
-            String[] D = cvsClientVersion41.getD();
+            CVSClient cvsClientVersion5_1 = entry.getValue();
+            String[] D = cvsClientVersion5_1.getD();
             for(int i=2;i<eVar.length;i++){ // use eVar array length !!!
                 if(i == 15) {
                     continue;
@@ -872,19 +884,31 @@ public class CSVReaderMain {
             CVSClient cvsClientVersion= entry.getValue();
             List<String[]> CList = cvsClientVersion.getClientsC();
             String[] D = cvsClientVersion.getD();
+
+            //TODO D[4] or D[3] ?????
             D[4] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
+
+
             List<String> curDList = new LinkedList<>();
-            curDList.addAll(Arrays.asList(D));
+
+            String D13 = D[12];
+            String D14A= D[13];
+            String D15 = D[14];
+
+            curDList.addAll(Arrays.asList(Arrays.copyOfRange(D, 0,12)));
+
             BigDecimal D12B = BigDecimalcalculateD12B(D, AVersion5_1, CList);
             BigDecimal D12C = BigDecimalcalculateD12C(D, AVersion5_1, CList);
             BigDecimal D14B = BigDecimalcalculateD14B(D, CList);
 
-            curDList.add(12, String.valueOf(D12B));
-            curDList.add(13, String.valueOf(D12C));
-            curDList.add(16, String.valueOf(D14B));
+            curDList.add(String.valueOf(D12B));
+            curDList.add(String.valueOf(D12C));
+            curDList.add(D13);
+            curDList.add(D14A);
+            curDList.add(String.valueOf(D14B));
+            curDList.add(String.valueOf(D15));
 
-            String[] DVersion5_1 = new String[D.length];
-            DVersion5_1 = curDList.toArray(DVersion5_1);
+            String[] DVersion5_1 = curDList.toArray(new String[]{});
 
             cvsClientVersion.setD(DVersion5_1);
         }
