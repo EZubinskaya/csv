@@ -1,5 +1,7 @@
 package comparus.de;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +54,7 @@ public class CVSClient {
     public List<String> listStringClientsC() {
         List<String> clientCString = new ArrayList<String>();
         for (String[] el : this.clientsC) {
-            clientCString.add(String.join("*", el));
+            clientCString.add(StringUtils.join( el, "*"));
         }
         return clientCString;
     }
