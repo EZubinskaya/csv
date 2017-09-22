@@ -42,6 +42,17 @@ public class CSVReaderMain {
         return fileInfo;
     }
 
+    static void calculateDAmount(Map<String,CVSClient> fullFile) {
+        int countD = 0;
+
+        for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
+            if(entry.getValue().getD() != null) {
+                countD ++;
+            }
+        }
+        protocol.setResultAmountD(countD);
+    }
+
     static void calculateAmount(List<String[]> allData) {
         int countB = 0;
         int countC = 0;
@@ -70,7 +81,7 @@ public class CSVReaderMain {
         return contistTheSameB;
     }
 
-    static void  writeProtocolToFile(String protocolName, String taskNumber, String inputFileForMerge1, String inputFileForMerge2,
+    static void  writeProtocolToFileTask1(String protocolName, String taskNumber, String inputFileForMerge1, String inputFileForMerge2,
             String task1ResultFileName, FileInfo fileInfo1, FileInfo fileInfo2, String errorMessage) throws FileNotFoundException {
 
         Writer writer = null;
@@ -133,6 +144,41 @@ public class CSVReaderMain {
         }
     }
 
+    static void  writeProtocolToFileTask2(String protocolName, String taskNumber, String inputFileForMerge1,
+                                          String task1ResultFileName, String errorMessage) throws FileNotFoundException {
+
+        Writer writer = null;
+        try {
+            if(taskNumber.equalsIgnoreCase("Task2") && inputFileForMerge1 != null) {
+                writer = new BufferedWriter(new OutputStreamWriter(
+                        new FileOutputStream(protocolName), "utf-8"));
+                writer.write("\r\n=============================================================================\r\n");
+                writer.write("GENERAL INFORMATIONS\r\n\r\n");
+
+                writer.write("Program name: einlagensicherungsgesetz\r\n");
+                writer.write("Date of run: " + new SimpleDateFormat("dd-MM-YYYY").format(new Date()) + "\r\n");
+                writer.write("Task: " + taskNumber + "\r\n");
+                writer.write("Input file 1: " + inputFileForMerge1 + "\r\n");
+                writer.write("Filename result file: " + task1ResultFileName + "\r\n");
+
+                writer.write("\r\n=============================================================================\r\n");
+                writer.write("ERRORS\r\n");
+                if(errorMessage != null) {
+                    writer.write(errorMessage + "\r\n");
+                }
+
+                writer.write("\r\n=============================================================================\r\n");
+                writer.write("\r\nAMOUNTS OF DATASETS\r\n\r\n");
+                writer.write("Inputfile name 1: " + inputFileForMerge1 + "\r\n");
+                writer.write("D : " + protocol.getResultAmountD() + "\r\n");
+            }
+        } catch (IOException ex) {
+            // report
+        } finally {
+            try {writer.close();} catch (Exception ex) {/*ignore*/}
+        }
+    }
+
     public static void main(String[] args) throws IOException {
 
         String inputFileForMerge1 = System.getProperty("file1");
@@ -153,10 +199,10 @@ public class CSVReaderMain {
         // TEST DATA
 //        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
 //        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
-//        String inputFileAfterMerge =  "src/main/resources/bug1/3.csv";
+//        String inputFileAfterMerge =  "src/main/resources/example2.csv";
 //        String Additional_CRecord_Data_Task1a = "src/main/resources/bug1/Additional_CRecord_Data_Task1a.csv";
 //
-//        String taskNumber = "Task1a";
+//        String taskNumber = "Task1";
 //        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
 //        String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
 //        String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
@@ -181,6 +227,7 @@ public class CSVReaderMain {
                 allData = generateListOfDataArray(A, fullFile, E);
                 writeCSV(allData, task1ResultFileName);
             } catch (Exception ex) {
+                errorMessage = ex.getStackTrace().toString();
                 System.out.println(" exception " + ex.getStackTrace());
                 throw ex;
             }
@@ -189,13 +236,27 @@ public class CSVReaderMain {
             calculateAmount(allData);
             protocol.setResultAmountTotal(allData.size());
             protocol.setResultAmountTotal(protocol.getKeyFile1ToFile2().size());
-                        writeProtocolToFile("Protocol Task1.txt", taskNumber, inputFileForMerge1, inputFileForMerge2,
+            writeProtocolToFileTask1("Protocol Task1.txt", taskNumber, inputFileForMerge1, inputFileForMerge2,
                     task1ResultFileName, fileInfo1, fileInfo2, errorMessage);
         } else if(taskNumber.equalsIgnoreCase("Task2") && inputFileAfterMerge != null) {
-            Map<String,CVSClient> fullFile = readCSVFileByStringSimple(inputFileAfterMerge);
-            List<String> metadata = generateMetadata(E, fullFile);
-            List<String[]> allMetadata = generateMetadataArray(metadata);
-            writeCSV(allMetadata, task2ResultFileName);
+            String errorMessage = null;
+            Map<String,CVSClient> fullFile = null;
+            List<String[]> allMetadata = null;
+            try {
+                fullFile = readCSVFileByStringSimple(inputFileAfterMerge);
+                List<String> metadata = generateMetadata(E, fullFile);
+                allMetadata = generateMetadataArray(metadata);
+                writeCSV(allMetadata, task2ResultFileName);
+            } catch (Exception ex) {
+                errorMessage = ex.getStackTrace().toString();
+                throw ex;
+            }
+
+            //Protocol
+            calculateDAmount(fullFile);
+            writeProtocolToFileTask2("Protocol Task2.txt", taskNumber, inputFileAfterMerge,
+                    task2ResultFileName, errorMessage);
+
         }else if(taskNumber.equalsIgnoreCase("Task1a") && inputFileAfterMerge != null && Additional_CRecord_Data_Task1a != null) {
             Map<String,CVSClient> fullFile = readCSVFileByStringSimple(inputFileAfterMerge);
             Map<String, Additional_CRecord_Data_Task1a> additional_cRecord_data_task1aMap = readExtraAdditionalDataCTask1a(Additional_CRecord_Data_Task1a);
@@ -402,16 +463,11 @@ public class CSVReaderMain {
         } else {
             AFile2 = myEntries.get(0)[0].split("\\*");
         }
-        System.out.println("before E" );
-        System.out.println("myEntities size " +myEntries.size());
 
         if(myEntries.size() > 0) {
             for(int k = myEntries.size()-1; k > 0; k-- ) {
-                System.out.println("k " + k + " & myEntries.get(k)[0] " + StringUtils.join(myEntries.get(k), " "));
                 if((myEntries.get(k)[0]).startsWith("E")) {
-                    System.out.println("found E");
                     E = myEntries.get(k)[0].split("\\*");
-                    System.out.println( myEntries.get(k)[0]);
                     break;
                 }
             }
@@ -518,12 +574,23 @@ public class CSVReaderMain {
             } else if(b2MapUtil.get(entry.getKey()) != null) {
                 String[] B = entry.getValue().getClientB();
                 B[1] = entry.getKey().getB1();
-                CVSClient cvsClient = new CVSClient(B, entry.getValue().getClientsC(), entry.getValue().getD());
+                List<String[]> C1 = entry.getValue().getClientsC();
+                for(String[] curC : C1) {
+                    curC[1] = curC[1] + "-" + A[1];
+                }
+                String[] D1 = entry.getValue().getD();
+                D1[1] = D1[1] + "-" + A[1];
+                CVSClient cvsClient = new CVSClient(B, C1, D1);
                 resultMap.put(entry.getKey().getBKey(), cvsClient);
                 String[] BFile2 = b2MapUtil.get(entry.getKey()).getClientB();
                 BFile2[1] = BFile2[1] + "-" + AFile2[1];
                 String B2InRealFile = BFile2[1];
                 CVSClient cvsClientFile2 = b2MapUtil.get(entry.getKey());
+                for(String[] curC : cvsClientFile2.getClientsC()) {
+                    curC[1] = curC[1] + "-" + AFile2[1];
+                }
+                String[] D = cvsClientFile2.getD();
+                D[1] = D[1] + "-" + AFile2[1];
                 String key = BFile2[2] + BFile2[3] + BFile2[11];
                 resultMap.put(key, cvsClientFile2);
                 B bReadFile2 = new B(key, BFile2[1], B2InRealFile);
