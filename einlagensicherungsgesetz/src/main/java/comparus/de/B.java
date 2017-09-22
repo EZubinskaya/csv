@@ -6,13 +6,15 @@ package comparus.de;
 public class B {
     private String BKey;
     private String B1;
+    private String B1RealInFile;
 
     public B() {
     }
 
-    public B(String BKey, String b1) {
+    public B(String BKey, String B1, String B1RealInFile) {
         this.BKey = BKey;
-        B1 = b1;
+        this.B1 = B1;
+        this.B1RealInFile = B1RealInFile;
     }
 
     public String getBKey() {
@@ -29,5 +31,13 @@ public class B {
 
     public void setB1(String b1) {
         B1 = b1;
+    }
+
+    public String getB1RealInFile() {
+        return B1RealInFile;
+    }
+
+    public void setB1RealInFile(String b1RealInFile) {
+        B1RealInFile = b1RealInFile;
     }
 }
