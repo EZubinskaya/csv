@@ -135,15 +135,15 @@ public class CSVReaderMain {
 
     public static void main(String[] args) throws IOException {
 
-//        String inputFileForMerge1 = System.getProperty("file1");
-//        String inputFileForMerge2 = System.getProperty("file2");
-//        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
-//        String A_Additional_5 = System.getProperty("A_Additional5");
-//
-//        String Additional_CRecord_Data_Task1a = System.getProperty("Additional_CRecord_Data_Task1a");
-//        String B_Additional_5 = System.getProperty("B_Additional5");
-//        String C_Additional_5 = System.getProperty("C_Additional5");
-//        String taskNumber = System.getProperty("taskNumber");
+        String inputFileForMerge1 = System.getProperty("file1");
+        String inputFileForMerge2 = System.getProperty("file2");
+        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
+        String A_Additional_5 = System.getProperty("A_Additional5");
+
+        String Additional_CRecord_Data_Task1a = System.getProperty("Additional_CRecord_Data_Task1a");
+        String B_Additional_5 = System.getProperty("B_Additional5");
+        String C_Additional_5 = System.getProperty("C_Additional5");
+        String taskNumber = System.getProperty("taskNumber");
 
         String task1ResultFileName = "EinreicherdateiB11_Gesamt_4.1.csv";
         String task1aResultFileName = "EinreicherdateiB11_Gesamt_4.1_add_additional_C.csv";
@@ -151,15 +151,15 @@ public class CSVReaderMain {
         String task3ResultFileName = "EinreicherdateiB11_Gesamt_5.1.csv";
 
         // TEST DATA
-        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
-        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
-        String inputFileAfterMerge =  "src/main/resources/bug1/3.csv";
-        String Additional_CRecord_Data_Task1a = "src/main/resources/bug1/Additional_CRecord_Data_Task1a.csv";
-
-        String taskNumber = "Task1a";
-        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
-        String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
-        String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
+//        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
+//        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
+//        String inputFileAfterMerge =  "src/main/resources/bug1/3.csv";
+//        String Additional_CRecord_Data_Task1a = "src/main/resources/bug1/Additional_CRecord_Data_Task1a.csv";
+//
+//        String taskNumber = "Task1a";
+//        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
+//        String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
+//        String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
 
         if(taskNumber.equalsIgnoreCase("Task1") && inputFileForMerge1!= null & inputFileForMerge2 != null) {
             Map<B, CVSClient> readFile1 = null;
@@ -176,7 +176,7 @@ public class CSVReaderMain {
                 fileInfo2 = readCSVFileByStringRetCount(readFile2, inputFileForMerge2);
 
                 Map<String, CVSClient> fullFile = generateMapOfData(readFile1, readFile2);
-                reCalculateD(fullFile, A);
+                reCalculateD(fullFile, A, true);
                 String[] E = reCalculateE(fullFile, A);
                 allData = generateListOfDataArray(A, fullFile, E);
                 writeCSV(allData, task1ResultFileName);
@@ -200,7 +200,7 @@ public class CSVReaderMain {
             Map<String,CVSClient> fullFile = readCSVFileByStringSimple(inputFileAfterMerge);
             Map<String, Additional_CRecord_Data_Task1a> additional_cRecord_data_task1aMap = readExtraAdditionalDataCTask1a(Additional_CRecord_Data_Task1a);
             Map<String,CVSClient> fullFileVersion4_1_Additional_C = generateVersion4AdditionalC(fullFile, additional_cRecord_data_task1aMap);
-            reCalculateD2(fullFileVersion4_1_Additional_C, A);
+            reCalculateD(fullFileVersion4_1_Additional_C, A, false);
             String[] E = reCalculateE(fullFileVersion4_1_Additional_C, A);
             List<String[]> allData = generateListOfDataArray(A, fullFileVersion4_1_Additional_C, E);
             writeCSV(allData, task1aResultFileName);
@@ -559,15 +559,18 @@ public class CSVReaderMain {
         return E;
     }
 
-    static Map<String, CVSClient> reCalculateD(Map<String, CVSClient> fullFile, String[] A) {
-        List<String>  sameBList = sameBList(protocol.getKeyFile1ToFile2());
+    static Map<String, CVSClient> reCalculateD(Map<String, CVSClient> fullFile, String[] A, boolean writeToProtocol) {
+        List<String>  sameBList = new ArrayList<>();
+        if(writeToProtocol) {
+            sameBList = sameBList(protocol.getKeyFile1ToFile2());
+        }
         List<String>  recalculatedDRecords = new ArrayList<>();
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
             String[] clientB = entry.getValue().getClientB();
             CVSClient cvsClientVersion41 = entry.getValue();
             List<String[]> CList = cvsClientVersion41.getClientsC();
             String[] D = cvsClientVersion41.getD();
-            if(sameBList.contains(StringUtils.join(clientB, "*"))) {
+            if(writeToProtocol && sameBList.contains(StringUtils.join(clientB, "*"))) {
                 D[2] = calculateD3(CList);
                 D[3] = calculateD4(clientB, CList, createNumValue(D[2]));
                 D[4] = calculateD5D7(createNumValue(D[2]), createNumValue(D[3]));
@@ -584,32 +587,8 @@ public class CSVReaderMain {
                 recalculatedDRecords.add(StringUtils.join(D, "*"));
             }
         }
-        protocol.setRecalculatedDRecords(recalculatedDRecords);
-        return fullFile;
-    }
-
-    static Map<String, CVSClient> reCalculateD2(Map<String, CVSClient> fullFile, String[] A) {
-        List<String>  recalculatedDRecords = new ArrayList<>();
-        for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-            String[] clientB = entry.getValue().getClientB();
-            CVSClient cvsClientVersion41 = entry.getValue();
-            List<String[]> CList = cvsClientVersion41.getClientsC();
-            String[] D = cvsClientVersion41.getD();
-                D[2] = calculateD3(CList);
-                D[3] = calculateD4(clientB, CList, createNumValue(D[2]));
-                D[4] = calculateD5D7(createNumValue(D[2]), createNumValue(D[3]));
-                D[5] = calculateD6(createNumValue(A[3]), createNumValue(D[4]), CList);
-                D[6] = calculateD5D7(createNumValue(D[4]), createNumValue(D[5]));
-                D[7] = "0";
-                D[8] = "0";
-                D[9] = calculateD1011(30, 49, 10, 49, CList, clientB);
-                D[10] = calculateD1011(30, 49, 20, 49, CList, clientB);
-                D[11] = calculateD12(D, CList, A[5]);
-                D[12] = "0";
-                D[13] = calculateD14(CList);
-                D[14] = "0"; // why 101
-                recalculatedDRecords.add(StringUtils.join(D, "*"));
-
+        if(writeToProtocol) {
+            protocol.setRecalculatedDRecords(recalculatedDRecords);
         }
         return fullFile;
     }
