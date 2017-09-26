@@ -400,11 +400,11 @@ public class Task3 {
             result.append('N');
         }
 
-        result.append(C20.substring(16,21));
-        String C20pos21_24 = "NNN";
+        result.append(C20.substring(16,20));
+        String C20pos21_24 = "NNNN";
         result.append(C20pos21_24);
-        result.append(C20.substring(24,31));
-        if(isYSymbolSet(23, C20) ||  isYSymbolSet(24, C20)) {
+        result.append(C20.substring(24,30));
+        if(isYSymbolSet(22, C20) ||  isYSymbolSet(23, C20)) {
             result.append('Y');
         } else {
             result.append('N');
@@ -563,8 +563,9 @@ public class Task3 {
 
         for (String[] cStr: CList) {
             BigDecimal C5 = createNumValue(cStr[5]);
-            BigDecimal A5C5 = C5.multiply(createNumValue(A6));
-            if(HW1.compareTo(A5C5) == -1) {
+            BigDecimal A6C5 = C5.multiply(createNumValue(A6));
+            result = A6C5;
+            if(HW1.compareTo(A6C5) == -1) {
                 result = HW1;
             }
         }
@@ -573,7 +574,7 @@ public class Task3 {
         if(result.signum() == -1) {
             result = BigDecimal.ZERO;
         }
-        return (result);
+        return result;
     }
 
     static BigDecimal calculateD13Version5_1(BigDecimal D12A, BigDecimal D12B, BigDecimal D12C) {
