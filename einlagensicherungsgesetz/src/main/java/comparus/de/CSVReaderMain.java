@@ -48,12 +48,12 @@ public class CSVReaderMain {
         String task5ResultFileName = "Meldedatei_Gesamt_5.1.csv";
 
         // TEST DATA
-        String inputFileForMerge1 =  "src/main/resources/task4/1.csv";
+        String inputFileForMerge1 =  "src/main/resources/bug1/3.csv";
         String inputFileForMerge2 = "src/main/resources/task4/2.csv";
-        String inputFileAfterMerge =  "src/main/resources/example1.csv";
+        String inputFileAfterMerge =  "src/main/resources/bug1/3.csv";
         String Additional_CRecord_Data_Task1a = "src/main/resources/bug1/Additional_CRecord_Data_Task1a.csv";
 
-        String taskNumber = "Task5";
+        String taskNumber = "Task1a";
         String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
         String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
         String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
