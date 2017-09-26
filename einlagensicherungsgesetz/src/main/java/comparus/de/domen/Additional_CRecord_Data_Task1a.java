@@ -1,5 +1,7 @@
 package comparus.de.domen;
 
+import org.apache.commons.lang3.StringUtils;
+
 /**
  * Created by ekaterina on 9/21/17.
  */
@@ -325,5 +327,10 @@ public class Additional_CRecord_Data_Task1a implements Cloneable {
         String[] arr = {C1, C2A, C2B, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20_01_50, C21_01_04 + C21_05 + C21_06 +
                 C21_07 + C21_08_50};
         return arr;
+    }
+
+    @Override
+    public String toString() {
+        return StringUtils.join(toArray(), "*");
     }
 }

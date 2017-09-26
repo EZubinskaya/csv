@@ -189,7 +189,7 @@ public class Task1 {
     }
 
 
-    private static String calculateD3(List<String[]> CList) {
+    static String calculateD3(List<String[]> CList) {
         BigDecimal sumD3 = BigDecimal.ZERO;
         for (String[] elStr : CList) {
             BigDecimal el = createNumValue(elStr[19]);
@@ -291,7 +291,7 @@ public class Task1 {
         return false;
     }
 
-    private static String calculateD1011(int ifFrom, int ifTo, int elseFrom, int elseTo, List<String[]> CList, String[] clientB) {
+    static String calculateD1011(int ifFrom, int ifTo, int elseFrom, int elseTo, List<String[]> CList, String[] clientB) {
         BigDecimal sumD10 = BigDecimal.ZERO;
 
         if(specificPositionSymbol(ifFrom,ifTo, clientB[13])) {

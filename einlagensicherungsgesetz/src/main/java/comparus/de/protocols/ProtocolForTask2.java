@@ -4,6 +4,8 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import static comparus.de.CSVReaderMain.protocol;
+
 /**
  * Created by ekaterina on 9/26/17.
  */
@@ -34,7 +36,7 @@ public class ProtocolForTask2 {
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nAMOUNTS OF DATASETS\r\n\r\n");
                 writer.write("Inputfile name 1: " + inputFileForMerge1 + "\r\n");
-                writer.write("D : " + ProtocolForTask1.protocol.getResultAmountD() + "\r\n");
+                writer.write("D : " + protocol.getResultAmountD() + "\r\n");
             }
         } catch (IOException ex) {
             // report

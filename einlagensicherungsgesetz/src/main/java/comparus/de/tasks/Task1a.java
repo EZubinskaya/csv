@@ -3,12 +3,17 @@ package comparus.de.tasks;
 import com.opencsv.CSVReader;
 import comparus.de.domen.Additional_CRecord_Data_Task1a;
 import comparus.de.domen.CVSClient;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileReader;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static comparus.de.CSVReaderMain.A;
+import static comparus.de.CSVReaderMain.protocol;
+import static comparus.de.protocols.ProtocolForTask1.sameBList;
+import static comparus.de.tasks.Task1.*;
 import static comparus.de.util.Util.createNumValue;
 import static comparus.de.util.Util.decimalToString;
 import static java.awt.PageAttributes.MediaType.C9;
@@ -122,4 +127,32 @@ public class Task1a {
         C.put(valueZusatz002.getC2A(), valueZusatz002);
         C.put(valueZusatz003.getC2A(), valueZusatz002);
     }
+
+    public static void reCalculateD_task1A(Map<String, CVSClient> fullFile, String[] a, List<String> b) {
+        List<String>  recalculatedDRecords = new ArrayList<>();
+        for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+            String[] clientB = entry.getValue().getClientB();
+            CVSClient cvsClientVersion41 = entry.getValue();
+            List<String[]> CList = cvsClientVersion41.getClientsC();
+            String[] D = cvsClientVersion41.getD();
+            if(b.contains(clientB[1])) {
+                D[2] = calculateD3(CList);
+                D[3] = calculateD4(clientB, CList, createNumValue(D[2]));
+                D[4] = calculateD5D7(createNumValue(D[2]), createNumValue(D[3]));
+                D[5] = calculateD6(createNumValue(A[3]), createNumValue(D[4]), CList);
+                D[6] = calculateD5D7(createNumValue(D[4]), createNumValue(D[5]));
+                D[7] = "0,00";
+                D[8] = "0,00";
+                D[9] = calculateD1011(30, 49, 10, 49, CList, clientB);
+                D[10] = calculateD1011(30, 49, 20, 49, CList, clientB);
+                D[11] = calculateD12(D, CList, A[5]);
+                D[12] = "0,00";
+                D[13] = calculateD14(CList);
+                D[14] = "0,00"; // why 101
+                recalculatedDRecords.add(StringUtils.join(D, "*"));
+            }
+        }
+        protocol.setRecalculatedDRecords(recalculatedDRecords);
+    }
+
 }

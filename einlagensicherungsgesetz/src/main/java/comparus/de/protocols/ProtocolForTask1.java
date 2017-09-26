@@ -9,11 +9,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import static comparus.de.CSVReaderMain.protocol;
+
 /**
  * Created by ekaterina on 9/26/17.
  */
 public class ProtocolForTask1 {
-    public static Protocol protocol = new Protocol();
     //Protocol
     public static FileInfo readCSVFileByStringRetCount(Map<B, CVSClient> fullFile, String fileName) throws IOException {
         FileInfo fileInfo = new FileInfo();

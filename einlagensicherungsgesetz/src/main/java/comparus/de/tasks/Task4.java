@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static comparus.de.protocols.ProtocolForTask1.protocol;
+import static comparus.de.CSVReaderMain.protocol;
 import static comparus.de.protocols.ProtocolForTask1.sameBList;
 import static comparus.de.tasks.Task1.*;
 import static comparus.de.tasks.Task1.calculateD14;

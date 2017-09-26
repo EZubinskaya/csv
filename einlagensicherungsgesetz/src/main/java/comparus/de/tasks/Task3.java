@@ -574,7 +574,7 @@ public class Task3 {
         if(result.signum() == -1) {
             result = BigDecimal.ZERO;
         }
-        return result;
+        return (result);
     }
 
     static BigDecimal calculateD13Version5_1(BigDecimal D12A, BigDecimal D12B, BigDecimal D12C) {
