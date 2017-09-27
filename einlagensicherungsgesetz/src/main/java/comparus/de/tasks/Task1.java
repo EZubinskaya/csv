@@ -22,7 +22,7 @@ import static comparus.de.util.Util.decimalToString;
 public class Task1 {
     static List<String[]> bTheSame = new ArrayList<>();
 
-    public static Map<B,CVSClient> readCSVFileByString(String file) throws IOException {
+    public static Map<B,CVSClient> readCSVFileByString(String file, boolean addA2ToC2B) throws IOException {
 
         Map<B,CVSClient> clients = new TreeMap(new Comparator<B>() {
             @Override
@@ -59,7 +59,11 @@ public class Task1 {
                     String[] DValue = null;
                     j = i+1;
                     while (myEntries.get(j)[0].startsWith("C")) {
-                        CValues.add(myEntries.get(j)[0].split("\\*"));
+                        String[] cur = myEntries.get(j)[0].split("\\*");
+                        if(addA2ToC2B) {
+                            cur[2] = cur[2] + "-" + myEntries.get(0)[0].split("\\*")[1];
+                        }
+                        CValues.add(cur);
                         j++;
                     }
                     if(myEntries.get(j)[0].startsWith("D")) {
@@ -97,6 +101,10 @@ public class Task1 {
                 bTheSame.add(readFile1.get(entry.getKey()).getClientB());
                 List<String[]> clients = new LinkedList<>();
                 clients.addAll(entry.getValue().getClientsC());
+                List<String[]> file2Crecords = readFile2.get(entry.getKey()).getClientsC();
+                for (String[] curEl : file2Crecords) {
+                    curEl[1] = readFile1.get(entry.getKey()).getClientB()[1];
+                }
                 clients.addAll(readFile2.get(entry.getKey()).getClientsC());
                 resultMap.put(entry.getKey().getBKey(), new CVSClient(entry.getValue().getClientB(), clients, entry.getValue().getD()));
                 readFile2.remove(entry.getKey());

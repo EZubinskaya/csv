@@ -49,8 +49,10 @@ public class CSVReaderMain {
         String task5ResultFileName = "Meldedatei_Gesamt_5.1.csv";
 
         // TEST DATA
-        String inputFileForMerge1 =  "src/main/resources/bug1/3.csv";
-        String inputFileForMerge2 = "src/main/resources/task4/2.csv";
+//        String inputFileForMerge1 =  "src/main/resources/bug1/3.csv";
+//        String inputFileForMerge2 = "src/main/resources/task4/2.csv";
+        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
+        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
         String inputFileAfterMerge =  "src/main/resources/bug1/3.csv";
         String Additional_CRecord_Data_Task1a = "src/main/resources/bug1/Additional_CRecord_Data_Task1a.csv";
 
@@ -67,8 +69,8 @@ public class CSVReaderMain {
             List<String[]> allData = null;
             String errorMessage = null;
             try {
-                readFile1 = readCSVFileByString(inputFileForMerge1);
-                readFile2 = readCSVFileByString(inputFileForMerge2);
+                readFile1 = readCSVFileByString(inputFileForMerge1, true);
+                readFile2 = readCSVFileByString(inputFileForMerge2, true);
 
                 fileInfo1 = readCSVFileByStringRetCount(readFile1, inputFileForMerge1);
                 fileInfo2 = readCSVFileByStringRetCount(readFile2, inputFileForMerge2);
@@ -177,8 +179,8 @@ public class CSVReaderMain {
             List<String[]> allData = null;
             String errorMessage = null;
             try {
-                readFile1 = readCSVFileByString(inputFileForMerge1);
-                readFile2 = readCSVFileByString(inputFileForMerge2);
+                readFile1 = readCSVFileByString(inputFileForMerge1, false);
+                readFile2 = readCSVFileByString(inputFileForMerge2, false);
 
                 fileInfo1 = readCSVFileByStringRetCount(readFile1, inputFileForMerge1);
                 fileInfo2 = readCSVFileByStringRetCount(readFile2, inputFileForMerge2);
