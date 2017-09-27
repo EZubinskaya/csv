@@ -28,12 +28,13 @@ public class Task1a {
         CSVReader reader = new CSVReader(new FileReader(additional_cRecord_data_task1a), '\n', '\'');
         List<String[]> myEntries = reader.readAll();
         for(int i = 1; i < myEntries.size(); i++) {
+            //starts with A2
             String[] curEl = myEntries.get(i)[0].split(";", -1);
-            String key = curEl[1];
-            Additional_CRecord_Data_Task1a value = new Additional_CRecord_Data_Task1a(curEl[0], curEl[1], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
+            String key = curEl[2];
+            Additional_CRecord_Data_Task1a value = new Additional_CRecord_Data_Task1a(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
                     curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
                     curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28], curEl[29], curEl[30], curEl[31]);
-            if(curEl[2].startsWith("GEMKD") && value.getZusatz_GK_001().equals("J")) {
+            if(value.getC2B().startsWith("GEMKD") && value.getZusatz_GK_001().equals("J")) {
                 specialCRecords(C, value, curEl);
             } else {
                 C.put(key, value);
@@ -92,10 +93,10 @@ public class Task1a {
     }
 
     static void specialCRecords(Map<String,Additional_CRecord_Data_Task1a> C, Additional_CRecord_Data_Task1a value, String[] curEl) {
-        Additional_CRecord_Data_Task1a valueZusatz002 = new Additional_CRecord_Data_Task1a(curEl[0], curEl[1], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
+        Additional_CRecord_Data_Task1a valueZusatz002 = new Additional_CRecord_Data_Task1a(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
                 curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
                 curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28], curEl[29], curEl[30], curEl[31]);
-        Additional_CRecord_Data_Task1a valueZusatz003 = new Additional_CRecord_Data_Task1a(curEl[0], curEl[1], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
+        Additional_CRecord_Data_Task1a valueZusatz003 = new Additional_CRecord_Data_Task1a(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
                 curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
                 curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28], curEl[29], curEl[30], curEl[31]);
 
@@ -125,7 +126,7 @@ public class Task1a {
         valueZusatz003.setC2B(newC2B_Zusatz003);
 
         C.put(valueZusatz002.getC2A(), valueZusatz002);
-        C.put(valueZusatz003.getC2A(), valueZusatz002);
+        C.put(valueZusatz003.getC2A(), valueZusatz003);
     }
 
     public static void reCalculateD_task1A(Map<String, CVSClient> fullFile, String[] a, List<String> b) {

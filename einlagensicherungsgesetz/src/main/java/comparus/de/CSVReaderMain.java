@@ -53,7 +53,7 @@ public class CSVReaderMain {
 //        String inputFileForMerge2 = "src/main/resources/task4/2.csv";
         String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
         String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
-        String inputFileAfterMerge =  "src/main/resources/bug1/3.csv";
+        String inputFileAfterMerge =  "src/main/resources/bug1/4.csv";
         String Additional_CRecord_Data_Task1a = "src/main/resources/bug1/Additional_CRecord_Data_Task1a.csv";
 
         String taskNumber = "Task1a";
@@ -134,7 +134,7 @@ public class CSVReaderMain {
                 Map<String, comparus.de.domen.Additional_CRecord_Data_Task1a> additional_cRecord_data_task1aMap = readExtraAdditionalDataCTask1a(Additional_CRecord_Data_Task1a);
 
                 fileInfo2 = new FileInfo();
-                fileInfo2.setCCount(additional_cRecord_data_task1aMap.size()-1);
+                fileInfo2.setCCount(additional_cRecord_data_task1aMap.size());
                 mergingCRecords.addAll(additional_cRecord_data_task1aMap.values());
                 Map<String,CVSClient> fullFileVersion4_1_Additional_C = generateVersion4AdditionalC(readFile1, additional_cRecord_data_task1aMap);
                 List<String> B = new ArrayList<>();
