@@ -2,7 +2,6 @@ package comparus.de.tasks;
 
 import com.opencsv.CSVReader;
 import comparus.de.domen.Additional_CRecord;
-import comparus.de.domen.Additional_CRecord_Data_Task1a;
 import comparus.de.domen.CVSClient;
 import org.apache.commons.lang3.StringUtils;
 
@@ -13,11 +12,9 @@ import java.util.*;
 
 import static comparus.de.CSVReaderMain.A;
 import static comparus.de.CSVReaderMain.protocol;
-import static comparus.de.protocols.ProtocolForTask1.sameBList;
 import static comparus.de.tasks.Task1.*;
 import static comparus.de.util.Util.createNumValue;
 import static comparus.de.util.Util.decimalToString;
-import static java.awt.PageAttributes.MediaType.C9;
 
 
 /**
@@ -32,11 +29,8 @@ public class Task1a {
             //starts with A2
             String[] curEl = myEntries.get(i)[0].split(";", -1);
             String key = curEl[2];
-            Additional_CRecord_Data_Task1a value = new Additional_CRecord_Data_Task1a(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
-                    curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
-                    curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28], curEl[29], curEl[30], curEl[31]);
-            if(value.getC2B().startsWith("GEMKD") && value.getZusatz_GK_001().equals("J")) {
-                specialCRecords(C, value, curEl);
+            if(curEl[3].startsWith("GEMKD") && curEl[29].equals("J")) {
+                specialCRecords(C, curEl);
             } else {
                 Additional_CRecord valueRecord = new Additional_CRecord(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
                         curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
@@ -96,7 +90,7 @@ public class Task1a {
         return  sortedData;
     }
 
-    static void specialCRecords(Map<String,Additional_CRecord> C, Additional_CRecord_Data_Task1a value, String[] curEl) {
+    static void specialCRecords(Map<String,Additional_CRecord> C, String[] curEl) {
         Additional_CRecord valueZusatz002 = new Additional_CRecord(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
                 curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
                 curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28]);
@@ -104,27 +98,27 @@ public class Task1a {
                 curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
                 curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28]);
 
-        valueZusatz002.setC2A(value.getZusatz_GK_002());
-        valueZusatz003.setC2A(value.getZusatz_GK_003());
+        valueZusatz002.setC2A(curEl[30]);
+        valueZusatz003.setC2A(curEl[30]);
 
         BigDecimal two = new BigDecimal("2");
-        valueZusatz002.setC9(decimalToString(createNumValue(value.getC9()).divide(two)));
-        valueZusatz003.setC9(decimalToString(createNumValue(value.getC9()).divide(two)));
+        valueZusatz002.setC9(decimalToString(createNumValue(curEl[9]).divide(two)));
+        valueZusatz003.setC9(decimalToString(createNumValue(curEl[9]).divide(two)));
 
-        valueZusatz002.setC11(decimalToString(createNumValue(value.getC11()).divide(two)));
-        valueZusatz003.setC11(decimalToString(createNumValue(value.getC11()).divide(two)));
+        valueZusatz002.setC11(decimalToString(createNumValue(curEl[11]).divide(two)));
+        valueZusatz003.setC11(decimalToString(createNumValue(curEl[11]).divide(two)));
 
-        valueZusatz002.setC17(decimalToString(createNumValue(value.getC17()).divide(two)));
-        valueZusatz003.setC17(decimalToString(createNumValue(value.getC17()).divide(two)));
+        valueZusatz002.setC17(decimalToString(createNumValue(curEl[17]).divide(two)));
+        valueZusatz003.setC17(decimalToString(createNumValue(curEl[17]).divide(two)));
 
-        valueZusatz002.setC18(decimalToString(createNumValue(value.getC18()).divide(two)));
-        valueZusatz003.setC18(decimalToString(createNumValue(value.getC18()).divide(two)));
+        valueZusatz002.setC18(decimalToString(createNumValue(curEl[18]).divide(two)));
+        valueZusatz003.setC18(decimalToString(createNumValue(curEl[18]).divide(two)));
 
-        valueZusatz002.setC19(decimalToString(createNumValue(value.getC19()).divide(two)));
-        valueZusatz003.setC19(decimalToString(createNumValue(value.getC19()).divide(two)));
+        valueZusatz002.setC19(decimalToString(createNumValue(curEl[19]).divide(two)));
+        valueZusatz003.setC19(decimalToString(createNumValue(curEl[19]).divide(two)));
 
-        String newC2B_Zusatz002 = "GEMKD" + value.getZusatz_GK_002() + "-" + value.getC2B();
-        String newC2B_Zusatz003 = "GEMKD" + value.getZusatz_GK_003() + "-" + value.getC2B();
+        String newC2B_Zusatz002 = "GEMKD" + curEl[30] + "-" + curEl[3];
+        String newC2B_Zusatz003 = "GEMKD" + curEl[31] + "-" + curEl[3];
 
         valueZusatz002.setC2B(newC2B_Zusatz002);
         valueZusatz003.setC2B(newC2B_Zusatz003);
