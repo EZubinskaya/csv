@@ -99,23 +99,23 @@ public class Task1a {
                 curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28]);
 
         valueZusatz002.setC2A(curEl[30]);
-        valueZusatz003.setC2A(curEl[30]);
+        valueZusatz003.setC2A(curEl[31]);
 
         BigDecimal two = new BigDecimal("2");
-        valueZusatz002.setC9(decimalToString(createNumValue(curEl[9]).divide(two)));
-        valueZusatz003.setC9(decimalToString(createNumValue(curEl[9]).divide(two)));
+        valueZusatz002.setC9(decimalToString(createNumValue(curEl[10]).divide(two)));
+        valueZusatz003.setC9(decimalToString(createNumValue(curEl[10]).divide(two)));
 
-        valueZusatz002.setC11(decimalToString(createNumValue(curEl[11]).divide(two)));
-        valueZusatz003.setC11(decimalToString(createNumValue(curEl[11]).divide(two)));
+        valueZusatz002.setC11(decimalToString(createNumValue(curEl[12]).divide(two)));
+        valueZusatz003.setC11(decimalToString(createNumValue(curEl[12]).divide(two)));
 
-        valueZusatz002.setC17(decimalToString(createNumValue(curEl[17]).divide(two)));
-        valueZusatz003.setC17(decimalToString(createNumValue(curEl[17]).divide(two)));
+        valueZusatz002.setC17(decimalToString(createNumValue(curEl[18]).divide(two)));
+        valueZusatz003.setC17(decimalToString(createNumValue(curEl[18]).divide(two)));
 
-        valueZusatz002.setC18(decimalToString(createNumValue(curEl[18]).divide(two)));
-        valueZusatz003.setC18(decimalToString(createNumValue(curEl[18]).divide(two)));
+        valueZusatz002.setC18(decimalToString(createNumValue(curEl[19]).divide(two)));
+        valueZusatz003.setC18(decimalToString(createNumValue(curEl[19]).divide(two)));
 
-        valueZusatz002.setC19(decimalToString(createNumValue(curEl[19]).divide(two)));
-        valueZusatz003.setC19(decimalToString(createNumValue(curEl[19]).divide(two)));
+        valueZusatz002.setC19(decimalToString(createNumValue(curEl[20]).divide(two)));
+        valueZusatz003.setC19(decimalToString(createNumValue(curEl[20]).divide(two)));
 
         String newC2B_Zusatz002 = "GEMKD" + curEl[30] + "-" + curEl[3];
         String newC2B_Zusatz003 = "GEMKD" + curEl[31] + "-" + curEl[3];
