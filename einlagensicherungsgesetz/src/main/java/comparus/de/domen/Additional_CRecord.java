@@ -3,9 +3,9 @@ package comparus.de.domen;
 import org.apache.commons.lang3.StringUtils;
 
 /**
- * Created by ekaterina on 9/21/17.
+ * Created by ekaterina on 9/28/17.
  */
-public class Additional_CRecord_Data_Task1a implements Cloneable {
+public class Additional_CRecord {
     private String C1;
     private String C2A;
     private String C2B;
@@ -26,22 +26,15 @@ public class Additional_CRecord_Data_Task1a implements Cloneable {
     private String C17;
     private String C18;
     private String C19;
-    private String C20_01_50;
-    private String C21_01_04;
-    private String C21_05;
-    private String C21_06;
-    private String C21_07;
-    private String C21_08_50;
+    private String C20;
+    private String C21;
     private String C22;
     private String C23;
-    private String Zusatz_GK_001;
-    private String Zusatz_GK_002;
-    private String Zusatz_GK_003;
 
-    public Additional_CRecord_Data_Task1a() {
+    public Additional_CRecord() {
     }
 
-    public Additional_CRecord_Data_Task1a(String c1, String c2A, String c2B, String c3, String c4, String c5, String c6, String c7, String c8, String c9, String c10, String c11, String c12, String c13, String c14, String c15, String c16, String c17, String c18, String c19, String c20_01_50, String c21_01_04, String c21_05, String c21_06, String c21_07, String c21_08_50, String c22, String c23, String zusatz_GK_001, String zusatz_GK_002, String Zusatz_GK_003) {
+    public Additional_CRecord(String c1, String c2A, String c2B, String c3, String c4, String c5, String c6, String c7, String c8, String c9, String c10, String c11, String c12, String c13, String c14, String c15, String c16, String c17, String c18, String c19, String c20_01_50, String c21_01_04, String c21_05, String c21_06, String c21_07, String c21_08_50, String c22, String c23) {
         C1 = c1;
         C2A = c2A;
         C2B = c2B;
@@ -62,17 +55,10 @@ public class Additional_CRecord_Data_Task1a implements Cloneable {
         C17 = c17;
         C18 = c18;
         C19 = c19;
-        C20_01_50 = c20_01_50;
-        C21_01_04 = c21_01_04;
-        C21_05 = c21_05;
-        C21_06 = c21_06;
-        C21_07 = c21_07;
-        C21_08_50 = c21_08_50;
+        C20 = c20_01_50;
+        C21 = c21_01_04 + c21_05 + c21_06 + c21_07 + c21_08_50;
         C22 = c22;
         C23 = c23;
-        Zusatz_GK_001 = zusatz_GK_001;
-        Zusatz_GK_002 = zusatz_GK_002;
-        this.Zusatz_GK_003=Zusatz_GK_003;
     }
 
     public String getC1() {
@@ -235,52 +221,20 @@ public class Additional_CRecord_Data_Task1a implements Cloneable {
         C19 = c19;
     }
 
-    public String getC20_01_50() {
-        return C20_01_50;
+    public String getC20() {
+        return C20;
     }
 
-    public void setC20_01_50(String c20_01_50) {
-        C20_01_50 = c20_01_50;
+    public void setC20(String c20) {
+        C20 = c20;
     }
 
-    public String getC21_01_04() {
-        return C21_01_04;
+    public String getC21() {
+        return C21;
     }
 
-    public void setC21_01_04(String c21_01_04) {
-        C21_01_04 = c21_01_04;
-    }
-
-    public String getC21_05() {
-        return C21_05;
-    }
-
-    public void setC21_05(String c21_05) {
-        C21_05 = c21_05;
-    }
-
-    public String getC21_06() {
-        return C21_06;
-    }
-
-    public void setC21_06(String c21_06) {
-        C21_06 = c21_06;
-    }
-
-    public String getC21_07() {
-        return C21_07;
-    }
-
-    public void setC21_07(String c21_07) {
-        C21_07 = c21_07;
-    }
-
-    public String getC21_08_50() {
-        return C21_08_50;
-    }
-
-    public void setC21_08_50(String c21_08_50) {
-        C21_08_50 = c21_08_50;
+    public void setC21(String c21) {
+        C21 = c21;
     }
 
     public String getC22() {
@@ -299,38 +253,13 @@ public class Additional_CRecord_Data_Task1a implements Cloneable {
         C23 = c23;
     }
 
-    public String getZusatz_GK_001() {
-        return Zusatz_GK_001;
-    }
-
-    public void setZusatz_GK_001(String zusatz_GK_001) {
-        Zusatz_GK_001 = zusatz_GK_001;
-    }
-
-    public String getZusatz_GK_002() {
-        return Zusatz_GK_002;
-    }
-
-    public void setZusatz_GK_002(String zusatz_GK_002) {
-        Zusatz_GK_002 = zusatz_GK_002;
-    }
-
-    public String getZusatz_GK_003() {
-        return Zusatz_GK_003;
-    }
-
-    public void setZusatz_GK_003(String zusatz_GK_003) {
-        Zusatz_GK_003 = zusatz_GK_003;
-    }
-
     public String[] toArray() {
-        String[] arr = {C1, C2A, C2B, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20_01_50, C21_01_04 + C21_05 + C21_06 +
-                C21_07 + C21_08_50};
+        String[] arr = {C1, C2A, C2B, C3, C4, C5, C6, C7, C8, C9, C10, C11, C12, C13, C14, C15, C16, C17, C18, C19, C20, C21, C22, C23};
         return arr;
     }
 
     @Override
     public String toString() {
-        return StringUtils.join(toArray(),"*");
+        return StringUtils.join(toArray(), "*");
     }
 }

@@ -261,7 +261,7 @@ public class Task3 {
 
     public static Map<String,String> readExtraDataA (String A_Additional_5) throws IOException {
         Map<String,String> A = new LinkedHashMap<>();
-        CSVReader reader = new CSVReader(new FileReader(A_Additional_5), '\n', '\'');
+        CSVReader reader = new CSVReader(new FileReader(A_Additional_5), '\n', '|');
         List<String[]> myEntries = reader.readAll();
         String[] keys = myEntries.get(0)[0].split("\\*", -1);
         String[] values = myEntries.get(1)[0].split("\\*", -1);
@@ -273,7 +273,7 @@ public class Task3 {
 
     public static Map<String,B_ExtraData> readExtraDataB (String B_Additional_5) throws IOException {
         Map<String,B_ExtraData> B = new LinkedHashMap<>();
-        CSVReader reader = new CSVReader(new FileReader(B_Additional_5), '\n', '\'');
+        CSVReader reader = new CSVReader(new FileReader(B_Additional_5), '\n', '|');
         List<String[]> myEntries = reader.readAll();
         for(int i = 1; i < myEntries.size(); i++) {
             String[] curEl = myEntries.get(i)[0].split("\\*", -1);
@@ -286,7 +286,7 @@ public class Task3 {
 
     public static Map<String,C_ExtraData> readExtraDataC(String C_Additional_5) throws IOException {
         Map<String,C_ExtraData> C = new LinkedHashMap<>();
-        CSVReader reader = new CSVReader(new FileReader(C_Additional_5), '\n', '\'');
+        CSVReader reader = new CSVReader(new FileReader(C_Additional_5), '\n', '|');
         List<String[]> myEntries = reader.readAll();
         for(int i = 1; i < myEntries.size(); i++) {
             String[] curEl = myEntries.get(i)[0].split("\\*", -1);

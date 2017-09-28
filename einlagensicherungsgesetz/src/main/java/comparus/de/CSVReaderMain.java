@@ -31,15 +31,15 @@ public class CSVReaderMain {
 
     public static void main(String[] args) throws IOException {
 
-//        String inputFileForMerge1 = System.getProperty("file1");
-//        String inputFileForMerge2 = System.getProperty("file2");
-//        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
-//        String A_Additional_5 = System.getProperty("A_Additional5");
-//
-//        String Additional_CRecord_Data_Task1a = System.getProperty("Additional_CRecord_Data_Task1a");
-//        String B_Additional_5 = System.getProperty("B_Additional5");
-//        String C_Additional_5 = System.getProperty("C_Additional5");
-//        String taskNumber = System.getProperty("taskNumber");
+        String inputFileForMerge1 = System.getProperty("file1");
+        String inputFileForMerge2 = System.getProperty("file2");
+        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
+        String A_Additional_5 = System.getProperty("A_Additional5");
+
+        String Additional_CRecord_Data_Task1a = System.getProperty("Additional_CRecord_Data_Task1a");
+        String B_Additional_5 = System.getProperty("B_Additional5");
+        String C_Additional_5 = System.getProperty("C_Additional5");
+        String taskNumber = System.getProperty("taskNumber");
 
         String task1ResultFileName = "EinreicherdateiB11_Gesamt_4.1.csv";
         String task1aResultFileName = "EinreicherdateiB11_Gesamt_4.1_add_additional_C.csv";
@@ -48,18 +48,18 @@ public class CSVReaderMain {
         String task4ResultFileName = "EinreicherdateiB11_Gesamt_5.1_merge.csv";
         String task5ResultFileName = "Meldedatei_Gesamt_5.1.csv";
 
-        // TEST DATA
+//        // TEST DATA
 //        String inputFileForMerge1 =  "src/main/resources/bug1/3.csv";
 //        String inputFileForMerge2 = "src/main/resources/task4/2.csv";
-        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
-        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
-        String inputFileAfterMerge =  "src/main/resources/bug1/4.csv";
-        String Additional_CRecord_Data_Task1a = "src/main/resources/bug1/Additional_CRecord_Data_Task1a.csv";
-
-        String taskNumber = "Task1a";
-        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
-        String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
-        String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
+//        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
+//        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
+//        String inputFileAfterMerge =  "src/main/resources/task1a/input.csv";
+//        String Additional_CRecord_Data_Task1a = "src/main/resources/task1a/additionalTest.csv";
+//
+//        String taskNumber = "Task1a";
+//        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
+//        String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
+//        String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
 
         if(taskNumber.equalsIgnoreCase("Task1") && inputFileForMerge1!= null & inputFileForMerge2 != null) {
             Map<B, CVSClient> readFile1 = null;
@@ -126,19 +126,19 @@ public class CSVReaderMain {
             FileInfo fileInfo2 = null;
             List<String[]> allData = null;
             String errorMessage = null;
-            Set<Additional_CRecord_Data_Task1a> mergingCRecords = new HashSet<>();
+            Set<Additional_CRecord> mergingCRecords = new HashSet<>();
             try {
                 readFile1 = readCSVFileByStringSimple(inputFileAfterMerge);
                 fileInfo1 = readCSVFileByStringRetCountTask1a(readFile1, inputFileAfterMerge);
 
-                Map<String, comparus.de.domen.Additional_CRecord_Data_Task1a> additional_cRecord_data_task1aMap = readExtraAdditionalDataCTask1a(Additional_CRecord_Data_Task1a);
+                Map<String, Additional_CRecord> additional_cRecord = readExtraAdditionalDataCTask1a(Additional_CRecord_Data_Task1a);
 
                 fileInfo2 = new FileInfo();
-                fileInfo2.setCCount(additional_cRecord_data_task1aMap.size());
-                mergingCRecords.addAll(additional_cRecord_data_task1aMap.values());
-                Map<String,CVSClient> fullFileVersion4_1_Additional_C = generateVersion4AdditionalC(readFile1, additional_cRecord_data_task1aMap);
+                fileInfo2.setCCount(additional_cRecord.size());
+                mergingCRecords.addAll(additional_cRecord.values());
+                Map<String,CVSClient> fullFileVersion4_1_Additional_C = generateVersion4AdditionalC(readFile1, additional_cRecord);
                 List<String> B = new ArrayList<>();
-                for(Additional_CRecord_Data_Task1a a : mergingCRecords) {
+                for(Additional_CRecord a : mergingCRecords) {
                     B.add(a.getC2A());
                 }
                 reCalculateD_task1A(fullFileVersion4_1_Additional_C, A, B);

@@ -23,7 +23,7 @@ public class Task2 {
 
         Map<String,CVSClient> clients = new LinkedHashMap<>();
 
-        CSVReader reader = new CSVReader(new FileReader(file), '\n', '\'');
+        CSVReader reader = new CSVReader(new FileReader(file), '\n', '|');
         List<String[]> myEntries = reader.readAll();
         if(A == null) {
             A = myEntries.get(0)[0].split("\\*");

@@ -1,6 +1,7 @@
 package comparus.de.tasks;
 
 import com.opencsv.CSVReader;
+import comparus.de.domen.Additional_CRecord;
 import comparus.de.domen.Additional_CRecord_Data_Task1a;
 import comparus.de.domen.CVSClient;
 import org.apache.commons.lang3.StringUtils;
@@ -23,9 +24,9 @@ import static java.awt.PageAttributes.MediaType.C9;
  * Created by ekaterina on 9/26/17.
  */
 public class Task1a {
-    public static Map<String,Additional_CRecord_Data_Task1a> readExtraAdditionalDataCTask1a(String additional_cRecord_data_task1a) throws IOException {
-        Map<String,Additional_CRecord_Data_Task1a> C = new LinkedHashMap<>();
-        CSVReader reader = new CSVReader(new FileReader(additional_cRecord_data_task1a), '\n', '\'');
+    public static Map<String,Additional_CRecord> readExtraAdditionalDataCTask1a(String additional_cRecord_data_task1a) throws IOException {
+        Map<String,Additional_CRecord> C = new LinkedHashMap<>();
+        CSVReader reader = new CSVReader(new FileReader(additional_cRecord_data_task1a), '\n', '|');
         List<String[]> myEntries = reader.readAll();
         for(int i = 1; i < myEntries.size(); i++) {
             //starts with A2
@@ -37,13 +38,16 @@ public class Task1a {
             if(value.getC2B().startsWith("GEMKD") && value.getZusatz_GK_001().equals("J")) {
                 specialCRecords(C, value, curEl);
             } else {
-                C.put(key, value);
+                Additional_CRecord valueRecord = new Additional_CRecord(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
+                        curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
+                        curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28]);
+                C.put(key, valueRecord);
             }
         }
         return C;
     }
 
-    public static Map<String,CVSClient> generateVersion4AdditionalC(Map<String, CVSClient> fullFile, Map<String, Additional_CRecord_Data_Task1a> C_Additional) {
+    public static Map<String,CVSClient> generateVersion4AdditionalC(Map<String, CVSClient> fullFile, Map<String, Additional_CRecord> C_Additional) {
 
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
             String key = entry.getKey();
@@ -92,13 +96,13 @@ public class Task1a {
         return  sortedData;
     }
 
-    static void specialCRecords(Map<String,Additional_CRecord_Data_Task1a> C, Additional_CRecord_Data_Task1a value, String[] curEl) {
-        Additional_CRecord_Data_Task1a valueZusatz002 = new Additional_CRecord_Data_Task1a(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
+    static void specialCRecords(Map<String,Additional_CRecord> C, Additional_CRecord_Data_Task1a value, String[] curEl) {
+        Additional_CRecord valueZusatz002 = new Additional_CRecord(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
                 curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
-                curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28], curEl[29], curEl[30], curEl[31]);
-        Additional_CRecord_Data_Task1a valueZusatz003 = new Additional_CRecord_Data_Task1a(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
+                curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28]);
+        Additional_CRecord valueZusatz003 = new Additional_CRecord(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
                 curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
-                curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28], curEl[29], curEl[30], curEl[31]);
+                curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28]);
 
         valueZusatz002.setC2A(value.getZusatz_GK_002());
         valueZusatz003.setC2A(value.getZusatz_GK_003());
