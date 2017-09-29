@@ -35,6 +35,7 @@ public class Task1a {
                 Additional_CRecord valueRecord = new Additional_CRecord(curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
                         curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
                         curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28]);
+                valueRecord.setC2B(curEl[3] + "-" + curEl[0]);
                 C.put(key, valueRecord);
             }
         }
@@ -120,8 +121,8 @@ public class Task1a {
         String newC2B_Zusatz002 = "GEMKD" + curEl[30] + "-" + curEl[3];
         String newC2B_Zusatz003 = "GEMKD" + curEl[31] + "-" + curEl[3];
 
-        valueZusatz002.setC2B(newC2B_Zusatz002);
-        valueZusatz003.setC2B(newC2B_Zusatz003);
+        valueZusatz002.setC2B(newC2B_Zusatz002 + "-" + curEl[0]);
+        valueZusatz003.setC2B(newC2B_Zusatz003 + "-" + curEl[0]);
 
         C.put(valueZusatz002.getC2A(), valueZusatz002);
         C.put(valueZusatz003.getC2A(), valueZusatz003);
