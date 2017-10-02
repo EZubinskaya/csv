@@ -28,7 +28,7 @@ public class Task1a {
         for(int i = 1; i < myEntries.size(); i++) {
             //starts with A2
             String[] curEl = myEntries.get(i)[0].split(";", -1);
-            String key = curEl[2];
+            String key = curEl[3];
             if(curEl[3].startsWith("GEMKD") && curEl[29].equals("J")) {
                 specialCRecords(C, curEl);
             } else {
@@ -49,10 +49,17 @@ public class Task1a {
             CVSClient value = entry.getValue();
             String[] B = value.getClientB();
             String clientB = B[1];
-            if(C_Additional.get(clientB) != null) {
-                List<String[]> clientC = value.getClientsC();
-                clientC.add(C_Additional.get(clientB).toArray());
+            for (Map.Entry<String, Additional_CRecord> entry_c : C_Additional.entrySet()) {
+                String C2A = entry_c.getValue().getC2A();
+                if(C2A.equals(clientB)) {
+                    List<String[]> clientC = value.getClientsC();
+                    clientC.add(entry_c.getValue().toArray());
+                }
             }
+//            if(C_Additional.get(clientB) != null) {
+//                List<String[]> clientC = value.getClientsC();
+//                clientC.add(C_Additional.get(clientB).toArray());
+//            }
         }
         return fullFile;
     }
@@ -124,8 +131,8 @@ public class Task1a {
         valueZusatz002.setC2B(newC2B_Zusatz002 + "-" + curEl[0]);
         valueZusatz003.setC2B(newC2B_Zusatz003 + "-" + curEl[0]);
 
-        C.put(valueZusatz002.getC2A(), valueZusatz002);
-        C.put(valueZusatz003.getC2A(), valueZusatz003);
+        C.put(valueZusatz002.getC2B(), valueZusatz002);
+        C.put(valueZusatz003.getC2B(), valueZusatz003);
     }
 
     public static void reCalculateD_task1A(Map<String, CVSClient> fullFile, String[] a, List<String> b) {
