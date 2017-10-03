@@ -1,0 +1,49 @@
+
+=============================================================================
+GENERAL INFORMATIONS
+
+Program name: einlagensicherungsgesetz
+Date of run: 02-10-2017 11-17
+Task: Task1a
+Input file 1: EinreicherdateiB11_Gesamt_4.1.csv
+Input file 2: bank11_meldung_einlagensicherung_20170831_neu.csv
+Filename result file: EinreicherdateiB11_Gesamt_4.1_add_additional_C.csv
+
+=============================================================================
+ERRORS
+
+=============================================================================
+
+AMOUNTS OF DATASETS
+
+Input file name 1: EinreicherdateiB11_Gesamt_4.1.csv
+B : 12646
+C : 31746
+D : 12646
+Input file name: bank11_meldung_einlagensicherung_20170831_neu.csv
+C : 4
+Resultfile
+B : 12646
+C : 31750
+D : 12646
+
+=============================================================================
+
+MERGING
+
+Amount of merged datasets: 4
+List of created C-Records:
+C*0000255015*232951430-121**N*1*20082015*Darlehen*EUR*-15564,55*1*-15564,55*0*0*01092018*N*04*0*0*-15564,55*NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN*NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN**
+C*0003268284*155214730-121**N*1*28022014*Darlehen*EUR*-3048,12*1*-3048,12*0*0*15032019*N*04*0*0*-3048,12*NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN*NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN**
+C*0001038230*5002852112-883**N*1*15062016*Kontokorrent*EUR*-3240,70*1*-3240,70*0*0*16062016*N*04*0*0*-3240,70*NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN*NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN**
+C*0001216104*5002850651-883**N*1*10052016*Kontokorrent*EUR*-1260,23*1*-1260,23*0*0*11052016*N*04*0*0*-1260,23*NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN*NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN**
+
+=============================================================================
+
+RECALCULATING
+
+List of recalculated D-Records in result file:
+D*0000255015*30060,44*0,00*30060,44*30060,44*0,00*0,00*0,00*0,00*0,00*0,00*0,00*-15564,55*0,00
+D*0001038230*3,05*0,00*3,05*3,05*0,00*0,00*0,00*0,00*0,00*0,00*0,00*-3240,70*0,00
+D*0001216104*42523,60*0,00*42523,60*42523,60*0,00*0,00*0,00*0,00*0,00*0,00*0,00*-1260,23*0,00
+D*0003268284*96845,71*0,00*96845,71*96845,71*0,00*0,00*0,00*0,00*0,00*0,00*0,00*-3820,97*0,00

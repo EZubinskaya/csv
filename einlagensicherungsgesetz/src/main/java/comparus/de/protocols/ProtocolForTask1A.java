@@ -34,7 +34,7 @@ public class ProtocolForTask1A {
     }
 
     public static void  writeProtocolToFileTask1A(String protocolName, String taskNumber, String inputFileForMerge1, String Additional_CRecord_Data_Task1a,
-                                                  String task1ResultFileName, FileInfo fileInfo1, FileInfo fileInfo2, Set<Additional_CRecord> mergingCRecords,
+                                                  String task1ResultFileName, FileInfo fileInfo1, FileInfo fileInfo2, Set<Additional_CRecord> mergingCRecords,  Set<Additional_CRecord> notMergingCRecords,
                                                   String errorMessage) throws FileNotFoundException {
 
         Writer writer = null;
@@ -77,6 +77,12 @@ public class ProtocolForTask1A {
                 writer.write("List of created C-Records:" + "\r\n");
                 for (Additional_CRecord d : mergingCRecords) {
                     writer.write(d.toString() + "\r\n");
+                }
+                if(!notMergingCRecords.isEmpty()) {
+                    writer.write("\r\nC-Record could not be merge:" + "\r\n");
+                    for (Additional_CRecord d : notMergingCRecords) {
+                        writer.write(d.toString() + "\r\n");
+                    }
                 }
 
                 writer.write("\r\n=============================================================================\r\n");

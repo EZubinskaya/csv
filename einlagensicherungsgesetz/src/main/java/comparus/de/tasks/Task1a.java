@@ -21,6 +21,7 @@ import static comparus.de.util.Util.decimalToString;
  * Created by ekaterina on 9/26/17.
  */
 public class Task1a {
+    public static Set<Additional_CRecord> C_Additional_Not_Import = new HashSet<>();
     public static Map<String,Additional_CRecord> readExtraAdditionalDataCTask1a(String additional_cRecord_data_task1a) throws IOException {
         Map<String,Additional_CRecord> C = new LinkedHashMap<>();
         CSVReader reader = new CSVReader(new FileReader(additional_cRecord_data_task1a), '\n', '|');
@@ -45,22 +46,28 @@ public class Task1a {
     public static Map<String,CVSClient> generateVersion4AdditionalC(Map<String, CVSClient> fullFile, Map<String, Additional_CRecord> C_Additional) {
 
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
-            String key = entry.getKey();
             CVSClient value = entry.getValue();
             String[] B = value.getClientB();
             String clientB = B[1];
-            for (Map.Entry<String, Additional_CRecord> entry_c : C_Additional.entrySet()) {
+            for(Iterator<Map.Entry<String, Additional_CRecord>> it = C_Additional.entrySet().iterator(); it.hasNext(); ) {
+                Map.Entry<String, Additional_CRecord> entry_c = it.next();
                 String C2A = entry_c.getValue().getC2A();
                 if(C2A.equals(clientB)) {
                     List<String[]> clientC = value.getClientsC();
                     clientC.add(entry_c.getValue().toArray());
+                    it.remove();
                 }
             }
-//            if(C_Additional.get(clientB) != null) {
-//                List<String[]> clientC = value.getClientsC();
-//                clientC.add(C_Additional.get(clientB).toArray());
+//            for (Map.Entry<String, Additional_CRecord> entry_c : C_Additional.entrySet()) {
+//                String C2A = entry_c.getValue().getC2A();
+//                if(C2A.equals(clientB)) {
+//                    List<String[]> clientC = value.getClientsC();
+//                    clientC.add(entry_c.getValue().toArray());
+//                    C_Additional.remove(entry_c.getKey());
+//                }
 //            }
         }
+        C_Additional_Not_Import.addAll(C_Additional.values());
         return fullFile;
     }
 
@@ -132,7 +139,7 @@ public class Task1a {
         valueZusatz003.setC2B(newC2B_Zusatz003 + "-" + curEl[0]);
 
         C.put(valueZusatz002.getC2A() + valueZusatz002.getC2B(), valueZusatz002);
-        C.put(valueZusatz002.getC2A() + valueZusatz003.getC2B(), valueZusatz003);
+        C.put(valueZusatz003.getC2A() + valueZusatz003.getC2B(), valueZusatz003);
     }
 
     public static void reCalculateD_task1A(Map<String, CVSClient> fullFile, String[] a, List<String> b) {
