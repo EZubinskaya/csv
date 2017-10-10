@@ -4,6 +4,8 @@ import com.opencsv.CSVReader;
 import comparus.de.domen.B_ExtraData;
 import comparus.de.domen.CVSClient;
 import comparus.de.domen.C_ExtraData;
+import comparus.de.domen.HW;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileReader;
 import java.io.IOException;
@@ -21,6 +23,7 @@ public class Task3 {
     private static List<String> B_List = new ArrayList<>();
     private static Map<String, B_ExtraData> B_Record_Not_Inserted = new LinkedHashMap<>();
     private static Map<String, C_ExtraData>  C_Record_Not_Inserted = new LinkedHashMap<>();
+    private static Map<String, HW>  D_HW = new LinkedHashMap<>();
 
     private static BigDecimal calculateHW1(String[] D) {
         BigDecimal sumHW1 = BigDecimal.ZERO;
@@ -190,15 +193,16 @@ public class Task3 {
         return sum;
     }
 
-    public static BigDecimal BigDecimalcalculateD12B(String[] D, String[] A, List<String[]> CList) {
+    public static BigDecimal BigDecimalcalculateD12B(String[] D, String[] A, List<String[]> CList, HW hw) {
         BigDecimal D12B = BigDecimal.ZERO;
 
         BigDecimal D12B_HW1_D12A = calculateHW1(D).subtract(createNumValue(D[11]));
         BigDecimal D12B_SecondPart = BigDecimal.ZERO;
 
         BigDecimal HW2 = calculateHW2(CList);
+        hw.setHW2(HW2.toString());
         BigDecimal HW3 = calculateHW3(CList);
-
+        hw.setHW3(HW3.toString());
         BigDecimal D6PlusD9MinusHW3 = createNumValue(D[5]).add(createNumValue(D[8])).subtract(HW3);
 
 
@@ -219,12 +223,15 @@ public class Task3 {
         return D12B;
     }
 
-    public static BigDecimal BigDecimalcalculateD12C(String[] D, String[] A, List<String[]> CList) {
+    public static BigDecimal BigDecimalcalculateD12C(String[] D, String[] A, List<String[]> CList, HW hw) {
         BigDecimal D12C = BigDecimal.ZERO;
         BigDecimal HW1 = calculateHW1(D);
+        hw.setHW1(HW1.toString());
         BigDecimal С5 = createNumValue(CList.get(0)[5]);
         BigDecimal HW4 = calculateHW4(CList);
+        hw.setHW4(HW4.toString());
         BigDecimal HW5 = calculateHW5(CList);
+        hw.setHW5(HW5.toString());
 
         if(ifD12C(HW1, A, CList)) {
 
@@ -510,6 +517,8 @@ public class Task3 {
 
     public static void reCalculateDVersion5_1(Map<String, CVSClient> fullFileVersion5_1, String[] AVersion5_1) {
         for (Map.Entry<String, CVSClient> entry : fullFileVersion5_1.entrySet()){
+            HW hw = new HW();
+
             String[] clientB = entry.getValue().getClientB();
             CVSClient cvsClientVersion= entry.getValue();
             List<String[]> CList = cvsClientVersion.getClientsC();
@@ -539,10 +548,10 @@ public class Task3 {
             BigDecimal D12A = calculateD12AVersion5_1(AVersion5_1[5], tempD, CList);
             tempD[11] = String.valueOf(D12A);
 
-            BigDecimal D12B = BigDecimalcalculateD12B(tempD, AVersion5_1, CList);
+            BigDecimal D12B = BigDecimalcalculateD12B(tempD, AVersion5_1, CList, hw);
             tempD[12] = String.valueOf(D12B);
 
-            BigDecimal D12C = BigDecimalcalculateD12C(tempD, AVersion5_1, CList);
+            BigDecimal D12C = BigDecimalcalculateD12C(tempD, AVersion5_1, CList, hw);
             tempD[13] = String.valueOf(D12C);
 
             BigDecimal D13 = calculateD13Version5_1(D12A, D12B, D12C);
@@ -561,6 +570,7 @@ public class Task3 {
 
 //            String[] DVersion5_1 = curDList.toArray(new String[]{});
 
+            D_HW.put(StringUtils.join(tempD, "*"), hw);
             cvsClientVersion.setD(tempD);
         }
 

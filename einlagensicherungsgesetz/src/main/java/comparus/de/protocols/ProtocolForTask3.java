@@ -73,9 +73,9 @@ public class ProtocolForTask3 {
         return contistTheSameB;
     }
 
-    public static void  writeProtocolToFileTask1(String protocolName, String taskNumber, String inputFileForMerge1, String inputFileForMerge2,
+    public static void  writeProtocolToFileTask3(String protocolName, String taskNumber, String inputFileForMerge1, String inputFileForMerge2,
                                           String task1ResultFileName, FileInfo fileInfo1, FileInfo fileInfo2, String errorMessage,
-                        Map<String, B_ExtraData> notInsertBRecord, Map<String, C_ExtraData> notInsertCRecord
+                        Map<String, B_ExtraData> notInsertBRecord, Map<String, C_ExtraData> notInsertCRecord, Map<String, HW> D_HW
     ) throws FileNotFoundException {
 
         Writer writer = null;
@@ -128,7 +128,13 @@ public class ProtocolForTask3 {
                 writer.write("\r\nRECALCULATING\r\n\r\n");
                 writer.write("List of recalculated D-Records in result file:\r\n");
                 for(String d : protocol.getRecalculatedDRecords()) {
-                    writer.write(d + "\r\n");
+                    HW hw = D_HW.get(d);
+                    writer.write("D : " + d + "\r\n");
+                    writer.write("HW1 : " + hw.getHW1() + "\r\n");
+                    writer.write("HW2 : " + hw.getHW2() + "\r\n");
+                    writer.write("HW3 : " + hw.getHW3() + "\r\n");
+                    writer.write("HW4 : " + hw.getHW4() + "\r\n");
+                    writer.write("HW5 : " + hw.getHW5() + "\r\n");
                 }
 
                 if(!notInsertBRecord.isEmpty() || !notInsertCRecord.isEmpty()) {
