@@ -73,8 +73,8 @@ public class ProtocolForTask3 {
         return contistTheSameB;
     }
 
-    public static void  writeProtocolToFileTask3(String protocolName, String taskNumber, String inputFileForMerge1, String additioanlFileA,
-                        String additioanlFileB, String additioanlFileC, String task1ResultFileName, String errorMessage,
+    public static void  writeProtocolToFileTask3(String protocolName, String taskNumber, String inputFileForMerge1, FileInfo fileInfo, String additioanlFileA,
+                        String additioanlFileB, String additioanlFileC, String task1ResultFileName, int AAdditioanlCount, int BAdditioanlCount, int CAdditioanlCount, String errorMessage,
                         Map<String, B_ExtraData> notInsertBRecord, Map<String, C_ExtraData> notInsertCRecord, Map<String, HW> D_HW
     ) throws FileNotFoundException {
 
@@ -102,35 +102,35 @@ public class ProtocolForTask3 {
 
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nAMOUNTS OF DATASETS\r\n\r\n");
-//                writer.write("Input file name: " + fileInfo1.getFileName() + "\r\n");
-//                writer.write("B : " + fileInfo1.getBCount() + "\r\n");
-//                writer.write("C : " + fileInfo1.getCCount()  + "\r\n");
-//                writer.write("D : " + fileInfo1.getDCount()  + "\r\n");
-//                writer.write("Additional file A: " + additioanlFileA + "\r\n");
-//                writer.write("A : " + fileInfo2.getBCount() + "\r\n");
-//                writer.write("Additional file B: " + additioanlFileA + "\r\n");
-//                writer.write("B : " + fileInfo2.getBCount() + "\r\n");
-//                writer.write("Additional file C: " + additioanlFileA + "\r\n");
-//                writer.write("C : " + fileInfo2.getBCount() + "\r\n");
-//                writer.write("Resultfile\r\n");
-//                writer.write("B : " + protocol.getResultAmountB() + "\r\n");
-//                writer.write("C : " + protocol.getResultAmountC() + "\r\n");
-//                writer.write("D : " + protocol.getResultAmountD() + "\r\n");
+                writer.write("Input file name: " + fileInfo.getFileName() + "\r\n");
+                writer.write("B : " + fileInfo.getBCount() + "\r\n");
+                writer.write("C : " + fileInfo.getCCount()  + "\r\n");
+                writer.write("D : " + fileInfo.getDCount()  + "\r\n");
+                writer.write("Additional file A: " + additioanlFileA + "\r\n");
+                writer.write("A : " + AAdditioanlCount + "\r\n");
+                writer.write("Additional file B: " + additioanlFileB + "\r\n");
+                writer.write("B : " + BAdditioanlCount + "\r\n");
+                writer.write("Additional file C: " + additioanlFileC + "\r\n");
+                writer.write("C : " + CAdditioanlCount + "\r\n");
+                writer.write("Resultfile\r\n");
+                writer.write("B : " + protocol.getResultAmountB() + "\r\n");
+                writer.write("C : " + protocol.getResultAmountC() + "\r\n");
+                writer.write("D : " + protocol.getResultAmountD() + "\r\n");
 
-                writer.write("\r\n=============================================================================\r\n");
-                writer.write("\r\nMERGING\r\n\r\n");
-                writer.write("Amount of merged datasets: " + protocol.getResultAmountTotal() + "\r\n");
-                writer.write("List of identified double customers:" + "\r\n");
-                for(KeyFile1ToFile2 b : protocol.getKeyFile1ToFile2()) {
-                    writer.write("B2 in file1 : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-                    writer.write("B2 in file2 : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
-                    writer.write("B2 in result file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-                }
-                for(KeyFile1ToFile2 b : protocol.getKeyFile1ToFile2()) {
-                    writer.write("C2B in file1 : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-                    writer.write("B2 in file2 : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
-                    writer.write("B2 in result file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-                }
+//                writer.write("\r\n=============================================================================\r\n");
+//                writer.write("\r\nMERGING\r\n\r\n");
+//                writer.write("Amount of merged datasets: " + protocol.getResultAmountTotal() + "\r\n");
+//                writer.write("List of identified double customers:" + "\r\n");
+//                for(KeyFile1ToFile2 b : protocol.getKeyFile1ToFile2()) {
+//                    writer.write("B2 in file1 : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
+//                    writer.write("B2 in file2 : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
+//                    writer.write("B2 in result file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
+//                }
+//                for(KeyFile1ToFile2 b : protocol.getKeyFile1ToFile2()) {
+//                    writer.write("C2B in file1 : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
+//                    writer.write("B2 in file2 : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
+//                    writer.write("B2 in result file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
+//                }
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nRECALCULATING\r\n\r\n");
                 writer.write("List of recalculated D-Records in result file:\r\n");
