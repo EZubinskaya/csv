@@ -17,12 +17,11 @@ public class C_ExtraData {
     private String C24;
     private String C25;
     private String C26;
-    private String C27;
 
     public C_ExtraData() {
     }
 
-    public C_ExtraData(BigDecimal a2, String satz_ID, String c21_Pos15, String c21_Pos16, String c21_Pos17, String c21_Pos18, String c21_Pos19, String c24, String c25, String c26, String c27) {
+    public C_ExtraData(BigDecimal a2, String satz_ID, String c21_Pos15, String c21_Pos16, String c21_Pos17, String c21_Pos18, String c21_Pos19, String c24, String c25, String c26) {
         A2 = a2;
         Satz_ID = satz_ID;
         C21_Pos15 = c21_Pos15;
@@ -33,7 +32,6 @@ public class C_ExtraData {
         C24 = c24;
         C25 = c25;
         C26 = c26;
-        C27 = c27;
     }
 
     public BigDecimal getA2() {
@@ -116,11 +114,4 @@ public class C_ExtraData {
         C26 = c26;
     }
 
-    public String getC27() {
-        return C27;
-    }
-
-    public void setC27(String c27) {
-        C27 = c27;
-    }
 }

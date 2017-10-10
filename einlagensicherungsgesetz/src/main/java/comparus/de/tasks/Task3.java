@@ -18,6 +18,8 @@ import static comparus.de.util.Util.decimalToString;
  * Created by ekaterina on 9/26/17.
  */
 public class Task3 {
+    private static List<String> B_List = new ArrayList<>();
+
     private static BigDecimal calculateHW1(String[] D) {
         BigDecimal sumHW1 = BigDecimal.ZERO;
         BigDecimal maxD6D9 = createNumValue(D[5]).max(createNumValue(D[8]));
@@ -26,7 +28,7 @@ public class Task3 {
         return sumHW1;
     }
 
-    private static BigDecimal calculateHW2(List<String[]> CList) {
+    public static BigDecimal calculateHW2(List<String[]> CList) {
         if(C21ContainsYin19posAndC2701Or90(CList)) {
             return calculateositiveC19ForAllContainsC20YPosition19(CList);
         }
@@ -54,7 +56,7 @@ public class Task3 {
         return sum;
     }
 
-    private static BigDecimal calculateHW3(List<String[]> CList) {
+    public static BigDecimal calculateHW3(List<String[]> CList) {
         BigDecimal sumHW3 = BigDecimal.ZERO;
         if(HW3C19ForAllC2790C21In11And19IsN(CList)) {
             sumHW3.add(calculateositiveC19ForHW3C19ForAllC2790C21In11And19IsN(CList));
@@ -135,7 +137,7 @@ public class Task3 {
         return sum;
     }
 
-    private static BigDecimal calculateHW5(List<String[]> CList) {
+    public static BigDecimal calculateHW5(List<String[]> CList) {
         BigDecimal sumHW5 = BigDecimal.ZERO;
         if(C19WhereC27Is90AndC21IsNInPosition11(CList)) {
             sumHW5.add(calculateC19WhereC27Is90AndC21IsNInPosition11(CList));
@@ -186,7 +188,7 @@ public class Task3 {
         return sum;
     }
 
-    static BigDecimal BigDecimalcalculateD12B(String[] D, String[] A, List<String[]> CList) {
+    public static BigDecimal BigDecimalcalculateD12B(String[] D, String[] A, List<String[]> CList) {
         BigDecimal D12B = BigDecimal.ZERO;
 
         BigDecimal D12B_HW1_D12A = calculateHW1(D).subtract(createNumValue(D[11]));
@@ -215,7 +217,7 @@ public class Task3 {
         return D12B;
     }
 
-    static BigDecimal BigDecimalcalculateD12C(String[] D, String[] A, List<String[]> CList) {
+    public static BigDecimal BigDecimalcalculateD12C(String[] D, String[] A, List<String[]> CList) {
         BigDecimal D12C = BigDecimal.ZERO;
         BigDecimal HW1 = calculateHW1(D);
         BigDecimal С5 = createNumValue(CList.get(0)[5]);
@@ -263,8 +265,8 @@ public class Task3 {
         Map<String,String> A = new LinkedHashMap<>();
         CSVReader reader = new CSVReader(new FileReader(A_Additional_5), '\n', '|');
         List<String[]> myEntries = reader.readAll();
-        String[] keys = myEntries.get(0)[0].split("\\*", -1);
-        String[] values = myEntries.get(1)[0].split("\\*", -1);
+        String[] keys = myEntries.get(0)[0].split(";", -1);
+        String[] values = myEntries.get(1)[0].split(";", -1);
         for(int i = 0; i<keys.length; i++) {
             A.put(keys[i], values[i]);
         }
@@ -276,7 +278,7 @@ public class Task3 {
         CSVReader reader = new CSVReader(new FileReader(B_Additional_5), '\n', '|');
         List<String[]> myEntries = reader.readAll();
         for(int i = 1; i < myEntries.size(); i++) {
-            String[] curEl = myEntries.get(i)[0].split("\\*", -1);
+            String[] curEl = myEntries.get(i)[0].split(";", -1);
             String key = curEl[2];
             B_ExtraData value = new B_ExtraData(createNumValue(curEl[0]), curEl[1], createNumValue(curEl[3]));
             B.put(key, value);
@@ -289,9 +291,9 @@ public class Task3 {
         CSVReader reader = new CSVReader(new FileReader(C_Additional_5), '\n', '|');
         List<String[]> myEntries = reader.readAll();
         for(int i = 1; i < myEntries.size(); i++) {
-            String[] curEl = myEntries.get(i)[0].split("\\*", -1);
+            String[] curEl = myEntries.get(i)[0].split(";", -1);
             String key = curEl[2];
-            C_ExtraData value = new C_ExtraData(createNumValue(curEl[0]), curEl[1], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7], (curEl[8]), (curEl[9]), (curEl[10]), (curEl[11]));
+            C_ExtraData value = new C_ExtraData(createNumValue(curEl[0]), curEl[1], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7], (curEl[8]), (curEl[9]), (curEl[10]));
             C.put(key, value);
         }
         return C;
@@ -309,6 +311,22 @@ public class Task3 {
         return AVersion5_1;
     }
 
+    private static B_ExtraData checkKey(String BPrimaryKey,  Map<String,B_ExtraData> B_Additional) {
+        if(BPrimaryKey.contains("-")) {
+            String key = BPrimaryKey.split("-")[1];
+            if(B_Additional.get(key) != null) {
+                B_List.add(key);
+                return B_Additional.get(key);
+            }
+        } else {
+            if(B_Additional.get(BPrimaryKey) != null) {
+                B_List.add(BPrimaryKey);
+                return B_Additional.get(BPrimaryKey);
+            }
+        }
+        return null;
+    }
+
     public static Map<String,CVSClient> generateVersion5 (Map<String,CVSClient> fullFile, Map<String,B_ExtraData> B_Additional, Map<String,C_ExtraData> C_Additional) {
 
         Map<String,CVSClient>  fullFileVersion5_1 = new LinkedHashMap<>();
@@ -319,17 +337,20 @@ public class Task3 {
             //B
             String[] clientB = value.getClientB();
             List<String> clientBList = new LinkedList<>();
-            String BPrimaryKey = clientB[1];
-            B_ExtraData b_extraData = B_Additional.get(BPrimaryKey);
-            String B14 = clientB[13];
-            String B14Version5_1 = B14.substring(0,32) + "NN" + B14.substring(34);
-            clientB[13] = B14Version5_1;
-            clientBList.addAll(Arrays.asList(clientB));
-            clientBList.add("");
-            clientBList.add(b_extraData.getB16().toString());
             String[] BVersion5_1 = new String[clientBList.size()];
-            BVersion5_1 = clientBList.toArray(BVersion5_1);
-            value.setClientB(BVersion5_1);
+            String BPrimaryKey = clientB[1];
+            B_ExtraData b_extraData = checkKey(BPrimaryKey, B_Additional);
+            if(b_extraData != null) {
+                clientB[1] = clientB[1] + "-" + b_extraData.getA2();
+                String B14 = clientB[13];
+                String B14Version5_1 = B14.substring(0,32) + "NN" + B14.substring(34);
+                clientB[13] = B14Version5_1;
+                clientBList.addAll(Arrays.asList(clientB));
+                clientBList.add("");
+                clientBList.add(b_extraData.getB16().toString());
+                BVersion5_1 = clientBList.toArray(BVersion5_1);
+                value.setClientB(BVersion5_1);
+            }
 
             //C
             List<String[]> clientC = value.getClientsC();
@@ -337,33 +358,63 @@ public class Task3 {
                 String[] currentC = clientC.get(i);
                 C_ExtraData c_extraData = C_Additional.get(currentC[2]);
                 //TODO
+                if(c_extraData != null) {
+                    currentC[2] = currentC[2] + "-" + c_extraData.getA2();
+                    currentC[21] = currentC[21].substring(0,14) +
+                            c_extraData.getC21_Pos15() +
+                            c_extraData.getC21_Pos16() +
+                            c_extraData.getC21_Pos17() +
+                            c_extraData.getC21_Pos18() +
+                            c_extraData.getC21_Pos19() +
+                            currentC[21].substring(19);
+                    if( BVersion5_1[13] == null &&  BVersion5_1[15] == null) {
+                        BVersion5_1[13] = value.getClientB()[13];
+                        BVersion5_1[15] = value.getClientB()[15];
+                    }
+                    currentC[20] = C20_Version5_1(currentC[20], currentC[21], BVersion5_1[13], BVersion5_1[15]);
 
-                currentC[21] = currentC[21].substring(0,14) +
-                        c_extraData.getC21_Pos15() +
-                        c_extraData.getC21_Pos16() +
-                        c_extraData.getC21_Pos17() +
-                        c_extraData.getC21_Pos18() +
-                        c_extraData.getC21_Pos19() +
-                        currentC[21].substring(19);
+                    List<String> curClientCList = new LinkedList<>();
+                    curClientCList.addAll(Arrays.asList(currentC));
+                    curClientCList.add("");
+                    curClientCList.add("");
+                    curClientCList.add(c_extraData.getC24());
+                    curClientCList.add(c_extraData.getC25());
+                    curClientCList.add(c_extraData.getC26());
+                    curClientCList.add(calculateC27(currentC[20], currentC[21], clientB[13]));
 
-                currentC[20] = C20_Version5_1(currentC[20], currentC[21], BVersion5_1[13], BVersion5_1[15]);
+                    String[] curCVersion5_1 = curClientCList.toArray(new String[]{});
+                    clientC.set(i,curCVersion5_1);
+                }
 
-                List<String> curClientCList = new LinkedList<>();
-                curClientCList.addAll(Arrays.asList(currentC));
-                curClientCList.add("");
-                curClientCList.add("");
-                curClientCList.add(c_extraData.getC24());
-                curClientCList.add(c_extraData.getC25());
-                curClientCList.add(c_extraData.getC26());
-                curClientCList.add(c_extraData.getC27());
-
-                String[] curCVersion5_1 = curClientCList.toArray(new String[]{});
-                clientC.set(i,curCVersion5_1);
             }
             fullFileVersion5_1.put(key,value);
 
         }
         return fullFileVersion5_1;
+    }
+
+    private static String calculateC27 (String C20, String C21, String B14) {
+        //If in B14 and C20 there is no "Y".
+        if(!B14.contains("Y") && !C20.contains("Y")) {
+            return "90";
+        }
+        //It there is at least one "Y" in B14 in the area from position 01 to 15 and  there is no "Y" in B14 , Position 16 to 50 and C20 from position 11 to 50.
+        //else if there is in C20 , position 01 to 10 and least one 'Y' and there is no "Y" in C20, position 11 to 50 and B14, position 16 to 50.
+        if((Task1.specificPositionSymbol(0,15, B14) && !Task1.specificPositionSymbol(16,50, B14) && !Task1.specificPositionSymbol(11,50, C20))
+                || (Task1.specificPositionSymbol(0,10, C20) && !Task1.specificPositionSymbol(11,50, C20) && !Task1.specificPositionSymbol(16,50, B14))) {
+            return "01";
+        }
+        //If there is at least one "Y" in B14 in the area from position 31 to 50 and there is no "Y" in B14 , Position 01 to 30 and C20 from position 01 to 30.
+        //else if there is at least one "Y" in C20, position 31 to 50 and there is no "Y" in C20 , position 01 to 30 and B14, position 01 to 30.
+        if((Task1.specificPositionSymbol(31,50, B14) && !Task1.specificPositionSymbol(0,30, B14) && !Task1.specificPositionSymbol(0,30, C20)  )
+                || (Task1.specificPositionSymbol(31,50, C20) && !Task1.specificPositionSymbol(0,30, C20) && !Task1.specificPositionSymbol(0,30, B14))) {
+            return "20";
+        }
+        //all other combinations of B14 and C20, with at least one "Y"
+        if(Task1.specificPositionSymbol(0,50, B14) || Task1.specificPositionSymbol(0,50, C20)) {
+            return "10";
+        }
+        return "0.00";
     }
 
     private static String C20_Version5_1(String C20, String C21, String B14, String B16) {

@@ -50,16 +50,16 @@ public class CSVReaderMain {
         String task5ResultFileName = "Meldedatei_Gesamt_5.1.csv";
 
         // TEST DATA
-        String inputFileForMerge1 =  "src/main/resources/bug1/3.csv";
+        String inputFileForMerge1 =  "src/main/resources/example1.csv";
         String inputFileForMerge2 = "src/main/resources/task4/2.csv";
 //        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
 //        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
 //        String inputFileAfterMerge =  "src/main/resources/task1a/input.csv";
 //        String Additional_CRecord_Data_Task1a = "src/main/resources/task1a/Additional_CRecord_Data_Task1a.csv";
-        String inputFileAfterMerge =  "src/main/resources/task1aP/EinreicherdateiB11_Gesamt_4.1.csv";
-        String Additional_CRecord_Data_Task1a = "src/main/resources/task1aP/a.csv";
+        String inputFileAfterMerge =  "src/main/resources/example1.csv";
+        String Additional_CRecord_Data_Task1a = "src/main/resources/task1aP/bank11_meldung_einlagensicherung_20170831_neu.csv";
 
-        String taskNumber = "Task1a";
+        String taskNumber = "Task3";
         String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
         String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
         String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
@@ -146,7 +146,7 @@ public class CSVReaderMain {
                 }
                 reCalculateD_task1A(fullFileVersion4_1_Additional_C, A, B);
                 String[] E = reCalculateE(fullFileVersion4_1_Additional_C, A);
-                allData = generateListOfDataArray(A, fullFileVersion4_1_Additional_C, E);
+                allData = generateListOfDataArrayNotSorted(A, fullFileVersion4_1_Additional_C, E);
                 writeCSV(allData, task1aResultFileName);
 
             } catch (Exception ex) {
@@ -160,7 +160,7 @@ public class CSVReaderMain {
             calculateAmount(allData);
             protocol.setResultAmountTotal(allData.size());
             writeProtocolToFileTask1A("Protocol Task1a.txt", taskNumber, inputFileAfterMerge, Additional_CRecord_Data_Task1a,
-                    task1aResultFileName, fileInfo1, fileInfo2, mergingCRecords, Task1a.C_Additional_Not_Import, errorMessage);
+                    task1aResultFileName, fileInfo1, fileInfo2, Task1a.C_Additional_Import, Task1a.C_Additional_Not_Import, errorMessage);
 
         }else if(taskNumber.equalsIgnoreCase("Task3") && inputFileAfterMerge != null && A_Additional_5 != null
                 && B_Additional_5 != null && C_Additional_5 != null) {

@@ -171,24 +171,26 @@ public class Task1 {
         List<String>  recalculatedDRecords = new ArrayList<>();
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
             String[] clientB = entry.getValue().getClientB();
-            CVSClient cvsClientVersion41 = entry.getValue();
-            List<String[]> CList = cvsClientVersion41.getClientsC();
-            String[] D = cvsClientVersion41.getD();
-            if(writeToProtocol && sameBList.contains(StringUtils.join(clientB, "*"))) {
-                D[2] = calculateD3(CList);
-                D[3] = calculateD4(clientB, CList, createNumValue(D[2]));
-                D[4] = calculateD5D7(createNumValue(D[2]), createNumValue(D[3]));
-                D[5] = calculateD6(createNumValue(A[3]), createNumValue(D[4]), CList);
-                D[6] = calculateD5D7(createNumValue(D[4]), createNumValue(D[5]));
-                D[7] = "0,00";
-                D[8] = "0,00";
-                D[9] = calculateD1011(30, 49, 10, 49, CList, clientB);
-                D[10] = calculateD1011(30, 49, 20, 49, CList, clientB);
-                D[11] = calculateD12(D, CList, A[5]);
-                D[12] = "0,00";
-                D[13] = calculateD14(CList);
-                D[14] = "0,00"; // why 101
-                recalculatedDRecords.add(StringUtils.join(D, "*"));
+            if(bTheSame.contains(clientB)) {
+                CVSClient cvsClientVersion41 = entry.getValue();
+                List<String[]> CList = cvsClientVersion41.getClientsC();
+                String[] D = cvsClientVersion41.getD();
+                if(writeToProtocol && sameBList.contains(StringUtils.join(clientB, "*"))) {
+                    D[2] = calculateD3(CList);
+                    D[3] = calculateD4(clientB, CList, createNumValue(D[2]));
+                    D[4] = calculateD5D7(createNumValue(D[2]), createNumValue(D[3]));
+                    D[5] = calculateD6(createNumValue(A[3]), createNumValue(D[4]), CList);
+                    D[6] = calculateD5D7(createNumValue(D[4]), createNumValue(D[5]));
+                    D[7] = "0,00";
+                    D[8] = "0,00";
+                    D[9] = calculateD1011(30, 49, 10, 49, CList, clientB);
+                    D[10] = calculateD1011(30, 49, 20, 49, CList, clientB);
+                    D[11] = calculateD12(D, CList, A[5]);
+                    D[12] = "0,00";
+                    D[13] = calculateD14(CList);
+                    D[14] = "0,00"; // why 101
+                    recalculatedDRecords.add(StringUtils.join(D, "*"));
+                }
             }
         }
         if(writeToProtocol) {

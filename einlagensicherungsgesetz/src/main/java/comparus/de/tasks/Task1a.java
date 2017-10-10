@@ -22,6 +22,8 @@ import static comparus.de.util.Util.decimalToString;
  */
 public class Task1a {
     public static Set<Additional_CRecord> C_Additional_Not_Import = new HashSet<>();
+    public static Set<Additional_CRecord> C_Additional_Import = new HashSet<>();
+
     public static Map<String,Additional_CRecord> readExtraAdditionalDataCTask1a(String additional_cRecord_data_task1a) throws IOException {
         Map<String,Additional_CRecord> C = new LinkedHashMap<>();
         CSVReader reader = new CSVReader(new FileReader(additional_cRecord_data_task1a), '\n', '|');
@@ -55,17 +57,10 @@ public class Task1a {
                 if(C2A.equals(clientB)) {
                     List<String[]> clientC = value.getClientsC();
                     clientC.add(entry_c.getValue().toArray());
+                    C_Additional_Import.add(entry_c.getValue());
                     it.remove();
                 }
             }
-//            for (Map.Entry<String, Additional_CRecord> entry_c : C_Additional.entrySet()) {
-//                String C2A = entry_c.getValue().getC2A();
-//                if(C2A.equals(clientB)) {
-//                    List<String[]> clientC = value.getClientsC();
-//                    clientC.add(entry_c.getValue().toArray());
-//                    C_Additional.remove(entry_c.getKey());
-//                }
-//            }
         }
         C_Additional_Not_Import.addAll(C_Additional.values());
         return fullFile;
@@ -79,6 +74,20 @@ public class Task1a {
             fullData.add(entry.getClientB());
             fullData.addAll(entry.getClientsC());
             fullData.add(entry.getD());
+        }
+        fullData.add(e);
+        return fullData;
+    }
+
+    public static List<String[]> generateListOfDataArrayNotSorted(String[] a, Map<String, CVSClient> fullFile, String[] e) {
+        // fullFile.
+        List<String[]> fullData = new ArrayList<String[]>();
+        fullData.add(a);
+        for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+            CVSClient cvsClient = entry.getValue();
+            fullData.add(cvsClient.getClientB());
+            fullData.addAll(cvsClient.getClientsC());
+            fullData.add(cvsClient.getD());
         }
         fullData.add(e);
         return fullData;
