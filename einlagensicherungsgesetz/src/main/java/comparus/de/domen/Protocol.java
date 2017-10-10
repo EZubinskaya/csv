@@ -1,5 +1,6 @@
 package comparus.de.domen;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -11,10 +12,10 @@ public class Protocol {
     private int resultAmountD = 0;
     private int resultAmountTotal = 0;
 
-    private List<KeyFile1ToFile2> keyFile1ToFile2;
-    private List<String> recalculatedDRecords;
-    private List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile3_B_Record;
-    private List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile3_C_Record;
+    private List<KeyFile1ToFile2> keyFile1ToFile2 = new ArrayList<>();
+    private List<String> recalculatedDRecords = new ArrayList<>();
+    private List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile3_B_Record = new ArrayList<>();
+    private List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile3_C_Record = new ArrayList<>();
 
     public int getResultAmountB() {
         return resultAmountB;

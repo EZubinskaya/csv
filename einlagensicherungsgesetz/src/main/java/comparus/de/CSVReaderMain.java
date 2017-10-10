@@ -2,8 +2,6 @@ package comparus.de;
 
 import comparus.de.domen.*;
 import comparus.de.tasks.Task1a;
-import comparus.de.tasks.Task3;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.util.*;
@@ -177,6 +175,8 @@ public class CSVReaderMain {
                 String[] EVersion5_1 = reCalculateEVersion5_1(fullFileVersion5_1);
                 List<String[]> allDataVersion5_1 = generateListOfDataArray(AVersion5_1, fullFileVersion5_1, EVersion5_1);
                 writeCSV(allDataVersion5_1, task3ResultFileName);
+                calculateAmount(allDataVersion5_1);
+                protocol.setResultAmountTotal(allDataVersion5_1.size());
             } catch (Exception ex) {
                 errorMessage = ex.getStackTrace().toString();
                 System.out.println(" exception " + ex.getStackTrace());
@@ -185,7 +185,7 @@ public class CSVReaderMain {
             //Protocol
 
                     writeProtocolToFileTask3("Protocol Task3.txt", taskNumber, inputFileAfterMerge, fileInfo1, A_Additional_5, B_Additional_5, C_Additional_5,
-                    task1aResultFileName, A_ExtraData.size(), B_ExtraData.size(), C_ExtraData.size(), errorMessage, B_Record_Not_Inserted, C_Record_Not_Inserted, D_HW);
+                    task1aResultFileName, 1, B_ExtraData.size(), C_ExtraData.size(), errorMessage, B_Record_Not_Updated, C_Record_Not_Updated, D_HW);
 
         } else if (taskNumber.equalsIgnoreCase("Task4")  && inputFileForMerge1!= null & inputFileForMerge2 != null) {
             Map<B, CVSClient> readFile1 = null;

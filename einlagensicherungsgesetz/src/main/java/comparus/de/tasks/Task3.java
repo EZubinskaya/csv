@@ -18,8 +18,8 @@ import static comparus.de.util.Util.decimalToString;
  */
 public class Task3 {
     public static List<String> B_List = new ArrayList<>();
-    public static Map<String, B_ExtraData> B_Record_Not_Inserted = new LinkedHashMap<>();
-    public static Map<String, C_ExtraData>  C_Record_Not_Inserted = new LinkedHashMap<>();
+    public static Map<String, String[]> B_Record_Not_Updated = new LinkedHashMap<>();
+    public static Map<String, String[]> C_Record_Not_Updated = new LinkedHashMap<>();
     public static Map<String, HW>  D_HW = new LinkedHashMap<>();
 
     private static BigDecimal calculateHW1(String[] D) {
@@ -317,25 +317,34 @@ public class Task3 {
         return AVersion5_1;
     }
 
-    private static B_ExtraData checkKey(String BPrimaryKey,  Map<String,B_ExtraData> B_Additional) {
-        if(BPrimaryKey.contains("-")) {
-            String key = BPrimaryKey.split("-")[1];
+    private static B_ExtraData checkKey(String BPrimaryKey, Map<String, B_ExtraData> B_Additional) {
+            String key = getBprimaryKey(BPrimaryKey);
             if(B_Additional.get(key) != null) {
-                B_List.add(key);
                 return B_Additional.get(key);
             }
-        } else {
-            if(B_Additional.get(BPrimaryKey) != null) {
-                B_List.add(BPrimaryKey);
-                return B_Additional.get(BPrimaryKey);
-            }
-        }
         return null;
     }
 
+    private static String getBprimaryKey(String candidate) {
+        if(candidate.contains("-")) {
+            String key = candidate.split("-")[1];
+           return key;
+            }
+        return candidate;
+    }
+
+    private static String getСprimaryKey(String candidate) {
+        if((candidate.startsWith("LST") || candidate.startsWith("GEMKD")) && candidate.contains("-")) {
+            String key = candidate.split("-")[1];
+            return key;
+        }
+        return candidate;
+    }
+
+
+
     public static Map<String,CVSClient> generateVersion5 (Map<String,CVSClient> fullFile, Map<String,B_ExtraData> B_Additional, Map<String,C_ExtraData> C_Additional) {
 
-        Protocol protocol = new Protocol();
         List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile_B_Records = new ArrayList<>();
         protocol.setKeyFile1ToFile2ToFile3_B_Record(keyFile1ToFile2ToFile_B_Records);
         List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile_C_Records = new ArrayList<>();
@@ -353,6 +362,8 @@ public class Task3 {
             String BPrimaryKey = clientB[1];
             B_ExtraData b_extraData = checkKey(BPrimaryKey, B_Additional);
             if(b_extraData != null) {
+                B_List.add(key);
+                String clientBinitial = StringUtils.join(clientB, "*");
                 clientB[1] = clientB[1] + "-" + b_extraData.getA2();
                 String B14 = clientB[13];
                 String B14Version5_1 = B14.substring(0,32) + "NN" + B14.substring(34);
@@ -362,20 +373,24 @@ public class Task3 {
                 clientBList.add(b_extraData.getB16().toString());
                 BVersion5_1 = clientBList.toArray(BVersion5_1);
                 value.setClientB(BVersion5_1);
-                keyFile1ToFile2ToFile_B_Records.add(new KeyFile1ToFile2ToFile3(StringUtils.join(clientB, "*"),
-                        b_extraData.getA2() + ";" + b_extraData.getSatz_ID() + ";" + key + ";" + b_extraData.getB16(),
+                keyFile1ToFile2ToFile_B_Records.add(new KeyFile1ToFile2ToFile3(clientBinitial,
+                        b_extraData.getA2() + ";" + b_extraData.getSatz_ID() + ";" + getBprimaryKey(BPrimaryKey) + ";" + b_extraData.getB16(),
                         StringUtils.join(BVersion5_1, "*")));
                 B_Additional.remove(b_extraData);
+            } else {
+                B_Record_Not_Updated.put(BPrimaryKey, clientB);
             }
 
             //C
             List<String[]> clientC = value.getClientsC();
             for(int i = 0; i < clientC.size(); i++) {
                 String[] currentC = clientC.get(i);
-                C_ExtraData c_extraData = C_Additional.get(currentC[2]);
-                String currentC2 = currentC[2];
+                String accountPK =getСprimaryKey(currentC[2]);
+                C_ExtraData c_extraData = C_Additional.get(accountPK);
+
                 //TODO
                 if(c_extraData != null) {
+                    String clientCinitial = StringUtils.join(currentC, "*");
                     currentC[2] = currentC[2] + "-" + c_extraData.getA2();
                     currentC[21] = currentC[21].substring(0,14) +
                             c_extraData.getC21_Pos15() +
@@ -397,49 +412,50 @@ public class Task3 {
                     curClientCList.add(c_extraData.getC24());
                     curClientCList.add(c_extraData.getC25());
                     curClientCList.add(c_extraData.getC26());
-                    curClientCList.add(calculateC27(currentC[20], currentC[21], clientB[13]));
+                    curClientCList.add(calculateC27(currentC[20], clientB[13]));
 
                     String[] curCVersion5_1 = curClientCList.toArray(new String[]{});
                     clientC.set(i,curCVersion5_1);
 
-                    keyFile1ToFile2ToFile_C_Records.add(new KeyFile1ToFile2ToFile3(StringUtils.join(currentC, "*"),
-                            c_extraData.getA2() + ";" + c_extraData.getSatz_ID() + ";" + key + ";" + c_extraData.getC21_Pos15() +
+                    keyFile1ToFile2ToFile_C_Records.add(new KeyFile1ToFile2ToFile3(clientCinitial,
+                            c_extraData.getA2() + ";" + c_extraData.getSatz_ID() + ";" + accountPK + ";" + c_extraData.getC21_Pos15() +
                                     ";" + c_extraData.getC21_Pos16() + ";" + c_extraData.getC21_Pos17() + ";" + c_extraData.getC21_Pos18() +
                                     ";" + c_extraData.getC21_Pos19() + ";" + c_extraData.getC24() + ";" + c_extraData.getC25() + ";" + c_extraData.getC26(),
                             StringUtils.join(curCVersion5_1, "*")));
 
-                    C_Additional.remove(currentC2);
+                    //should not remove in case of multiple GEMKD-type C-records
+                   // C_Additional.remove(currentC2);
 
+                } else {
+                    C_Record_Not_Updated.put(currentC[2], currentC);
                 }
 
             }
             fullFileVersion5_1.put(key,value);
-
         }
-        B_Record_Not_Inserted.putAll(B_Additional);
-        C_Record_Not_Inserted.putAll(C_Additional);
+
         return fullFileVersion5_1;
     }
 
-    private static String calculateC27 (String C20, String C21, String B14) {
+    private static String calculateC27 (String C20, String B14) {
         //If in B14 and C20 there is no "Y".
         if(!B14.contains("Y") && !C20.contains("Y")) {
             return "90";
         }
         //It there is at least one "Y" in B14 in the area from position 01 to 15 and  there is no "Y" in B14 , Position 16 to 50 and C20 from position 11 to 50.
         //else if there is in C20 , position 01 to 10 and least one 'Y' and there is no "Y" in C20, position 11 to 50 and B14, position 16 to 50.
-        if((Task1.specificPositionSymbol(0,15, B14) && !Task1.specificPositionSymbol(16,50, B14) && !Task1.specificPositionSymbol(11,50, C20))
-                || (Task1.specificPositionSymbol(0,10, C20) && !Task1.specificPositionSymbol(11,50, C20) && !Task1.specificPositionSymbol(16,50, B14))) {
+        if((Task1.specificPositionSymbol(0,14, B14) && !Task1.specificPositionSymbol(15,49, B14) && !Task1.specificPositionSymbol(10,49, C20))
+                || (Task1.specificPositionSymbol(0,9, C20) && !Task1.specificPositionSymbol(10,49, C20) && !Task1.specificPositionSymbol(15,49, B14))) {
             return "01";
         }
         //If there is at least one "Y" in B14 in the area from position 31 to 50 and there is no "Y" in B14 , Position 01 to 30 and C20 from position 01 to 30.
         //else if there is at least one "Y" in C20, position 31 to 50 and there is no "Y" in C20 , position 01 to 30 and B14, position 01 to 30.
-        if((Task1.specificPositionSymbol(31,50, B14) && !Task1.specificPositionSymbol(0,30, B14) && !Task1.specificPositionSymbol(0,30, C20)  )
-                || (Task1.specificPositionSymbol(31,50, C20) && !Task1.specificPositionSymbol(0,30, C20) && !Task1.specificPositionSymbol(0,30, B14))) {
+        if((Task1.specificPositionSymbol(30,49, B14) && !Task1.specificPositionSymbol(0,29, B14) && !Task1.specificPositionSymbol(0,29, C20)  )
+                || (Task1.specificPositionSymbol(30,49, C20) && !Task1.specificPositionSymbol(0,29, C20) && !Task1.specificPositionSymbol(0,29, B14))) {
             return "20";
         }
         //all other combinations of B14 and C20, with at least one "Y"
-        if(Task1.specificPositionSymbol(0,50, B14) || Task1.specificPositionSymbol(0,50, C20)) {
+        if(Task1.specificPositionSymbol(0,49, B14) || Task1.specificPositionSymbol(0,49, C20)) {
             return "10";
         }
         return "0.00";
@@ -529,49 +545,51 @@ public class Task3 {
     }
 
     public static void reCalculateDVersion5_1(Map<String, CVSClient> fullFileVersion5_1, String[] AVersion5_1) {
-        for (Map.Entry<String, CVSClient> entry : fullFileVersion5_1.entrySet()){
-            HW hw = new HW();
+        for (Map.Entry<String, CVSClient> entry : fullFileVersion5_1.entrySet()) {
 
-            String[] clientB = entry.getValue().getClientB();
-            CVSClient cvsClientVersion= entry.getValue();
-            List<String[]> CList = cvsClientVersion.getClientsC();
-            String[] D = cvsClientVersion.getD();
-            String[] tempD = new String[18];
-            System.arraycopy(D, 0, tempD, 0, D.length);
+            if (B_List.contains(entry.getKey())) {
+                HW hw = new HW();
 
-            D[3] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
-            tempD[3] = D[3];
+                String[] clientB = entry.getValue().getClientB();
+                CVSClient cvsClientVersion = entry.getValue();
+                List<String[]> CList = cvsClientVersion.getClientsC();
+                String[] D = cvsClientVersion.getD();
+                String[] tempD = new String[18];
+                System.arraycopy(D, 0, tempD, 0, D.length);
 
-            D[9] = calculateD10Version5_1(CList);
-            tempD[9] = D[9];
+                D[3] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
+                tempD[3] = D[3];
 
-            D[10] = calculateD11Version5_1(CList);
-            tempD[10] = D[10];
+                D[9] = calculateD10Version5_1(CList);
+                tempD[9] = D[9];
+
+                D[10] = calculateD11Version5_1(CList);
+                tempD[10] = D[10];
 
 //            List<String> curDList = new LinkedList<>();
-            String D15 = D[14];
-            tempD[17] = D15;
+                String D15 = D[14];
+                tempD[17] = D15;
 
 //            curDList.addAll(Arrays.asList(Arrays.copyOfRange(D, 0,12)));
 
-            // recalculate  D[9] and D[10] ???? (B14 and C20 changed)
-            BigDecimal D14A = calculateD14AVersion5_1(CList);
-            tempD[15] = String.valueOf(D14A);
+                // recalculate  D[9] and D[10] ???? (B14 and C20 changed)
+                BigDecimal D14A = calculateD14AVersion5_1(CList);
+                tempD[15] = String.valueOf(D14A);
 
-            BigDecimal D12A = calculateD12AVersion5_1(AVersion5_1[5], tempD, CList);
-            tempD[11] = String.valueOf(D12A);
+                BigDecimal D12A = calculateD12AVersion5_1(AVersion5_1[5], tempD, CList);
+                tempD[11] = String.valueOf(D12A);
 
-            BigDecimal D12B = BigDecimalcalculateD12B(tempD, AVersion5_1, CList, hw);
-            tempD[12] = String.valueOf(D12B);
+                BigDecimal D12B = BigDecimalcalculateD12B(tempD, AVersion5_1, CList, hw);
+                tempD[12] = String.valueOf(D12B);
 
-            BigDecimal D12C = BigDecimalcalculateD12C(tempD, AVersion5_1, CList, hw);
-            tempD[13] = String.valueOf(D12C);
+                BigDecimal D12C = BigDecimalcalculateD12C(tempD, AVersion5_1, CList, hw);
+                tempD[13] = String.valueOf(D12C);
 
-            BigDecimal D13 = calculateD13Version5_1(D12A, D12B, D12C);
-            tempD[14] = String.valueOf(D13);
+                BigDecimal D13 = calculateD13Version5_1(D12A, D12B, D12C);
+                tempD[14] = String.valueOf(D13);
 
-            BigDecimal D14B = BigDecimalcalculateD14B(tempD);
-            tempD[16] = String.valueOf(D14B);
+                BigDecimal D14B = BigDecimalcalculateD14B(tempD);
+                tempD[16] = String.valueOf(D14B);
 
 //            curDList.add(String.valueOf(D12A));
 //            curDList.add(String.valueOf(D12B));
@@ -583,9 +601,12 @@ public class Task3 {
 
 //            String[] DVersion5_1 = curDList.toArray(new String[]{});
 
-            D_HW.put(StringUtils.join(tempD, "*"), hw);
-            cvsClientVersion.setD(tempD);
+                D_HW.put(StringUtils.join(tempD, "*"), hw);
+                cvsClientVersion.setD(tempD);
+            }
         }
+
+
 
     }
 

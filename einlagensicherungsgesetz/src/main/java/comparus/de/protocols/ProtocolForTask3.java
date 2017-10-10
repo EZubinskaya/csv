@@ -1,6 +1,7 @@
 package comparus.de.protocols;
 
 import comparus.de.domen.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
 import java.text.SimpleDateFormat;
@@ -75,7 +76,7 @@ public class ProtocolForTask3 {
 
     public static void  writeProtocolToFileTask3(String protocolName, String taskNumber, String inputFileForMerge1, FileInfo fileInfo, String additioanlFileA,
                         String additioanlFileB, String additioanlFileC, String task1ResultFileName, int AAdditioanlCount, int BAdditioanlCount, int CAdditioanlCount, String errorMessage,
-                        Map<String, B_ExtraData> notInsertBRecord, Map<String, C_ExtraData> notInsertCRecord, Map<String, HW> D_HW
+                        Map<String, String[]> notUpdatedBRecords, Map<String, String[]> notUpdatedCRecords, Map<String, HW> D_HW
     ) throws FileNotFoundException {
 
         Writer writer = null;
@@ -123,47 +124,41 @@ public class ProtocolForTask3 {
                 writer.write("List of identified double customers:" + "\r\n");
                 for(KeyFile1ToFile2ToFile3 b : protocol.getKeyFile1ToFile2ToFile3_B_Record()) {
                     writer.write("B2 in original file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-                    writer.write("B2 in additional B file : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
+                    writer.write("B2 in additional B file : " + b.getKeyFile2().split(";")[2] + "\r\n");
                     writer.write("B2 in result file : " + b.getKeyFile3().split("\\*")[1] + "\r\n");
                 }
-                for(KeyFile1ToFile2ToFile3 b : protocol.getKeyFile1ToFile2ToFile3_C_Record()) {
-                    writer.write("C in original file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-                    writer.write("C  in additional C file : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
-                    writer.write("C in result file : " + b.getKeyFile3().split("\\*")[1] + "\r\n");
+                for(KeyFile1ToFile2ToFile3 c : protocol.getKeyFile1ToFile2ToFile3_C_Record()) {
+                    writer.write("C in original file : " + c.getKeyFile1().split("\\*")[2] + "\r\n");
+                    writer.write("C  in additional C file : " + c.getKeyFile2().split(";")[2] + "\r\n");
+                    writer.write("C in result file : " + c.getKeyFile3().split("\\*")[2] + "\r\n");
                 }
 
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nRECALCULATING\r\n\r\n");
                 writer.write("List of recalculated D-Records in result file:\r\n");
-                for(String d : protocol.getRecalculatedDRecords()) {
-                    HW hw = D_HW.get(d);
-                    writer.write("D : " + d + "\r\n");
-                    writer.write("HW1 : " + hw.getHW1() + "\r\n");
-                    writer.write("HW2 : " + hw.getHW2() + "\r\n");
-                    writer.write("HW3 : " + hw.getHW3() + "\r\n");
-                    writer.write("HW4 : " + hw.getHW4() + "\r\n");
-                    writer.write("HW5 : " + hw.getHW5() + "\r\n");
+              //  for(String d : protocol.getRecalculatedDRecords()) {
+              for(Map.Entry<String, HW> hw : D_HW.entrySet()) {
+                    writer.write("D : " + hw.getKey() + "\r\n");
+                    writer.write("HW1 : " + hw.getValue().getHW1() + "\r\n");
+                    writer.write("HW2 : " + hw.getValue().getHW2() + "\r\n");
+                    writer.write("HW3 : " + hw.getValue().getHW3() + "\r\n");
+                    writer.write("HW4 : " + hw.getValue().getHW4() + "\r\n");
+                    writer.write("HW5 : " + hw.getValue().getHW5() + "\r\n");
                 }
 
-                if(!notInsertBRecord.isEmpty() || !notInsertCRecord.isEmpty()) {
+                if(!notUpdatedBRecords.isEmpty() || !notUpdatedCRecords.isEmpty()) {
                     writer.write("\r\n=============================================================================\r\n");
-                    writer.write("\r\nNot update records\r\n\r\n");
-                    if(!notInsertBRecord.isEmpty()) {
+                    writer.write("\r\nNot updated records\r\n\r\n");
+                    if(!notUpdatedBRecords.isEmpty()) {
                         writer.write("List of B records:\r\n");
-                        for (Map.Entry<String, B_ExtraData> entry : notInsertBRecord.entrySet()) {
-                            String key = entry.getKey();
-                            B_ExtraData value = entry.getValue();
-                            writer.write(value.getA2() + ";" + value.getSatz_ID() + ";" + key + ";" + value.getB16() + "\r\n");
+                        for (Map.Entry<String, String[]> entry : notUpdatedBRecords.entrySet()) {
+                            writer.write(StringUtils.join(entry.getValue(), ';') + "\r\n");
                         }
                     }
-                    if(!notInsertCRecord.isEmpty()) {
+                    if(!notUpdatedCRecords.isEmpty()) {
                         writer.write("List of c records:\r\n");
-                        for (Map.Entry<String, C_ExtraData> entry : notInsertCRecord.entrySet()) {
-                            String key = entry.getKey();
-                            C_ExtraData value = entry.getValue();
-                            writer.write(value.getA2() + ";" + value.getSatz_ID() + ";" + key + ";" + value.getC21_Pos15() +
-                                    ";" + value.getC21_Pos16() + ";" + value.getC21_Pos17() + ";" + value.getC21_Pos18() +
-                                    ";" + value.getC21_Pos19() + ";" + value.getC24() + ";" + value.getC25() + ";" + value.getC26() + "\r\n");
+                        for (Map.Entry<String, String[]> entry : notUpdatedCRecords.entrySet()) {
+                            writer.write(StringUtils.join(entry.getValue(), ';') + "\r\n");
                         }
                     }
                 }
