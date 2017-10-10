@@ -19,6 +19,8 @@ import static comparus.de.util.Util.decimalToString;
  */
 public class Task3 {
     private static List<String> B_List = new ArrayList<>();
+    private static Map<String, B_ExtraData> B_Record_Not_Inserted = new LinkedHashMap<>();
+    private static Map<String, C_ExtraData>  C_Record_Not_Inserted = new LinkedHashMap<>();
 
     private static BigDecimal calculateHW1(String[] D) {
         BigDecimal sumHW1 = BigDecimal.ZERO;
@@ -350,6 +352,7 @@ public class Task3 {
                 clientBList.add(b_extraData.getB16().toString());
                 BVersion5_1 = clientBList.toArray(BVersion5_1);
                 value.setClientB(BVersion5_1);
+                B_Additional.remove(b_extraData);
             }
 
             //C
@@ -357,6 +360,7 @@ public class Task3 {
             for(int i = 0; i < clientC.size(); i++) {
                 String[] currentC = clientC.get(i);
                 C_ExtraData c_extraData = C_Additional.get(currentC[2]);
+                String currentC2 = currentC[2];
                 //TODO
                 if(c_extraData != null) {
                     currentC[2] = currentC[2] + "-" + c_extraData.getA2();
@@ -384,12 +388,16 @@ public class Task3 {
 
                     String[] curCVersion5_1 = curClientCList.toArray(new String[]{});
                     clientC.set(i,curCVersion5_1);
+                    C_Additional.remove(currentC2);
+
                 }
 
             }
             fullFileVersion5_1.put(key,value);
 
         }
+        B_Record_Not_Inserted.putAll(B_Additional);
+        C_Record_Not_Inserted.putAll(C_Additional);
         return fullFileVersion5_1;
     }
 
