@@ -2,6 +2,7 @@ package comparus.de;
 
 import comparus.de.domen.*;
 import comparus.de.tasks.Task1a;
+import comparus.de.tasks.Task3;
 
 import java.io.*;
 import java.util.*;
@@ -9,6 +10,7 @@ import java.util.*;
 
 import static comparus.de.protocols.ProtocolForTask1A.readCSVFileByStringRetCountTask1a;
 import static comparus.de.protocols.ProtocolForTask1A.writeProtocolToFileTask1A;
+import static comparus.de.protocols.ProtocolForTask3.writeProtocolToFileTask3;
 import static comparus.de.tasks.Task1a.*;
 import static comparus.de.tasks.Task4.calculateDversion5;
 import static comparus.de.util.ReadWriteData.writeCSV;
@@ -115,15 +117,6 @@ public class CSVReaderMain {
                     task2ResultFileName, errorMessage);
 
         }else if(taskNumber.equalsIgnoreCase("Task1a") && inputFileAfterMerge != null && Additional_CRecord_Data_Task1a != null) {
-//            Map<String,CVSClient> fullFile = readCSVFileByStringSimple(inputFileAfterMerge);
-//            Map<String, comparus.de.domen.Additional_CRecord_Data_Task1a> additional_cRecord_data_task1aMap = readExtraAdditionalDataCTask1a(Additional_CRecord_Data_Task1a);
-//            Map<String,CVSClient> fullFileVersion4_1_Additional_C = generateVersion4AdditionalC(fullFile, additional_cRecord_data_task1aMap);
-//            reCalculateD(fullFileVersion4_1_Additional_C, A, true);
-//            String[] E = reCalculateE(fullFileVersion4_1_Additional_C, A);
-//            List<String[]> allData = generateListOfDataArray(A, fullFileVersion4_1_Additional_C, E);
-//            writeCSV(allData, task1aResultFileName);
-
-
             Map<String, CVSClient> readFile1 = null;
             FileInfo fileInfo1 = null;
             FileInfo fileInfo2 = null;
@@ -156,7 +149,6 @@ public class CSVReaderMain {
             }
 
             //Protocol
-
             calculateAmount(allData);
             protocol.setResultAmountTotal(allData.size());
             writeProtocolToFileTask1A("Protocol Task1a.txt", taskNumber, inputFileAfterMerge, Additional_CRecord_Data_Task1a,
@@ -164,16 +156,35 @@ public class CSVReaderMain {
 
         }else if(taskNumber.equalsIgnoreCase("Task3") && inputFileAfterMerge != null && A_Additional_5 != null
                 && B_Additional_5 != null && C_Additional_5 != null) {
-            Map<String,CVSClient> fullFile = readCSVFileByStringSimple(inputFileAfterMerge);
-            Map<String, String> A_ExtraData = readExtraDataA(A_Additional_5);
-            Map<String, B_ExtraData> B_ExtraData = readExtraDataB(B_Additional_5);
-            Map<String, C_ExtraData> C_ExtraData = readExtraDataC(C_Additional_5);
-            String[] AVersion5_1 = geeratedAVersion5_1 (A,  A_ExtraData);
-            Map<String,CVSClient> fullFileVersion5_1 = generateVersion5(fullFile, B_ExtraData, C_ExtraData);
-            reCalculateDVersion5_1(fullFileVersion5_1, AVersion5_1);
-            String[] EVersion5_1 = reCalculateEVersion5_1(fullFileVersion5_1);
-            List<String[]> allDataVersion5_1 = generateListOfDataArray(AVersion5_1, fullFileVersion5_1, EVersion5_1);
-            writeCSV(allDataVersion5_1, task3ResultFileName);
+            Map<String, CVSClient> readFile1 = null;
+            FileInfo fileInfo1 = null;
+            FileInfo fileInfo2 = null;
+            List<String[]> allData = null;
+            String errorMessage = null;
+            Set<Additional_CRecord> mergingCRecords = new HashSet<>();
+            try {
+                Map<String,CVSClient> fullFile = readCSVFileByStringSimple(inputFileAfterMerge);
+                Map<String, String> A_ExtraData = readExtraDataA(A_Additional_5);
+                Map<String, B_ExtraData> B_ExtraData = readExtraDataB(B_Additional_5);
+                Map<String, C_ExtraData> C_ExtraData = readExtraDataC(C_Additional_5);
+                String[] AVersion5_1 = geeratedAVersion5_1 (A,  A_ExtraData);
+                Map<String,CVSClient> fullFileVersion5_1 = generateVersion5(fullFile, B_ExtraData, C_ExtraData);
+                reCalculateDVersion5_1(fullFileVersion5_1, AVersion5_1);
+                String[] EVersion5_1 = reCalculateEVersion5_1(fullFileVersion5_1);
+                List<String[]> allDataVersion5_1 = generateListOfDataArray(AVersion5_1, fullFileVersion5_1, EVersion5_1);
+                writeCSV(allDataVersion5_1, task3ResultFileName);
+            } catch (Exception ex) {
+                errorMessage = ex.getStackTrace().toString();
+                System.out.println(" exception " + ex.getStackTrace());
+                throw ex;
+            }
+            //Protocol
+            calculateAmount(allData);
+            protocol.setResultAmountTotal(allData.size());
+
+                    writeProtocolToFileTask3("Protocol Task3.txt", taskNumber, inputFileAfterMerge, A_Additional_5, B_Additional_5, C_Additional_5,
+                    task1aResultFileName, errorMessage, B_Record_Not_Inserted, C_Record_Not_Inserted, D_HW);
+
         } else if (taskNumber.equalsIgnoreCase("Task4")  && inputFileForMerge1!= null & inputFileForMerge2 != null) {
             Map<B, CVSClient> readFile1 = null;
             Map<B, CVSClient> readFile2 = null;

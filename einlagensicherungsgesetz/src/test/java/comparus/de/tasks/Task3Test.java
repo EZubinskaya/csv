@@ -1,10 +1,7 @@
 package comparus.de.tasks;
 
 import com.opencsv.CSVReader;
-import comparus.de.domen.B;
-import comparus.de.domen.B_ExtraData;
-import comparus.de.domen.CVSClient;
-import comparus.de.domen.C_ExtraData;
+import comparus.de.domen.*;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -59,13 +56,14 @@ public class Task3Test {
 
     @Test
     public void D12Test() throws IOException {
+        HW hw = new HW();
         Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
         String[] clientB = fullFileVersion5_1.get("5615").getClientB();
         List<String[]> CList = fullFileVersion5_1.get("5615").getClientsC();
         String[] D = fullFileVersion5_1.get("5615").getD();
         List<String> curDList = new LinkedList<>();
         curDList.addAll(Arrays.asList(D));
-        BigDecimal D12B = BigDecimalcalculateD12B(D, AVersion5, CList);
+        BigDecimal D12B = BigDecimalcalculateD12B(D, AVersion5, CList, hw);
         System.out.println(D12B);
         Assert.assertEquals(D12B,BigDecimal.ZERO);
 
@@ -73,13 +71,14 @@ public class Task3Test {
 
     @Test
     public void D12Test2() throws IOException {
+        HW hw = new HW();
         Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
         String[] clientB = fullFileVersion5_1.get("5615").getClientB();
         List<String[]> CList = fullFileVersion5_1.get("5615").getClientsC();
         String[] D = fullFileVersion5_1.get("5615").getD();
         List<String> curDList = new LinkedList<>();
         curDList.addAll(Arrays.asList(D));
-        BigDecimal D12B = BigDecimalcalculateD12B(D, AVersion5, CList);
+        BigDecimal D12B = BigDecimalcalculateD12B(D, AVersion5, CList,hw);
         System.out.println(D12B);
         Assert.assertEquals(D12B,BigDecimal.ZERO);
 
@@ -87,12 +86,13 @@ public class Task3Test {
 
     @Test
     public void D12CTest1() throws IOException {
+        HW hw = new HW();
         Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
         String[] clientB = fullFileVersion5_1.get("5615").getClientB();
         List<String[]> CList = fullFileVersion5_1.get("5615").getClientsC();
         String[] D = fullFileVersion5_1.get("5615").getD();
 
-        BigDecimal D12C =BigDecimalcalculateD12C(D, AVersion5, CList);
+        BigDecimal D12C =BigDecimalcalculateD12C(D, AVersion5, CList, hw);
 
         System.out.println(D12C);
         Assert.assertEquals(D12C,BigDecimal.ZERO);
@@ -101,12 +101,13 @@ public class Task3Test {
 
     @Test
     public void D12CTest2() throws IOException {
+        HW hw = new HW();
         Map<String,CVSClient> fullFileVersion5_1 = getClientVersion5_1();
         String[] clientB = fullFileVersion5_1.get("5615").getClientB();
         List<String[]> CList = fullFileVersion5_1.get("5615").getClientsC();
         String[] D = fullFileVersion5_1.get("5615").getD();
 
-        BigDecimal D12C =BigDecimalcalculateD12C(D, AVersion5, CList);
+        BigDecimal D12C =BigDecimalcalculateD12C(D, AVersion5, CList, hw);
 
         System.out.println(D12C);
         Assert.assertEquals(D12C,new BigDecimal("0"));

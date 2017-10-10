@@ -20,10 +20,10 @@ import static comparus.de.util.Util.decimalToString;
  * Created by ekaterina on 9/26/17.
  */
 public class Task3 {
-    private static List<String> B_List = new ArrayList<>();
-    private static Map<String, B_ExtraData> B_Record_Not_Inserted = new LinkedHashMap<>();
-    private static Map<String, C_ExtraData>  C_Record_Not_Inserted = new LinkedHashMap<>();
-    private static Map<String, HW>  D_HW = new LinkedHashMap<>();
+    public static List<String> B_List = new ArrayList<>();
+    public static Map<String, B_ExtraData> B_Record_Not_Inserted = new LinkedHashMap<>();
+    public static Map<String, C_ExtraData>  C_Record_Not_Inserted = new LinkedHashMap<>();
+    public static Map<String, HW>  D_HW = new LinkedHashMap<>();
 
     private static BigDecimal calculateHW1(String[] D) {
         BigDecimal sumHW1 = BigDecimal.ZERO;

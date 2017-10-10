@@ -1,6 +1,7 @@
 package comparus.de.tasks;
 
 import comparus.de.domen.CVSClient;
+import comparus.de.domen.HW;
 import org.apache.commons.lang3.StringUtils;
 
 import java.math.BigDecimal;
@@ -26,6 +27,7 @@ public class Task4 {
         }
         List<String>  recalculatedDRecords = new ArrayList<>();
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+            HW hw = new HW();
             String[] clientB = entry.getValue().getClientB();
             CVSClient cvsClient = entry.getValue();
             List<String[]> CList = cvsClient.getClientsC();
@@ -58,10 +60,10 @@ public class Task4 {
                 BigDecimal D12A = calculateD12AVersion5_1(A[5], tempD, CList);
                 tempD[11] = String.valueOf(D12A);
 
-                BigDecimal D12B = BigDecimalcalculateD12B(tempD, A, CList);
+                BigDecimal D12B = BigDecimalcalculateD12B(tempD, A, CList, hw);
                 tempD[12] = String.valueOf(D12B);
 
-                BigDecimal D12C = BigDecimalcalculateD12C(tempD, A, CList);
+                BigDecimal D12C = BigDecimalcalculateD12C(tempD, A, CList, hw);
                 tempD[13] = String.valueOf(D12C);
 
                 BigDecimal D13 = calculateD13Version5_1(D12A, D12B, D12C);

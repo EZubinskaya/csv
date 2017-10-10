@@ -73,14 +73,14 @@ public class ProtocolForTask3 {
         return contistTheSameB;
     }
 
-    public static void  writeProtocolToFileTask3(String protocolName, String taskNumber, String inputFileForMerge1, String inputFileForMerge2,
-                                          String task1ResultFileName, FileInfo fileInfo1, FileInfo fileInfo2, String errorMessage,
+    public static void  writeProtocolToFileTask3(String protocolName, String taskNumber, String inputFileForMerge1, String additioanlFileA,
+                        String additioanlFileB, String additioanlFileC, String task1ResultFileName, String errorMessage,
                         Map<String, B_ExtraData> notInsertBRecord, Map<String, C_ExtraData> notInsertCRecord, Map<String, HW> D_HW
     ) throws FileNotFoundException {
 
         Writer writer = null;
         try {
-            if(inputFileForMerge1 != null && inputFileForMerge2 != null) {
+            if(inputFileForMerge1 != null) {
                 writer = new BufferedWriter(new OutputStreamWriter(
                         new FileOutputStream(protocolName), "utf-8"));
                 writer.write("\r\n=============================================================================\r\n");
@@ -89,9 +89,10 @@ public class ProtocolForTask3 {
                 writer.write("Program name: einlagensicherungsgesetz\r\n");
                 writer.write("Date of run: " + new SimpleDateFormat("dd-MM-YYYY HH-mm").format(new Date()) + "\r\n");
                 writer.write("Task: " + taskNumber + "\r\n");
-                writer.write("Input file 1: " + inputFileForMerge1 + "\r\n");
-                writer.write("Input file 2: " + inputFileForMerge2 + "\r\n");
-                writer.write("Filename result file: " + task1ResultFileName + "\r\n");
+                writer.write("Input file: " + inputFileForMerge1 + "\r\n");
+                writer.write("Additional file A: " + additioanlFileA + "\r\n");
+                writer.write("Additional file B: " + additioanlFileB + "\r\n");
+                writer.write("Additional file C: " + additioanlFileC + "\r\n");
 
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("ERRORS\r\n");
@@ -101,18 +102,20 @@ public class ProtocolForTask3 {
 
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nAMOUNTS OF DATASETS\r\n\r\n");
-                writer.write("Input file name 1: " + fileInfo1.getFileName() + "\r\n");
-                writer.write("B : " + fileInfo1.getBCount() + "\r\n");
-                writer.write("C : " + fileInfo1.getCCount()  + "\r\n");
-                writer.write("D : " + fileInfo1.getDCount()  + "\r\n");
-                writer.write("Input file name: " + fileInfo2.getFileName() + "\r\n");
-                writer.write("B : " + fileInfo2.getBCount() + "\r\n");
-                writer.write("C : " + fileInfo2.getCCount()  + "\r\n");
-                writer.write("D : " + fileInfo2.getDCount()  + "\r\n");
-                writer.write("Resultfile\r\n");
-                writer.write("B : " + protocol.getResultAmountB() + "\r\n");
-                writer.write("C : " + protocol.getResultAmountC() + "\r\n");
-                writer.write("D : " + protocol.getResultAmountD() + "\r\n");
+//                writer.write("Input file name: " + fileInfo1.getFileName() + "\r\n");
+//                writer.write("B : " + fileInfo1.getBCount() + "\r\n");
+//                writer.write("C : " + fileInfo1.getCCount()  + "\r\n");
+//                writer.write("D : " + fileInfo1.getDCount()  + "\r\n");
+//                writer.write("Additional file A: " + additioanlFileA + "\r\n");
+//                writer.write("A : " + fileInfo2.getBCount() + "\r\n");
+//                writer.write("Additional file B: " + additioanlFileA + "\r\n");
+//                writer.write("B : " + fileInfo2.getBCount() + "\r\n");
+//                writer.write("Additional file C: " + additioanlFileA + "\r\n");
+//                writer.write("C : " + fileInfo2.getBCount() + "\r\n");
+//                writer.write("Resultfile\r\n");
+//                writer.write("B : " + protocol.getResultAmountB() + "\r\n");
+//                writer.write("C : " + protocol.getResultAmountC() + "\r\n");
+//                writer.write("D : " + protocol.getResultAmountD() + "\r\n");
 
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nMERGING\r\n\r\n");
@@ -123,7 +126,11 @@ public class ProtocolForTask3 {
                     writer.write("B2 in file2 : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
                     writer.write("B2 in result file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
                 }
-
+                for(KeyFile1ToFile2 b : protocol.getKeyFile1ToFile2()) {
+                    writer.write("C2B in file1 : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
+                    writer.write("B2 in file2 : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
+                    writer.write("B2 in result file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
+                }
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nRECALCULATING\r\n\r\n");
                 writer.write("List of recalculated D-Records in result file:\r\n");
