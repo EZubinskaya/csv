@@ -1,10 +1,7 @@
 package comparus.de.tasks;
 
 import com.opencsv.CSVReader;
-import comparus.de.domen.B_ExtraData;
-import comparus.de.domen.CVSClient;
-import comparus.de.domen.C_ExtraData;
-import comparus.de.domen.HW;
+import comparus.de.domen.*;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileReader;
@@ -338,6 +335,12 @@ public class Task3 {
 
     public static Map<String,CVSClient> generateVersion5 (Map<String,CVSClient> fullFile, Map<String,B_ExtraData> B_Additional, Map<String,C_ExtraData> C_Additional) {
 
+        Protocol protocol = new Protocol();
+        List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile_B_Records = new ArrayList<>();
+        protocol.setKeyFile1ToFile2ToFile3_B_Record(keyFile1ToFile2ToFile_B_Records);
+        List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile_C_Records = new ArrayList<>();
+        protocol.setKeyFile1ToFile2ToFile3_C_Record(keyFile1ToFile2ToFile_C_Records);
+
         Map<String,CVSClient>  fullFileVersion5_1 = new LinkedHashMap<>();
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
             String key = entry.getKey();
@@ -359,6 +362,9 @@ public class Task3 {
                 clientBList.add(b_extraData.getB16().toString());
                 BVersion5_1 = clientBList.toArray(BVersion5_1);
                 value.setClientB(BVersion5_1);
+                keyFile1ToFile2ToFile_B_Records.add(new KeyFile1ToFile2ToFile3(StringUtils.join(clientB, "*"),
+                        b_extraData.getA2() + ";" + b_extraData.getSatz_ID() + ";" + key + ";" + b_extraData.getB16(),
+                        StringUtils.join(BVersion5_1, "*")));
                 B_Additional.remove(b_extraData);
             }
 
@@ -395,6 +401,13 @@ public class Task3 {
 
                     String[] curCVersion5_1 = curClientCList.toArray(new String[]{});
                     clientC.set(i,curCVersion5_1);
+
+                    keyFile1ToFile2ToFile_C_Records.add(new KeyFile1ToFile2ToFile3(StringUtils.join(currentC, "*"),
+                            c_extraData.getA2() + ";" + c_extraData.getSatz_ID() + ";" + key + ";" + c_extraData.getC21_Pos15() +
+                                    ";" + c_extraData.getC21_Pos16() + ";" + c_extraData.getC21_Pos17() + ";" + c_extraData.getC21_Pos18() +
+                                    ";" + c_extraData.getC21_Pos19() + ";" + c_extraData.getC24() + ";" + c_extraData.getC25() + ";" + c_extraData.getC26(),
+                            StringUtils.join(curCVersion5_1, "*")));
+
                     C_Additional.remove(currentC2);
 
                 }

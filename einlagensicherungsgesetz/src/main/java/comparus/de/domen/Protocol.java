@@ -13,6 +13,8 @@ public class Protocol {
 
     private List<KeyFile1ToFile2> keyFile1ToFile2;
     private List<String> recalculatedDRecords;
+    private List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile3_B_Record;
+    private List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile3_C_Record;
 
     public int getResultAmountB() {
         return resultAmountB;
@@ -60,6 +62,22 @@ public class Protocol {
 
     public void setRecalculatedDRecords(List<String> recalculatedDRecords) {
         this.recalculatedDRecords = recalculatedDRecords;
+    }
+
+    public List<KeyFile1ToFile2ToFile3> getKeyFile1ToFile2ToFile3_B_Record() {
+        return keyFile1ToFile2ToFile3_B_Record;
+    }
+
+    public void setKeyFile1ToFile2ToFile3_B_Record(List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile3_B_Record) {
+        this.keyFile1ToFile2ToFile3_B_Record = keyFile1ToFile2ToFile3_B_Record;
+    }
+
+    public List<KeyFile1ToFile2ToFile3> getKeyFile1ToFile2ToFile3_C_Record() {
+        return keyFile1ToFile2ToFile3_C_Record;
+    }
+
+    public void setKeyFile1ToFile2ToFile3_C_Record(List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile3_C_Record) {
+        this.keyFile1ToFile2ToFile3_C_Record = keyFile1ToFile2ToFile3_C_Record;
     }
 }
 

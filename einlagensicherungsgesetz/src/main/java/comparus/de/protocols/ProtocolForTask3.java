@@ -117,20 +117,21 @@ public class ProtocolForTask3 {
                 writer.write("C : " + protocol.getResultAmountC() + "\r\n");
                 writer.write("D : " + protocol.getResultAmountD() + "\r\n");
 
-//                writer.write("\r\n=============================================================================\r\n");
-//                writer.write("\r\nMERGING\r\n\r\n");
-//                writer.write("Amount of merged datasets: " + protocol.getResultAmountTotal() + "\r\n");
-//                writer.write("List of identified double customers:" + "\r\n");
-//                for(KeyFile1ToFile2 b : protocol.getKeyFile1ToFile2()) {
-//                    writer.write("B2 in file1 : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-//                    writer.write("B2 in file2 : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
-//                    writer.write("B2 in result file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-//                }
-//                for(KeyFile1ToFile2 b : protocol.getKeyFile1ToFile2()) {
-//                    writer.write("C2B in file1 : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-//                    writer.write("B2 in file2 : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
-//                    writer.write("B2 in result file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-//                }
+                writer.write("\r\n=============================================================================\r\n");
+                writer.write("\r\nMERGING\r\n\r\n");
+                writer.write("Amount of merged datasets: " + protocol.getResultAmountTotal() + "\r\n");
+                writer.write("List of identified double customers:" + "\r\n");
+                for(KeyFile1ToFile2ToFile3 b : protocol.getKeyFile1ToFile2ToFile3_B_Record()) {
+                    writer.write("B2 in original file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
+                    writer.write("B2 in additional B file : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
+                    writer.write("B2 in result file : " + b.getKeyFile3().split("\\*")[1] + "\r\n");
+                }
+                for(KeyFile1ToFile2ToFile3 b : protocol.getKeyFile1ToFile2ToFile3_C_Record()) {
+                    writer.write("C in original file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
+                    writer.write("C  in additional C file : " + b.getKeyFile2().split("\\*")[1] + "\r\n");
+                    writer.write("C in result file : " + b.getKeyFile3().split("\\*")[1] + "\r\n");
+                }
+
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nRECALCULATING\r\n\r\n");
                 writer.write("List of recalculated D-Records in result file:\r\n");
