@@ -320,10 +320,14 @@ public class Task3 {
     }
 
     private static B_ExtraData checkKey(String BPrimaryKey, Map<String, B_ExtraData> B_Additional) {
-            String key = getBprimaryKey(BPrimaryKey);
-            if(B_Additional.get(key) != null) {
-                return B_Additional.get(key);
-            }
+        if (((!BPrimaryKey.startsWith("LST")) || (!BPrimaryKey.startsWith("GEMKD"))) && (BPrimaryKey.split("-").length == 2)) {
+            String key = BPrimaryKey.split("-")[0];
+            return (B_ExtraData)B_Additional.get(key);
+        }
+        String key = getBprimaryKey(BPrimaryKey);
+        if (B_Additional.get(key) != null) {
+            return (B_ExtraData)B_Additional.get(key);
+        }
         return null;
     }
 
@@ -389,13 +393,14 @@ public class Task3 {
 
             //C
             List<String[]> clientC = value.getClientsC();
+            boolean CRecordIsValid = checkIfAllCRecordForCurrentBHaveAdditionalCInformation(clientC, C_Additional);
             for(int i = 0; i < clientC.size(); i++) {
                 String[] currentC = clientC.get(i);
                 String accountPK =getСprimaryKey(currentC[2]);
                 C_ExtraData c_extraData = C_Additional.get(accountPK);
 
                 //TODO
-                if(c_extraData != null && BVersion5_1.length > 0) {
+                if(c_extraData != null && BVersion5_1.length > 0 && CRecordIsValid) {
                     String clientCinitial = StringUtils.join(currentC, "*");
                     currentC[2] = currentC[2] + "-" + c_extraData.getA2();
                     currentC[21] = currentC[21].substring(0,14) +
@@ -446,6 +451,19 @@ public class Task3 {
         return fullFileVersion5_1;
     }
 
+    private static boolean checkIfAllCRecordForCurrentBHaveAdditionalCInformation(List<String[]> clientC, Map<String, C_ExtraData> C_Additional) {
+        boolean isCheck = true;
+        for (int i = 0; i < clientC.size(); i++) {
+            String[] currentC = (String[])clientC.get(i);
+            String accountPK = getСprimaryKey(currentC[2]);
+            C_ExtraData c_extraData = (C_ExtraData)C_Additional.get(accountPK);
+            if (c_extraData == null) {
+                return false;
+            }
+        }
+        return isCheck;
+    }
+    
     private static String calculateC27 (String C20, String B14) {
         //If in B14 and C20 there is no "Y".
         if(!B14.contains("Y") && !C20.contains("Y")) {
