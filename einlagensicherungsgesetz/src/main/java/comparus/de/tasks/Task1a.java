@@ -96,20 +96,6 @@ public class Task1a {
         return fullData;
     }
 
-    public static List<String[]> generateListOfDataArrayNotSorted(String[] a, Map<String, CVSClient> fullFile, String[] e) {
-        // fullFile.
-        List<String[]> fullData = new ArrayList<String[]>();
-        fullData.add(a);
-        for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
-            CVSClient cvsClient = entry.getValue();
-            fullData.add(cvsClient.getClientB());
-            fullData.addAll(cvsClient.getClientsC());
-            fullData.add(cvsClient.getD());
-        }
-        fullData.add(e);
-        return fullData;
-    }
-
     static List<CVSClient> getSortedListByB1C2A (Map<String, CVSClient> data) {
         List<CVSClient> sortedData = new ArrayList<>();
         for (Map.Entry<String, CVSClient> entry : data.entrySet()){

@@ -20,15 +20,10 @@ public class Task3 {
     public static List<String> B_List = new ArrayList<>();
     public static Map<String, String[]> B_Record_Not_Updated = new LinkedHashMap<>();
     public static Map<String, String[]> C_Record_Not_Updated = new LinkedHashMap<>();
-<<<<<<< HEAD
     public static Map<String, CVSClient> clients_not_have_additional_data = new LinkedHashMap<>();
 
     public static Map<String, HW>  D_HW = new LinkedHashMap<>();
     public static String A2;
-=======
-    public static Map<String, HW>  D_HW = new LinkedHashMap<>();
-
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
     private static BigDecimal calculateHW1(String[] D) {
         BigDecimal sumHW1 = BigDecimal.ZERO;
         BigDecimal maxD6D9 = createNumValue(D[5]).max(createNumValue(D[8]));
@@ -216,13 +211,10 @@ public class Task3 {
             D12B_SecondPart = HW2;
         }
 
-        if(A.length < 9 || (A.length > 9 && (A[8].equals("0") || A[8].equals("0,00") || A[8] == null))) {
-            D12B = D12B_HW1_D12A.min(D12B_SecondPart);
-        } else {
-            BigDecimal C5 = createNumValue(CList.get(0)[5]);
-            BigDecimal D12B_ThirdPart = createNumValue(A[8]).multiply(C5).subtract(createNumValue(D[5]).add(createNumValue(D[8]).add(createNumValue(D[11]))));
-            D12B = D12B_HW1_D12A.min(D12B_SecondPart).min(D12B_ThirdPart);
-        }
+        BigDecimal C5 = createNumValue(CList.get(0)[5]);
+        BigDecimal D12B_ThirdPart = createNumValue(A[8]).multiply(C5).subtract(createNumValue(D[5]).add(createNumValue(D[8]).add(createNumValue(D[11]))));
+
+        D12B = D12B_HW1_D12A.min(D12B_SecondPart).min(D12B_ThirdPart);
 
         if(D12B.signum() == -1) {
             D12B = BigDecimal.ZERO;
@@ -328,21 +320,10 @@ public class Task3 {
     }
 
     private static B_ExtraData checkKey(String BPrimaryKey, Map<String, B_ExtraData> B_Additional) {
-<<<<<<< HEAD
-        if((!BPrimaryKey.startsWith("LST") || !BPrimaryKey.startsWith("GEMKD")) && BPrimaryKey.split("-").length == 2) {
-            String key = BPrimaryKey.split("-")[0];
-            return B_Additional.get(key);
-        }
-        String key = getBprimaryKey(BPrimaryKey);
-        if(B_Additional.get(key) != null) {
-            return B_Additional.get(key);
-        }
-=======
             String key = getBprimaryKey(BPrimaryKey);
             if(B_Additional.get(key) != null) {
                 return B_Additional.get(key);
             }
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
         return null;
     }
 
@@ -382,13 +363,10 @@ public class Task3 {
             String[] BVersion5_1 = new String[clientBList.size()];
             String BPrimaryKey = clientB[1];
             B_ExtraData b_extraData = checkKey(BPrimaryKey, B_Additional);
-<<<<<<< HEAD
             if(A2 == null && b_extraData != null) {
                 A2 = b_extraData.getA2().toString();
             }
             boolean addElement = false;
-=======
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
             if(b_extraData != null) {
                 B_List.add(key);
                 String clientBinitial = StringUtils.join(clientB, "*");
@@ -411,18 +389,13 @@ public class Task3 {
 
             //C
             List<String[]> clientC = value.getClientsC();
-            boolean CRecordIsValid = checkIfAllCRecordForCurrentBHaveAdditionalCInformation(clientC, C_Additional );
             for(int i = 0; i < clientC.size(); i++) {
                 String[] currentC = clientC.get(i);
                 String accountPK =getСprimaryKey(currentC[2]);
                 C_ExtraData c_extraData = C_Additional.get(accountPK);
 
                 //TODO
-<<<<<<< HEAD
-                if(c_extraData != null && BVersion5_1.length > 0 && CRecordIsValid) {
-=======
-                if(c_extraData != null) {
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
+                if(c_extraData != null && BVersion5_1.length > 0) {
                     String clientCinitial = StringUtils.join(currentC, "*");
                     currentC[2] = currentC[2] + "-" + c_extraData.getA2();
                     currentC[21] = currentC[21].substring(0,14) +
@@ -458,7 +431,6 @@ public class Task3 {
 
                     //should not remove in case of multiple GEMKD-type C-records
                    // C_Additional.remove(currentC2);
-<<<<<<< HEAD
                     addElement = true;
                 } else {
                     C_Record_Not_Updated.put(currentC[2], currentC);
@@ -472,64 +444,6 @@ public class Task3 {
         }
 
         return fullFileVersion5_1;
-    }
-
-    private static boolean checkIfAllCRecordForCurrentBHaveAdditionalCInformation(List<String[]> clientC, Map<String,C_ExtraData> C_Additional ) {
-        boolean isCheck = true;
-        for(int i = 0; i < clientC.size(); i++) {
-            String[] currentC = clientC.get(i);
-            String accountPK = getСprimaryKey(currentC[2]);
-            C_ExtraData c_extraData = C_Additional.get(accountPK);
-            if(c_extraData == null) {
-                return false;
-            }
-        }
-            return isCheck;
-    }
-
-    private static String calculateC27 (String C20, String B14) {
-        //TODO REMOVE try - catch
-
-        //If in B14 and C20 there is no "Y".
-        try {
-        if(!B14.contains("Y") && !C20.contains("Y")) {
-            return "90";
-        }
-        //It there is at least one "Y" in B14 in the area from position 01 to 15 and  there is no "Y" in B14 , Position 16 to 50 and C20 from position 11 to 50.
-        //else if there is in C20 , position 01 to 10 and least one 'Y' and there is no "Y" in C20, position 11 to 50 and B14, position 16 to 50.
-        if((Task1.specificPositionSymbol(0,14, B14) && !Task1.specificPositionSymbol(15,49, B14) && !Task1.specificPositionSymbol(10,49, C20))
-                || (Task1.specificPositionSymbol(0,9, C20) && !Task1.specificPositionSymbol(10,49, C20) && !Task1.specificPositionSymbol(15,49, B14))) {
-            return "01";
-        }
-        //If there is at least one "Y" in B14 in the area from position 31 to 50 and there is no "Y" in B14 , Position 01 to 30 and C20 from position 01 to 30.
-        //else if there is at least one "Y" in C20, position 31 to 50 and there is no "Y" in C20 , position 01 to 30 and B14, position 01 to 30.
-        if((Task1.specificPositionSymbol(30,49, B14) && !Task1.specificPositionSymbol(0,29, B14) && !Task1.specificPositionSymbol(0,29, C20)  )
-                || (Task1.specificPositionSymbol(30,49, C20) && !Task1.specificPositionSymbol(0,29, C20) && !Task1.specificPositionSymbol(0,29, B14))) {
-            return "20";
-        }
-        //all other combinations of B14 and C20, with at least one "Y"
-        if(Task1.specificPositionSymbol(0,49, B14) || Task1.specificPositionSymbol(0,49, C20)) {
-            return "10";
-        } } catch (Exception e) {
-            System.out.println("exception in method calculateC27 ");
-//            System.out.println(e.getStackTrace());
-            System.out.println("C20 " + C20);
-            System.out.println("B14 " + B14);
-
-        }
-        return "0.00";
-=======
-
-                } else {
-                    C_Record_Not_Updated.put(currentC[2], currentC);
-                }
-
-            }
-            fullFileVersion5_1.put(key,value);
-        }
-
-        return fullFileVersion5_1;
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
     }
 
     private static String calculateC27 (String C20, String B14) {
@@ -651,23 +565,6 @@ public class Task3 {
                 String[] D = cvsClientVersion.getD();
                 String[] tempD = new String[18];
                 System.arraycopy(D, 0, tempD, 0, D.length);
-<<<<<<< HEAD
-
-                D[3] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
-                tempD[3] = D[3];
-
-                //TODO REMOVE
-                for(String[] el : CList) {
-                    if(el.length != 28) {
-                        System.out.println("el in Clist , wich lenthg != 28 " + StringUtils.join(el, "*"));
-                        System.out.println("B " + StringUtils.join(clientB, "*"));
-                    }
-                }
-
-                D[9] = calculateD10Version5_1(CList);
-                tempD[9] = D[9];
-
-=======
 
                 D[3] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
                 tempD[3] = D[3];
@@ -675,7 +572,6 @@ public class Task3 {
                 D[9] = calculateD10Version5_1(CList);
                 tempD[9] = D[9];
 
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
                 D[10] = calculateD11Version5_1(CList);
                 tempD[10] = D[10];
 
@@ -752,16 +648,6 @@ public class Task3 {
         BigDecimal sum = BigDecimal.ZERO;
         for(String[] cStr : CList) {
             BigDecimal C19 = createNumValue(cStr[19]);
-
-            //TODO REMOVE
-            try {
-                String o = cStr[27];
-            } catch (java.lang.ArrayIndexOutOfBoundsException e) {
-                System.out.println("exception ArrayIndexOutOfBoundsException ");
-                System.out.println(StringUtils.join(cStr, "*"));
-                System.out.println("lenthg " + cStr.length);
-            }
-
             if(cStr[27].equals("10") && C19.signum() == 1) {
                 sum  = sum.add(C19);
             }

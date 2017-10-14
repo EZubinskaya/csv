@@ -11,10 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import static comparus.de.CSVReaderMain.protocol;
-<<<<<<< HEAD
 import static comparus.de.tasks.Task3.clients_not_have_additional_data;
-=======
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
 
 /**
  * Created by ekaterina on 9/26/17.
@@ -121,7 +118,6 @@ public class ProtocolForTask3 {
                 writer.write("B : " + protocol.getResultAmountB() + "\r\n");
                 writer.write("C : " + protocol.getResultAmountC() + "\r\n");
                 writer.write("D : " + protocol.getResultAmountD() + "\r\n");
-<<<<<<< HEAD
 //
 //                writer.write("\r\n=============================================================================\r\n");
 //                writer.write("\r\nMERGING\r\n\r\n");
@@ -137,34 +133,12 @@ public class ProtocolForTask3 {
 //                    writer.write("C2B  in additional C file : " + c.getKeyFile2().split(";")[2] + "\r\n");
 //                    writer.write("C2B in result file : " + c.getKeyFile3().split("\\*")[2] + "\r\n");
 //                }
-=======
-
-                writer.write("\r\n=============================================================================\r\n");
-                writer.write("\r\nMERGING\r\n\r\n");
-                writer.write("Amount of merged datasets: " + protocol.getResultAmountTotal() + "\r\n");
-                writer.write("List of identified double customers:" + "\r\n");
-                for(KeyFile1ToFile2ToFile3 b : protocol.getKeyFile1ToFile2ToFile3_B_Record()) {
-                    writer.write("B2 in original file : " + b.getKeyFile1().split("\\*")[1] + "\r\n");
-                    writer.write("B2 in additional B file : " + b.getKeyFile2().split(";")[2] + "\r\n");
-                    writer.write("B2 in result file : " + b.getKeyFile3().split("\\*")[1] + "\r\n");
-                }
-                for(KeyFile1ToFile2ToFile3 c : protocol.getKeyFile1ToFile2ToFile3_C_Record()) {
-                    writer.write("C in original file : " + c.getKeyFile1().split("\\*")[2] + "\r\n");
-                    writer.write("C  in additional C file : " + c.getKeyFile2().split(";")[2] + "\r\n");
-                    writer.write("C in result file : " + c.getKeyFile3().split("\\*")[2] + "\r\n");
-                }
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
 
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nRECALCULATING\r\n\r\n");
                 writer.write("List of recalculated D-Records in result file:\r\n");
-<<<<<<< HEAD
                 //  for(String d : protocol.getRecalculatedDRecords()) {
                 for(Map.Entry<String, HW> hw : D_HW.entrySet()) {
-=======
-              //  for(String d : protocol.getRecalculatedDRecords()) {
-              for(Map.Entry<String, HW> hw : D_HW.entrySet()) {
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
                     writer.write("D : " + hw.getKey() + "\r\n");
                     writer.write("HW1 : " + hw.getValue().getHW1() + "\r\n");
                     writer.write("HW2 : " + hw.getValue().getHW2() + "\r\n");
@@ -189,7 +163,6 @@ public class ProtocolForTask3 {
                         }
                     }
                 }
-<<<<<<< HEAD
 
                 if(clients_not_have_additional_data.size() > 0) {
                     writer.write("\r\n=============================================================================\r\n");
@@ -202,8 +175,6 @@ public class ProtocolForTask3 {
                         writer.write("D : " + StringUtils.join(entry.getValue().getD(), ';') + "\r\n");
                     }
                 }
-=======
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
             }
         } catch (IOException ex) {
             // report

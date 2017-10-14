@@ -34,15 +34,15 @@ public class CSVReaderMain {
 
     public static void main(String[] args) throws IOException {
 
-//        String inputFileForMerge1 = System.getProperty("file1");
-//        String inputFileForMerge2 = System.getProperty("file2");
-//        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
-//        String A_Additional_5 = System.getProperty("A_Additional5");
-//
-//        String Additional_CRecord_Data_Task1a = System.getProperty("Additional_CRecord_Data_Task1a");
-//        String B_Additional_5 = System.getProperty("B_Additional5");
-//        String C_Additional_5 = System.getProperty("C_Additional5");
-//        String taskNumber = System.getProperty("taskNumber");
+        String inputFileForMerge1 = System.getProperty("file1");
+        String inputFileForMerge2 = System.getProperty("file2");
+        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
+        String A_Additional_5 = System.getProperty("A_Additional5");
+
+        String Additional_CRecord_Data_Task1a = System.getProperty("Additional_CRecord_Data_Task1a");
+        String B_Additional_5 = System.getProperty("B_Additional5");
+        String C_Additional_5 = System.getProperty("C_Additional5");
+        String taskNumber = System.getProperty("taskNumber");
 
         String task1ResultFileName = "EinreicherdateiB11_Gesamt_4.1.csv";
         String task1aResultFileName = "EinreicherdateiB11_Gesamt_4.1_add_additional_C.csv";
@@ -52,7 +52,6 @@ public class CSVReaderMain {
         String task5ResultFileName = "Meldedatei_Gesamt_5.1.csv";
 
         // TEST DATA
-<<<<<<< HEAD
 ////        String inputFileForMerge1 =  "src/main/resources/example1.csv";
 ////        String inputFileForMerge2 = "src/main/resources/task4/2.csv";
 ////        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
@@ -63,7 +62,7 @@ public class CSVReaderMain {
 //
 ////        String Additional_CRecord_Data_Task1a = "src/main/resources/task1aP/bank11_meldung_einlagensicherung_20170831_neu.csv";
 //
-////        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
+//        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
 //        String B_Additional_5 = "src/main/resources/task3Test/B_Zusatz5.0_121_06102017.csv";
 //        String C_Additional_5 = "src/main/resources/task3Test/C_Zusatz5.0_121_06102017.csv";
 //        String taskNumber = "Task3";
@@ -72,21 +71,6 @@ public class CSVReaderMain {
 ////        String inputFileAfterMerge =  "src/main/resources/task4A/task4.csv";
 //        String Additional_CRecord_Data_Task1a = "src/main/resources/task4A/Additional_CRecord_Data_Task1a_new.csv";
 ////        String C_Additional_5 = "src/main/resources/task4A/C_Additional_5.0.csv";
-=======
-        String inputFileForMerge1 =  "src/main/resources/example1.csv";
-        String inputFileForMerge2 = "src/main/resources/task4/2.csv";
-//        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
-//        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
-//        String inputFileAfterMerge =  "src/main/resources/task1a/input.csv";
-//        String Additional_CRecord_Data_Task1a = "src/main/resources/task1a/Additional_CRecord_Data_Task1a.csv";
-        String inputFileAfterMerge =  "src/main/resources/example1.csv";
-        String Additional_CRecord_Data_Task1a = "src/main/resources/task1aP/bank11_meldung_einlagensicherung_20170831_neu.csv";
-
-        String taskNumber = "Task3";
-        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
-        String B_Additional_5 = "src/main/resources/extraData/B_Additional_5.0.csv";
-        String C_Additional_5 = "src/main/resources/extraData/C_Additional_5.0.csv";
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
 
         if(taskNumber.equalsIgnoreCase("Task1") && inputFileForMerge1!= null & inputFileForMerge2 != null) {
             Map<B, CVSClient> readFile1 = null;
@@ -184,7 +168,6 @@ public class CSVReaderMain {
             Map<String, B_ExtraData> B_ExtraData = new HashMap<>();
             Map<String, C_ExtraData> C_ExtraData = new HashMap<>();
             String errorMessage = null;
-<<<<<<< HEAD
             String[] AVersion5_1 = A;
             try {
                 readFile1 = readCSVFileByString(inputFileAfterMerge, true);
@@ -201,26 +184,12 @@ public class CSVReaderMain {
 
                 B_ExtraData = readExtraDataB(B_Additional_5);
                 C_ExtraData = readExtraDataC(C_Additional_5);
-=======
-            try {
-                readFile1 = readCSVFileByString(inputFileForMerge1, true);
-                fileInfo1 = readCSVFileByStringRetCount(readFile1, inputFileForMerge1);
-
-                Map<String,CVSClient> fullFile = readCSVFileByStringSimple(inputFileAfterMerge);
-                A_ExtraData = readExtraDataA(A_Additional_5);
-                B_ExtraData = readExtraDataB(B_Additional_5);
-                C_ExtraData = readExtraDataC(C_Additional_5);
-                String[] AVersion5_1 = geeratedAVersion5_1 (A,  A_ExtraData);
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
                 Map<String,CVSClient> fullFileVersion5_1 = generateVersion5(fullFile, B_ExtraData, C_ExtraData);
                 reCalculateDVersion5_1(fullFileVersion5_1, AVersion5_1);
                 String[] EVersion5_1 = reCalculateEVersion5_1(fullFileVersion5_1);
                 List<String[]> allDataVersion5_1 = generateListOfDataArray(AVersion5_1, fullFileVersion5_1, EVersion5_1);
-<<<<<<< HEAD
                 String task3ResultFileName = "DEinreicherdatei50-" + A2 + ".csv";
 
-=======
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
                 writeCSV(allDataVersion5_1, task3ResultFileName);
                 calculateAmount(allDataVersion5_1);
                 protocol.setResultAmountTotal(allDataVersion5_1.size());
@@ -230,14 +199,8 @@ public class CSVReaderMain {
                 throw ex;
             }
             //Protocol
-<<<<<<< HEAD
             writeProtocolToFileTask3("Protocol Task3 - " + A2 + ".txt", taskNumber, inputFileAfterMerge, fileInfo1, A_Additional_5, B_Additional_5, C_Additional_5,
             task1aResultFileName, 1, B_ExtraData.size(), C_ExtraData.size(), errorMessage, B_Record_Not_Updated, C_Record_Not_Updated, D_HW);
-=======
-
-                    writeProtocolToFileTask3("Protocol Task3.txt", taskNumber, inputFileAfterMerge, fileInfo1, A_Additional_5, B_Additional_5, C_Additional_5,
-                    task1aResultFileName, 1, B_ExtraData.size(), C_ExtraData.size(), errorMessage, B_Record_Not_Updated, C_Record_Not_Updated, D_HW);
->>>>>>> bfa13cfe54f9c3b3277cd0dee4f8f849b6123c59
 
         } else if (taskNumber.equalsIgnoreCase("Task4")  && inputFileForMerge1!= null & inputFileForMerge2 != null) {
             Map<B, CVSClient> readFile1 = null;
