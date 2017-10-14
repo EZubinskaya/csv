@@ -211,10 +211,13 @@ public class Task3 {
             D12B_SecondPart = HW2;
         }
 
-        BigDecimal C5 = createNumValue(CList.get(0)[5]);
-        BigDecimal D12B_ThirdPart = createNumValue(A[8]).multiply(C5).subtract(createNumValue(D[5]).add(createNumValue(D[8]).add(createNumValue(D[11]))));
-
-        D12B = D12B_HW1_D12A.min(D12B_SecondPart).min(D12B_ThirdPart);
+        if ((A.length < 9) || ((A.length > 9) && ((A[8].equals("0")) || (A[8].equals("0,00")) || (A[8] == null)))) {
+            D12B = D12B_HW1_D12A.min(D12B_SecondPart);
+        } else {
+            BigDecimal C5 = createNumValue(((String[])CList.get(0))[5]);
+            BigDecimal D12B_ThirdPart = createNumValue(A[8]).multiply(C5).subtract(createNumValue(D[5]).add(createNumValue(D[8]).add(createNumValue(D[11]))));
+            D12B = D12B_HW1_D12A.min(D12B_SecondPart).min(D12B_ThirdPart);
+        }
 
         if(D12B.signum() == -1) {
             D12B = BigDecimal.ZERO;
@@ -463,7 +466,7 @@ public class Task3 {
         }
         return isCheck;
     }
-    
+
     private static String calculateC27 (String C20, String B14) {
         //If in B14 and C20 there is no "Y".
         if(!B14.contains("Y") && !C20.contains("Y")) {
