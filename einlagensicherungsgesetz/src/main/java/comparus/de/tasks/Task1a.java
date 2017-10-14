@@ -68,12 +68,29 @@ public class Task1a {
 
     public static List<String[]> generateListOfDataArray(String[] a, Map<String, CVSClient> fullFile, String[] e) {
         // fullFile.
+        if(fullFile.size() > 0) {
+            List<String[]> fullData = new ArrayList<String[]>();
+            fullData.add(a);
+            for (CVSClient entry : getSortedListByB1C2A(fullFile)){
+                fullData.add(entry.getClientB());
+                fullData.addAll(entry.getClientsC());
+                fullData.add(entry.getD());
+            }
+            fullData.add(e);
+            return fullData;
+        }
+        return new ArrayList<String[]>();
+    }
+
+    public static List<String[]> generateListOfDataArrayNotSorted(String[] a, Map<String, CVSClient> fullFile, String[] e) {
+        // fullFile.
         List<String[]> fullData = new ArrayList<String[]>();
         fullData.add(a);
-        for (CVSClient entry : getSortedListByB1C2A(fullFile)){
-            fullData.add(entry.getClientB());
-            fullData.addAll(entry.getClientsC());
-            fullData.add(entry.getD());
+        for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()){
+            CVSClient cvsClient = entry.getValue();
+            fullData.add(cvsClient.getClientB());
+            fullData.addAll(cvsClient.getClientsC());
+            fullData.add(cvsClient.getD());
         }
         fullData.add(e);
         return fullData;
