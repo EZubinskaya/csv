@@ -716,9 +716,10 @@ public class Task3 {
 
     static BigDecimal calculateD14AVersion5_1(List<String[]> CList) {
         BigDecimal result = BigDecimal.ZERO;
+
         for (String[] cur: CList) {
             if(createNumValue(cur[19]).signum() == -1) {
-                result.add(createNumValue(cur[19]));
+                result = result.subtract(createNumValue(cur[19]));
             }
         }
         return result;

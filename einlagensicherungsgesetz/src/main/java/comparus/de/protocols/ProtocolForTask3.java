@@ -149,7 +149,7 @@ public class ProtocolForTask3 {
 
                 if(!notUpdatedBRecords.isEmpty() || !notUpdatedCRecords.isEmpty()) {
                     writer.write("\r\n=============================================================================\r\n");
-                    writer.write("\r\nNot updated records\r\n\r\n");
+                    writer.write("\r\nRecords with no additional data:\r\n\r\n");
                     if(!notUpdatedBRecords.isEmpty()) {
                         writer.write("List of B records:\r\n");
                         for (Map.Entry<String, String[]> entry : notUpdatedBRecords.entrySet()) {
@@ -166,7 +166,7 @@ public class ProtocolForTask3 {
 
                 if(clients_not_have_additional_data.size() > 0) {
                     writer.write("\r\n=============================================================================\r\n");
-                    writer.write("\r\nClients that have not additional data \r\n\r\n");
+                    writer.write("\r\nDeleted Records \r\n\r\n");
                     for (Map.Entry<String, CVSClient> entry : clients_not_have_additional_data.entrySet()) {
                         writer.write("B : " + StringUtils.join(entry.getValue().getClientB(), ';') + "\r\n");
                         for(String[] c : entry.getValue().getClientsC()) {
