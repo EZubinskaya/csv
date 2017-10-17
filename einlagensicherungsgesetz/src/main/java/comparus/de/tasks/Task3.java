@@ -566,10 +566,10 @@ public class Task3 {
             }
         }
         for(int i = 2; i<eVar.length; i++) {
+            E[i] = decimalToString(eVar[i]);
             if(i ==15) {
                 E[i] = "";
             }
-            E[i] = decimalToString(eVar[i]);
         }
         return E;
     }
@@ -604,22 +604,22 @@ public class Task3 {
 
                 // recalculate  D[9] and D[10] ???? (B14 and C20 changed)
                 BigDecimal D14A = calculateD14AVersion5_1(CList);
-                tempD[15] = String.valueOf(D14A);
+                tempD[15] = decimalToString(D14A);
 
                 BigDecimal D12A = calculateD12AVersion5_1(AVersion5_1[5], tempD, CList);
-                tempD[11] = String.valueOf(D12A);
+                tempD[11] = decimalToString(D12A);
 
                 BigDecimal D12B = BigDecimalcalculateD12B(tempD, AVersion5_1, CList, hw);
-                tempD[12] = String.valueOf(D12B);
+                tempD[12] = decimalToString(D12B);
 
                 BigDecimal D12C = BigDecimalcalculateD12C(tempD, AVersion5_1, CList, hw);
-                tempD[13] = String.valueOf(D12C);
+                tempD[13] = decimalToString(D12C);
 
                 BigDecimal D13 = calculateD13Version5_1(D12A, D12B, D12C);
-                tempD[14] = String.valueOf(D13);
+                tempD[14] = decimalToString(D13);
 
                 BigDecimal D14B = BigDecimalcalculateD14B(tempD);
-                tempD[16] = String.valueOf(D14B);
+                tempD[16] = decimalToString(D14B);
 
 //            curDList.add(String.valueOf(D12A));
 //            curDList.add(String.valueOf(D12B));

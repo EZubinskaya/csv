@@ -126,12 +126,12 @@ public class Task3Test {
         Assert.assertEquals(D[8], "0,00");
         Assert.assertEquals(D[9], "0,00");
         Assert.assertEquals(D[10], "0,00");
-        Assert.assertEquals(D[11], "0");
-        Assert.assertEquals(D[12], "0");
-        Assert.assertEquals(D[13], "0");
-        Assert.assertEquals(D[14], "0");
-        Assert.assertEquals(D[15], "0");
-        Assert.assertEquals(D[16], "0.00");
+        Assert.assertEquals(D[11], "0,00");
+        Assert.assertEquals(D[12], "0,00");
+        Assert.assertEquals(D[13], "0,00");
+        Assert.assertEquals(D[14], "0,00");
+        Assert.assertEquals(D[15], "0,00");
+        Assert.assertEquals(D[16], "0,00");
         Assert.assertEquals(D[17], "0,00");
     }
 
@@ -151,9 +151,8 @@ public class Task3Test {
         Assert.assertEquals(E[10], "0,00");
         Assert.assertEquals(E[11], "0,00");
         Assert.assertEquals(E[12], "0,00");
-        Assert.assertEquals(E[13], "0,00");
         Assert.assertEquals(E[14], "0,00");
-        Assert.assertEquals(E[15], "0,00");
+        Assert.assertEquals(E[15], "");
         Assert.assertEquals(E[16], "0,00");
         Assert.assertEquals(E[17], "0,00");
     }
