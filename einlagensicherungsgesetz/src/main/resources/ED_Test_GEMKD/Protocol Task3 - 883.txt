@@ -1,0 +1,66 @@
+
+=============================================================================
+GENERAL INFORMATIONS
+
+Program name: einlagensicherungsgesetz
+Date of run: 17-10-2017 14-37
+Task: Task3
+Input file: 0000000883171012_GEMKD_reduce.csv
+Additional file A: null
+Additional file B: B_Zusatz5.0_883_1210.csv
+Additional file C: C_Zusatz5.0_883_1210.csv
+
+=============================================================================
+ERRORS
+
+=============================================================================
+
+AMOUNTS OF DATASETS
+
+Input file name: 0000000883171012_GEMKD_reduce.csv
+B : 3
+C : 5
+D : 3
+Additional file A: null
+A : 1
+Additional file B: B_Zusatz5.0_883_1210.csv
+B : 14491
+Additional file C: C_Zusatz5.0_883_1210.csv
+C : 15371
+Resultfile
+B : 1
+C : 3
+D : 1
+
+=============================================================================
+
+RECALCULATING
+
+List of recalculated D-Records in result file:
+D : D*0000245199*30522,31*0,00*30522,31*30522,31*0,00*0,00*0,00*0,00*0,00*0,00*0,00*0,00*0,00*772,85*0,00*0,00
+HW1 : -772.85
+HW2 : 0
+HW3 : 0
+HW4 : 0
+HW5 : 0
+
+=============================================================================
+
+Records with no additional data:
+
+List of B records:
+B;2000175116;Yilmaz;Hiday;;1;Heussstr. 8;;82178;Heimfeld;DE;17011980;97A;NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+B;2000175117;Yilmaz;Mali;;2;Heussstr. 8;;82178;Heimfeld;DE;13051981;97A;NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+List of c records:
+C;2000175117;GEMKD9000006086-5000203284;;N;001;05052009;Kontokorrent;EUR;4,65;1,00000;4,65;0,00000;30092017;12102017;Y;02;-4,65;-4,65;0,00;NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN;NNNNNNNNNNNYNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+
+=============================================================================
+
+Deleted Records 
+
+B : B;2000175116;Yilmaz;Hiday;;1;Heussstr. 8;;82178;Heimfeld;DE;17011980;97A;NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+C : C;2000175116;GEMKD9000006086-5000203284;;N;001;05052009;Kontokorrent;EUR;4,66;1,00000;4,66;0,00000;30092017;12102017;Y;02;-4,66;-4,66;0,00;NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN;NNNNNNNNNNNYNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+D : D;2000175116;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00
+B : B;2000175117;Yilmaz;Mali;;2;Heussstr. 8;;82178;Heimfeld;DE;13051981;97A;NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+C : C;2000175117;GEMKD9000006086-5000203284;;N;001;05052009;Kontokorrent;EUR;4,65;1,00000;4,65;0,00000;30092017;12102017;Y;02;-4,65;-4,65;0,00;NNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN;NNNNNNNNNNNYNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN
+D : D;2000175117;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00;0,00
