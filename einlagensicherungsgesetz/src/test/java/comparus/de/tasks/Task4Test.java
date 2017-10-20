@@ -83,19 +83,19 @@ public class Task4Test {
         String[] D = fullFile.get("AEF99037A1757D821E80D46E83E71B17 XX X X X7011936").getD();
         Assert.assertEquals(D[0], "D");
         Assert.assertEquals(D[1], "14");
-        Assert.assertEquals(D[2], "16317,05");
+        Assert.assertEquals(D[2], "200000");
         Assert.assertEquals(D[3], "200000");
-        Assert.assertEquals(D[4], "-183682,95");
-        Assert.assertEquals(D[5], "-183682,95");
+        Assert.assertEquals(D[4], "0,00");
+        Assert.assertEquals(D[5], "0,00");
         Assert.assertEquals(D[6], "0,00");
         Assert.assertEquals(D[7], "0,00");
         Assert.assertEquals(D[8], "0,00");
         Assert.assertEquals(D[9], "200000");
         Assert.assertEquals(D[10], "0,00");
-        Assert.assertEquals(D[11], "0");
-        Assert.assertEquals(D[12], "0");
-        Assert.assertEquals(D[13], "-39430,35");
-        Assert.assertEquals(D[14], "0");
+        Assert.assertEquals(D[11], "0,00");
+        Assert.assertEquals(D[12], "0,00");
+        Assert.assertEquals(D[13], "0,00");
+        Assert.assertEquals(D[14], "0,00");
 
 
     }

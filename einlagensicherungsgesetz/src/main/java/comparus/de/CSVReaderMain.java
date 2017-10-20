@@ -35,8 +35,8 @@ public class CSVReaderMain {
 
     public static void main(String[] args) throws IOException {
 
-//        String inputFileForMerge1 = System.getProperty("file1");
-//        String inputFileForMerge2 = System.getProperty("file2");
+        String inputFileForMerge1 = System.getProperty("file1");
+        String inputFileForMerge2 = System.getProperty("file2");
         String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
         String A_Additional_5 = System.getProperty("A_Additional5");
         String inputFileForTask3 = System.getProperty("Einreicherdatei41");
@@ -45,7 +45,7 @@ public class CSVReaderMain {
         String Additional_CRecord_Data_Task1a = System.getProperty("Additional_CRecord_Data_Task1a");
         String B_Additional_5 = System.getProperty("B_Additional5");
         String C_Additional_5 = System.getProperty("C_Additional5");
-//        String taskNumber = System.getProperty("taskNumber");
+        String taskNumber = System.getProperty("taskNumber");
 
         String task1ResultFileName = "EinreicherdateiB11_Gesamt_4.1.csv";
         String task1aResultFileName = "EinreicherdateiB11_Gesamt_4.1_add_additional_C.csv";
@@ -55,26 +55,26 @@ public class CSVReaderMain {
         String task5ResultFileName = "Meldedatei_Gesamt_3.0.csv";
 
         // TEST DATA
-        String inputFileForMerge1 =  "src/main/resources/task4/1.csv";
-        String inputFileForMerge2 = "src/main/resources/task4/2.csv";
-////        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
-////        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
-////        String inputFileAfterMerge =  "src/main/resources/task1a/input.csv";
-////        String Additional_CRecord_Data_Task1a = "src/main/resources/task1a/Additional_CRecord_Data_Task1a.csv";
-////        String inputFileAfterMerge =  "src/main/resources/task3Test/0000000121170930.csv";
-//        String inputFileForTask3 =  "src/main/resources/ED_Test_GEMKD/0000000883171012_GEMKD_reduce.csv";
-////        String Additional_CRecord_Data_Task1a = "src/main/resources/task1aP/bank11_meldung_einlagensicherung_20170831_neu.csv";
-//
-//        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
-//        String B_Additional_5 = "src/main/resources/ED_Test_GEMKD/B_Zusatz5.0_883_1210.csv";
-//        String C_Additional_5 = "src/main/resources/ED_Test_GEMKD/C_Zusatz5.0_883_1210.csv";
-        String taskNumber = "Task4";
-//        String inputFileForTask5 = "src/main/resources/ED_Test_GEMKD/res.csv";
-//
-////        String taskNumber = "Task4A";
-////        String inputFileAfterMerge =  "src/main/resources/task4A/task4.csv";
-////        String Additional_CRecord_Data_Task1a = "src/main/resources/task4A/Additional_CRecord_Data_Task1a_new.csv";
-////        String C_Additional_5 = "src/main/resources/task4A/C_Additional_5.0.csv";
+//        String inputFileForMerge1 =  "src/main/resources/task4/1.csv";
+//        String inputFileForMerge2 = "src/main/resources/task4/2.csv";
+//////        String inputFileForMerge1 =  "src/main/resources/bug1/1.csv";
+//////        String inputFileForMerge2 = "src/main/resources/bug1/2.csv";
+//////        String inputFileAfterMerge =  "src/main/resources/task1a/input.csv";
+//////        String Additional_CRecord_Data_Task1a = "src/main/resources/task1a/Additional_CRecord_Data_Task1a.csv";
+//////        String inputFileAfterMerge =  "src/main/resources/task3Test/0000000121170930.csv";
+////        String inputFileForTask3 =  "src/main/resources/ED_Test_GEMKD/0000000883171012_GEMKD_reduce.csv";
+//////        String Additional_CRecord_Data_Task1a = "src/main/resources/task1aP/bank11_meldung_einlagensicherung_20170831_neu.csv";
+////
+////        String A_Additional_5 = "src/main/resources/extraData/A_Additional_5.0.csv";
+////        String B_Additional_5 = "src/main/resources/ED_Test_GEMKD/B_Zusatz5.0_883_1210.csv";
+////        String C_Additional_5 = "src/main/resources/ED_Test_GEMKD/C_Zusatz5.0_883_1210.csv";
+//        String taskNumber = "Task4";
+////        String inputFileForTask5 = "src/main/resources/ED_Test_GEMKD/res.csv";
+////
+//////        String taskNumber = "Task4A";
+//////        String inputFileAfterMerge =  "src/main/resources/task4A/task4.csv";
+//////        String Additional_CRecord_Data_Task1a = "src/main/resources/task4A/Additional_CRecord_Data_Task1a_new.csv";
+//////        String C_Additional_5 = "src/main/resources/task4A/C_Additional_5.0.csv";
 
         if(taskNumber.equalsIgnoreCase("Task1") && inputFileForMerge1!= null & inputFileForMerge2 != null) {
             Map<B, CVSClient> readFile1 = null;

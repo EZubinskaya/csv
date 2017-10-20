@@ -15,6 +15,7 @@ import static comparus.de.tasks.Task1.*;
 import static comparus.de.tasks.Task1.calculateD14;
 import static comparus.de.tasks.Task3.*;
 import static comparus.de.util.Util.createNumValue;
+import static comparus.de.util.Util.decimalToString;
 
 /**
  * Created by ekaterina on 9/26/17.
@@ -56,24 +57,33 @@ public class Task4 {
                 D[10] = calculateD11Version5_1(CList);
                 tempD[10] = D[10];
 
+//            List<String> curDList = new LinkedList<>();
+                String D15 = D[14];
+                tempD[17] = D15;
+
+//            curDList.addAll(Arrays.asList(Arrays.copyOfRange(D, 0,12)));
+
+                // recalculate  D[9] and D[10] ???? (B14 and C20 changed)
                 BigDecimal D14A = calculateD14AVersion5_1(CList);
-                tempD[15] = String.valueOf(D14A);
+                tempD[15] = decimalToString(D14A);
 
                 BigDecimal D12A = calculateD12AVersion5_1(A[5], tempD, CList);
-                tempD[11] = String.valueOf(D12A);
+                tempD[11] = decimalToString(D12A);
 
                 BigDecimal D12B = BigDecimalcalculateD12B(tempD, A, CList, hw);
-                tempD[12] = String.valueOf(D12B);
+                tempD[12] = decimalToString(D12B);
 
                 BigDecimal D12C = BigDecimalcalculateD12C(tempD, A, CList, hw);
-                tempD[13] = String.valueOf(D12C);
+                tempD[13] = decimalToString(D12C);
 
                 BigDecimal D13 = calculateD13Version5_1(D12A, D12B, D12C);
-                tempD[14] = String.valueOf(D13);
+                tempD[14] = decimalToString(D13);
 
                 BigDecimal D14B = BigDecimalcalculateD14B(tempD);
-                tempD[16] = String.valueOf(D14B);
+                tempD[16] = decimalToString(D14B);
+
                 recalculatedDRecords.add(StringUtils.join(D, "*"));
+                cvsClient.setD(tempD);
             }
         }
         if(writeToProtocol) {
