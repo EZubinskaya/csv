@@ -152,9 +152,7 @@ public class Task3Test {
         Assert.assertEquals(E[11], "0,00");
         Assert.assertEquals(E[12], "0,00");
         Assert.assertEquals(E[14], "0,00");
-        Assert.assertEquals(E[15], "");
         Assert.assertEquals(E[16], "0,00");
-        Assert.assertEquals(E[17], "0,00");
     }
 
     @Test

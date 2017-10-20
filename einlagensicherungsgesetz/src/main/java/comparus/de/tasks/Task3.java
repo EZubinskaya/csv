@@ -370,6 +370,10 @@ public class Task3 {
             String[] BVersion5_1 = new String[clientBList.size()];
             String BPrimaryKey = clientB[1];
             B_ExtraData b_extraData = checkKey(BPrimaryKey, B_Additional);
+            String B2Value = checkIfBRecordContainCRecordWithGEMKD (value);
+            if(!B2Value.equals("")) {
+                b_extraData = checkKey(B2Value, B_Additional);
+            }
             if(A2 == null && b_extraData != null) {
                 A2 = b_extraData.getA2().toString();
             }
@@ -452,6 +456,16 @@ public class Task3 {
         }
 
         return fullFileVersion5_1;
+    }
+
+    private static String checkIfBRecordContainCRecordWithGEMKD(CVSClient value) {
+        List<String[]> cClients = value.getClientsC();
+        for(String[] curC : cClients) {
+            if(curC[2].startsWith("GEMKD")) {
+                return curC[2].split("-")[0].replace("GEMKD","");
+            }
+        }
+        return "";
     }
 
     private static boolean checkIfAllCRecordForCurrentBHaveAdditionalCInformation(List<String[]> clientC, Map<String, C_ExtraData> C_Additional) {
@@ -548,7 +562,7 @@ public class Task3 {
     }
 
     public static String[] reCalculateEVersion5_1(Map<String, CVSClient> fullFileVersion5_1) {
-        String[] E = new String[18];
+        String[] E = new String[17];
         E[0] = "E";
         E[1] = A[1];
         BigDecimal[] eVar = new BigDecimal[18];
@@ -565,11 +579,10 @@ public class Task3 {
                 eVar[i] = eVar[i].add(createNumValue(D[i]));
             }
         }
-        for(int i = 2; i<eVar.length; i++) {
-            E[i] = decimalToString(eVar[i]);
-            if(i ==15) {
-                E[i] = "";
-            }
+        List<BigDecimal> resE = new ArrayList(Arrays.asList(eVar));
+        resE.remove(15);
+        for(int i = 2; i<resE.size(); i++) {
+            E[i] = decimalToString(resE.get(i));
         }
         return E;
     }
@@ -722,7 +735,7 @@ public class Task3 {
                 result = result.subtract(createNumValue(cur[19]));
             }
         }
-        return result;
+        return result.negate();
     }
 
 }

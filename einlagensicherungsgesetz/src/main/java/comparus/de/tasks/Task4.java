@@ -36,6 +36,8 @@ public class Task4 {
             String[] tempD = new String[18];
 
             if(writeToProtocol && sameBList.contains(StringUtils.join(clientB, "*"))) {
+                D[2] = calculateD3(CList);
+
                 D[3] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
                 tempD[3] = D[3];
 
