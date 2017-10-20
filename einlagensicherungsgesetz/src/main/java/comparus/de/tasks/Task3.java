@@ -328,7 +328,7 @@ public class Task3 {
             return (B_ExtraData)B_Additional.get(key);
         }
         String key = getBprimaryKey(BPrimaryKey);
-        if (B_Additional.get(key) != null) {
+        if (B_Additional!= null && B_Additional.get(key) != null) {
             return (B_ExtraData)B_Additional.get(key);
         }
         return null;
