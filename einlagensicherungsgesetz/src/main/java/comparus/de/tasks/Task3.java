@@ -481,7 +481,7 @@ public class Task3 {
         return isCheck;
     }
 
-    private static String calculateC27 (String C20, String B14) {
+    public static String calculateC27 (String C20, String B14) {
         //If in B14 and C20 there is no "Y".
         if(!B14.contains("Y") && !C20.contains("Y")) {
             return "90";
@@ -505,7 +505,7 @@ public class Task3 {
         return "0.00";
     }
 
-    private static String C20_Version5_1(String C20, String C21, String B14, String B16) {
+    public static String C20_Version5_1(String C20, String C21, String B14, String B16) {
         StringBuilder result = new StringBuilder();
         result.append(C20.substring(0,11));
 
