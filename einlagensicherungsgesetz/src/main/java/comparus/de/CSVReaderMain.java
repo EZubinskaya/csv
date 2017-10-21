@@ -278,7 +278,6 @@ public class CSVReaderMain {
                     additional_cRecord_Withought_C_Extra_Data, mergingCRecords,
                     errorMessage, additional_cRecord.size(), C_ExtraData.size());
 
-
         } else if(taskNumber.equalsIgnoreCase("Task5") && inputFileForTask5 != null) {
             String errorMessage = null;
             Map<String,CVSClient> fullFile = null;
