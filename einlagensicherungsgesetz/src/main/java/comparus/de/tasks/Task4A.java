@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.*;
 
 import static comparus.de.CSVReaderMain.protocol;
-import static comparus.de.tasks.Task1a.readExtraAdditionalDataCTask1a;
+import static comparus.de.tasks.Task1.*;
 import static comparus.de.tasks.Task3.*;
 import static comparus.de.util.Util.createNumValue;
 import static comparus.de.util.Util.decimalToString;
@@ -65,7 +65,9 @@ public class Task4A {
                 if(c_extraData != null && clientB.length >= 15) {
                     B_List.add(key);
                     String clientCinitial = StringUtils.join(currentC, "*");
-                    currentC[2] = currentC[2] + "-" + c_extraData.getA2();
+                    if (!currentC[2].endsWith("-" + c_extraData.getA2())) {
+                        currentC[2] = currentC[2] + "-" + c_extraData.getA2();
+                    }
                     currentC[21] = currentC[21].substring(0,14) +
                             c_extraData.getC21_Pos15() +
                             c_extraData.getC21_Pos16() +
@@ -122,10 +124,15 @@ public class Task4A {
                 List<String[]> CList = cvsClientVersion.getClientsC();
                 String[] D = cvsClientVersion.getD();
                 String[] tempD = new String[18];
-                System.arraycopy(D, 0, tempD, 0, D.length);
-
+                D[2] = calculateD3(CList);
                 D[3] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
-                tempD[3] = D[3];
+                D[4] = calculateD5D7(createNumValue(D[2]), createNumValue(D[3]));
+                D[5] = calculateD6(createNumValue(AVersion5_1[3]), createNumValue(D[4]), CList);
+                D[6] = calculateD5D7(createNumValue(D[4]), createNumValue(D[5]));
+                D[7] = "0,00";
+                D[8] = "0,00";
+
+                System.arraycopy(D, 0, tempD, 0, D.length);
 
                 D[9] = calculateD10Version5_1(CList);
                 tempD[9] = D[9];

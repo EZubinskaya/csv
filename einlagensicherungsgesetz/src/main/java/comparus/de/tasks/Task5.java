@@ -56,17 +56,17 @@ public class Task5 {
             metadata.add(decimalToString(sumC));
         }
 
-        BigDecimal sum118 = BigDecimal.ZERO;
+        BigDecimal sum120 = BigDecimal.ZERO;
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
             List<String[]> C = entry.getValue().getClientsC();
             for (String[] el : C) {
                 if (el[21].contains("BE")) {
-                    sum118 = sum118.add(createNumValue(el[19]));
+                    sum120 = sum120.add(createNumValue(el[19]));
                 }
             }
         }
-        if(!sum118.equals(BigDecimal.ZERO)) {
-            metadata.add(decimalToString(sum118));
+        if(!sum120.equals(BigDecimal.ZERO)) {
+            metadata.add(decimalToString(sum120));
         } else {
             metadata.add("");
         }

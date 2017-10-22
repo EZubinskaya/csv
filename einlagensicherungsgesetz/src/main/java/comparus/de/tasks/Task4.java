@@ -42,7 +42,7 @@ public class Task4 {
                 D[3] = calculateD4Version5_1(clientB, CList, createNumValue(D[2]));
                 tempD[3] = D[3];
 
-                D[3] = calculateD4(clientB, CList, createNumValue(D[2]));
+              //  D[3] = calculateD4(clientB, CList, createNumValue(D[2]));
                 D[4] = calculateD5D7(createNumValue(D[2]), createNumValue(D[3]));
                 D[5] = calculateD6(createNumValue(A[3]), createNumValue(D[4]), CList);
                 D[6] = calculateD5D7(createNumValue(D[4]), createNumValue(D[5]));
