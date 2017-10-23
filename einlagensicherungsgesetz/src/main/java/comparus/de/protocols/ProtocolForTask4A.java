@@ -19,12 +19,12 @@ import static comparus.de.CSVReaderMain.protocol;
  */
 public class ProtocolForTask4A {
 
-    public static void  writeProtocolToFileTask4A(String protocolName, String taskNumber, String inputFileForMerge1, String Additional_CRecord_Data_Task1a, String C_Additional_5,
+    public static void  writeProtocolToFileTask4A(String protocolName, String taskNumber, String inputFileForMerge1, String Additional_CRecord_Data_Task1a, String C_Additional_5, String C_Additional_5_2,
                                                   String task1ResultFileName, FileInfo fileInfo1,
                                                   List<String> additional_cRecord_Withought_C_Extra_Data,
                                                   List<String> mergingCRecords,
                                                   String errorMessage,
-                                                  int Additional_CRecord_Data_Task1aCount, int C_Additional_5Count) throws FileNotFoundException {
+                                                  int Additional_CRecord_Data_Task1aCount, int C_Additional_5Count_1, int C_Additional_5Count_2) throws FileNotFoundException {
 
         Writer writer = null;
         try {
@@ -58,7 +58,9 @@ public class ProtocolForTask4A {
                 writer.write("Input file name: " + Additional_CRecord_Data_Task1a + "\r\n");
                 writer.write("C : " + Additional_CRecord_Data_Task1aCount + "\r\n");
                 writer.write("Input file name: " + C_Additional_5 + "\r\n");
-                writer.write("C : " + C_Additional_5Count + "\r\n");
+                writer.write("C : " + C_Additional_5Count_1 + "\r\n");
+                writer.write("Input file name: " + C_Additional_5_2 + "\r\n");
+                writer.write("C : " + C_Additional_5Count_2 + "\r\n");
                 writer.write("Resultfile\r\n");
                 writer.write("B : " + protocol.getResultAmountB() + "\r\n");
                 writer.write("C : " + protocol.getResultAmountC() + "\r\n");
