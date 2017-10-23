@@ -2,6 +2,8 @@ package comparus.de.tasks;
 
 import com.opencsv.CSVReader;
 import comparus.de.domen.*;
+import org.apache.commons.collections.Transformer;
+import org.apache.commons.collections.map.DefaultedMap;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.FileReader;
@@ -9,7 +11,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.*;
 
-import static comparus.de.CSVReaderMain.protocol;
 import static comparus.de.tasks.Task1.*;
 import static comparus.de.tasks.Task3.*;
 import static comparus.de.util.Util.createNumValue;
@@ -26,14 +27,25 @@ public class Task4A {
     public static List<String> mergingCRecords = new ArrayList<>();
     public static Map<String, List<String[]>> full_C_Record = new HashMap<>();
 
-    public static Map<String,Additional_A_C_Record> readExtraAdditionalDataCTask4a(String additional_cRecord_data_task1a) throws IOException {
-        Map<String,Additional_A_C_Record> C = new LinkedHashMap<>();
+    public static Map<String, List<Additional_A_C_Record>> readExtraAdditionalDataCTask4a(String additional_cRecord_data_task1a) throws IOException {
+        Map<String, List<Additional_A_C_Record>> C =  DefaultedMap.decorate(new TreeMap<>(
+                new Comparator<String>(){
+            @Override
+            public int compare(String  o1, String o2) {
+                return getFirstPart(o1).compareTo(getFirstPart(o2));
+            }
+        }),new Transformer() {
+            @Override
+            public List<Additional_A_C_Record> transform(Object o) {
+                return new ArrayList<>();
+            }
+        });
         CSVReader reader = new CSVReader(new FileReader(additional_cRecord_data_task1a), '\n', '|');
         List<String[]> myEntries = reader.readAll();
         for(int i = 1; i < myEntries.size(); i++) {
             //starts with A2
             String[] curEl = myEntries.get(i)[0].split(";", -1);
-            String key = curEl[2] + "+" + curEl[3];
+            String key = curEl[2];
             if(curEl[3].startsWith("GEMKD") && curEl[29].equals("J")) {
                 specialCRecords(C, curEl);
             } else {
@@ -41,13 +53,15 @@ public class Task4A {
                         curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
                         curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28]);
                 valueRecord.setC2B(curEl[3] + "-" + curEl[0]);
-                C.put(key, valueRecord);
+                List<Additional_A_C_Record> records = C.get(key);
+                records.add(valueRecord);
+                C.put(key, records);
             }
         }
         return C;
     }
 
-    static void specialCRecords(Map<String,Additional_A_C_Record> C, String[] curEl) {
+    static void specialCRecords(Map<String,List<Additional_A_C_Record>> C, String[] curEl) {
         Additional_A_C_Record valueZusatz002 = new Additional_A_C_Record(curEl[0], curEl[1], curEl[2], curEl[3], curEl[4], curEl[5], curEl[6], curEl[7],
                 curEl[8], curEl[9], curEl[10], curEl[11], curEl[12], curEl[13], curEl[14], curEl[15], curEl[16], curEl[17], curEl[18], curEl[19], curEl[20], curEl[21],
                 curEl[22], curEl[23], curEl[24], curEl[25], curEl[26], curEl[27], curEl[28]);
@@ -74,87 +88,52 @@ public class Task4A {
         valueZusatz002.setC19(decimalToString(createNumValue(curEl[20]).divide(two)));
         valueZusatz003.setC19(decimalToString(createNumValue(curEl[20]).divide(two)));
 
+        //TODO GEMKD1000009068-GEMKD2329514-1002453340 ???
         String newC2B_Zusatz002 = "GEMKD" + curEl[30] + "-" + curEl[3];
         String newC2B_Zusatz003 = "GEMKD" + curEl[31] + "-" + curEl[3];
 
         valueZusatz002.setC2B(newC2B_Zusatz002 + "-" + curEl[0]);
         valueZusatz003.setC2B(newC2B_Zusatz003 + "-" + curEl[0]);
 
-        C.put(valueZusatz002.getC2A() + "+" + valueZusatz002.getC2B(), valueZusatz002);
-        C.put(valueZusatz003.getC2A() + "+" + valueZusatz003.getC2B(), valueZusatz003);
+        List<Additional_A_C_Record> records = C.get(valueZusatz002.getC2A());
+        records.add(valueZusatz002);
+        C.put(valueZusatz002.getC2A(), records);
+        records = C.get(valueZusatz003.getC2A());
+        records.add(valueZusatz003);
+        C.put(valueZusatz003.getC2A(), records);
     }
 
-    public static Map<String, Additional_CRecord> sortDataForAddingNewCRecord (Map<String, Additional_CRecord> additional_cRecord , Map<String, C_ExtraData> C_ExtraData ) {
-        for(Iterator<Map.Entry<String, Additional_CRecord>> it = additional_cRecord.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<String, Additional_CRecord> entry_c = it.next();
-            String C2B = entry_c.getValue().getC2B();
-            if(C2B.split("-").length > 0) {
-                C2B = C2B.split("-")[0];
-            }
-            //Todo correct?
-            if(C2B.split("\\+").length > 0) {
-                C2B = C2B.split("\\+")[1];
-            }
-            if(C_ExtraData.get(C2B) == null) {
-                additional_cRecord_Withought_C_Extra_Data.add(StringUtils.join(entry_c.getValue().toArray(), "*"));
-                it.remove();
-            }
-        }
-
-        return additional_cRecord;
-    }
-
-
-    public static List<Additional_A_C_Record> getListAdditional_A_C_Record(Map<String, Additional_A_C_Record> additional_cRecord, String B2) {
-        List<Additional_A_C_Record> additional_a_c_records = new ArrayList<>();
-        for(Iterator<Map.Entry<String, Additional_A_C_Record>> it = additional_cRecord.entrySet().iterator(); it.hasNext(); ) {
-            Map.Entry<String, Additional_A_C_Record> entry_c = it.next();
-            String currC2A = entry_c.getValue().getC2A();
-            if(currC2A.split("-").length == 2) {
-                currC2A = currC2A.split("-")[0];
-            }
-            if(B2.split("-").length == 2) {
-                B2 = B2.split("-")[0];
-            }
-            if(currC2A.equals(B2)) {
-                additional_a_c_records.add(entry_c.getValue());
-            }
-        }
-        return additional_a_c_records;
-    }
-
-    public static Map<String, Additional_A_C_Record> sortDataForAddingNewCRecord (Map<String, Additional_A_C_Record> additional_cRecord , Map<String, C_ExtraData> C_ExtraData_1,
+    public static void sortDataForAddingNewCRecord (Map<String, List<Additional_A_C_Record>> additional_cRecord , Map<String, C_ExtraData> C_ExtraData_1,
                                                                                   Map<String, C_ExtraData> C_ExtraData_2,
                                                                                   Map<String,CVSClient> fullFile) {
         for(Iterator<Map.Entry<String, CVSClient>> iterator = fullFile.entrySet().iterator(); iterator.hasNext(); ) {
             Map.Entry<String, CVSClient> element = iterator.next();
             String[] B = element.getValue().getClientB();
-            List<String[]> C = element.getValue().getClientsC();
+            //List<String[]> C = element.getValue().getClientsC();
             String B2 = B[1];
-            List<Additional_A_C_Record> additional_a_c_records = getListAdditional_A_C_Record(additional_cRecord, B2);
+            //optimisation to avoid nested loop
+            List<Additional_A_C_Record> additional_a_c_records = additional_cRecord.get(B2);
+
             if (additional_a_c_records.size() > 0) {
                 for (Additional_A_C_Record additional_a_c_record : additional_a_c_records) {
                     String A2 = additional_a_c_record.getA2();
                     String C2A = additional_a_c_record.getC2A();
-                    String C2B = additional_a_c_record.getC2B();
-                    if(C2B.split("-").length > 0) {
-                        C2B = C2B.split("-")[0];
-                    }
-                    if(C_ExtraData_1.get(C2B) != null && C_ExtraData_1.get(C2B).getA2().compareTo(createNumValue(A2)) == 0){
-                        addValue(C_ExtraData_1.get(C2B), C2A , additional_a_c_record, B);
-                    } else if (C_ExtraData_2.get(C2B) != null && C_ExtraData_2.get(C2B).getA2().compareTo(createNumValue(A2)) == 0) {
-                        addValue(C_ExtraData_2.get(C2B), C2A , additional_a_c_record, B);
+                    String C2B = getFirstPart(additional_a_c_record.getC2B());
 
+                    if(C_ExtraData_1.get(C2B) != null && C_ExtraData_1.get(C2B).getA2().compareTo(createNumValue(A2)) == 0){
+                        fillAndAddAdditionalCRecord(C_ExtraData_1.get(C2B), C2A , additional_a_c_record, B);
+                    } else if (C_ExtraData_2.get(C2B) != null && C_ExtraData_2.get(C2B).getA2().compareTo(createNumValue(A2)) == 0) {
+                        fillAndAddAdditionalCRecord(C_ExtraData_2.get(C2B), C2A , additional_a_c_record, B);
+                    } else {
+                        additional_cRecord_Withought_C_Extra_Data.add(additional_a_c_record.toString());
                     }
                 }
             }
 
         }
-
-        return additional_cRecord;
     }
 
-    public static void addValue(C_ExtraData c_extraData, String C2A, Additional_A_C_Record entry_c, String[] clientB) {
+    public static void fillAndAddAdditionalCRecord(C_ExtraData c_extraData, String C2A, Additional_A_C_Record entry_c, String[] clientB) {
         String[] entry_cArr = entry_c.toArray();
         entry_cArr[21] = entry_cArr[21].substring(0,14) +
             c_extraData.getC21_Pos15() +
@@ -186,26 +165,19 @@ public class Task4A {
 
 
     public static Map<String,CVSClient> generateVersion5_Task4A(Map<String, CVSClient> fullFile, Map<String, List<String[]>> full_C_Record) {
-        List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile_B_Records = new ArrayList<>();
-        protocol.setKeyFile1ToFile2ToFile3_B_Record(keyFile1ToFile2ToFile_B_Records);
-        List<KeyFile1ToFile2ToFile3> keyFile1ToFile2ToFile_C_Records = new ArrayList<>();
-        protocol.setKeyFile1ToFile2ToFile3_C_Record(keyFile1ToFile2ToFile_C_Records);
-
         Map<String,CVSClient>  fullFileVersion5_1 = new LinkedHashMap<>();
         for (Map.Entry<String, CVSClient> entry : fullFile.entrySet()) {
             String[] B = entry.getValue().getClientB();
             String key = entry.getKey();
             CVSClient value = entry.getValue();
 
-            String com = B[1];
-            if(B[1].split("-").length > 0) {
-                com = B[1].split("-")[0];
-            }
+            String  bKey = getFirstPart(B[1]);
 
             //TODO дублируются хначения??
-            if(full_C_Record.get(com) != null) {
-                value.getClientsC().addAll(full_C_Record.get(com));
-                for (String [] el : full_C_Record.get(com)) {
+            if(full_C_Record.get(bKey) != null) {
+                B_List.add(key);
+                value.getClientsC().addAll(full_C_Record.get(bKey));
+                for (String [] el : full_C_Record.get(bKey)) {
                     mergingCRecords.add(StringUtils.join(el,"*"));
                 }
             }
@@ -266,20 +238,14 @@ public class Task4A {
                 cvsClientVersion.setD(tempD);
             }
         }
-
-
-
     }
 
-    private static String getСprimaryKey(String candidate) {
-        if((candidate.startsWith("LST") || candidate.startsWith("GEMKD")) && candidate.contains("-")) {
-            String key = candidate.split("-")[1];
-            return key;
+    private static  String getFirstPart(String key) {
+        if(key.contains("-")) {
+            String fixedKey = key.split("-")[0];
+            return fixedKey;
         }
-        if(candidate.contains("-")) {
-            String key = candidate.split("-")[0];
-            return key;
-        }
-        return candidate;
+        return key;
     }
+
 }

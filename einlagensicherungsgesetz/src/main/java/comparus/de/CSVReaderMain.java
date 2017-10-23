@@ -248,7 +248,7 @@ public class CSVReaderMain {
                     task4ResultFileName, fileInfo1, fileInfo2, errorMessage);
         } else if(taskNumber.equalsIgnoreCase("Task4A") && inputFileAfterMerge != null && Additional_CRecord_Data_Task1a != null && C_Additional_5 != null && C_Additional_5_2 != null) {
             Map<String,CVSClient> fullFile = null;
-            Map<String, Additional_A_C_Record> additional_cRecord = null;
+            Map<String, List<Additional_A_C_Record>> additional_cRecord = null;
             Map<String, C_ExtraData> C_ExtraData_1 = null;
             Map<String, C_ExtraData> C_ExtraData_2 = null;
             Map<String,CVSClient> fullFileVersion5_1 = null;
@@ -265,7 +265,7 @@ public class CSVReaderMain {
                 fileInfo1 = readCSVFileByStringRetCount(readFile1, inputFileAfterMerge);
 
                 sortDataForAddingNewCRecord(additional_cRecord, C_ExtraData_1, C_ExtraData_2, fullFile);
-                generateVersion5_Task4A(fullFile, full_C_Record);
+
                 fullFileVersion5_1 = Task4A.generateVersion5_Task4A(fullFile, full_C_Record);
                 Task4A.reCalculateDVersion5_1(fullFileVersion5_1, A);
                 String[] EVersion5_1 = reCalculateEVersion5_1(fullFileVersion5_1);
@@ -273,6 +273,7 @@ public class CSVReaderMain {
                 writeCSV(allDataVersion5_1, task4AResultFileName);
 
             } catch (Exception ex) {
+                //TODO error message is never protocoled
                 errorMessage = ex.getStackTrace().toString();
                 System.out.println(" exception " + ex.getStackTrace());
                 throw ex;

@@ -3,6 +3,7 @@ package comparus.de.protocols;
 import comparus.de.domen.Additional_CRecord;
 import comparus.de.domen.CVSClient;
 import comparus.de.domen.FileInfo;
+import comparus.de.domen.HW;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.*;
@@ -13,6 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static comparus.de.CSVReaderMain.protocol;
+import static comparus.de.tasks.Task3.D_HW;
 
 /**
  * Created by ekaterina on 9/26/17.
@@ -40,6 +42,7 @@ public class ProtocolForTask4A {
                 writer.write("Input file 1: " + inputFileForMerge1 + "\r\n");
                 writer.write("Input file 2: " + Additional_CRecord_Data_Task1a + "\r\n");
                 writer.write("Input file 3: " + C_Additional_5 + "\r\n");
+                writer.write("Input file 4: " + C_Additional_5_2 + "\r\n");
 
                 writer.write("Filename result file: " + task1ResultFileName + "\r\n");
 
@@ -74,7 +77,7 @@ public class ProtocolForTask4A {
                     writer.write(d + "\r\n");
                 }
                 if(!additional_cRecord_Withought_C_Extra_Data.isEmpty()) {
-                    writer.write("\r\nC-Record could not be merge (extra data absent for additional record):" + "\r\n");
+                    writer.write("\r\nC-Record could not be merged (extra data absent for additional record):" + "\r\n");
                     for (String d : additional_cRecord_Withought_C_Extra_Data) {
                         writer.write(d + "\r\n");
                     }
@@ -83,8 +86,13 @@ public class ProtocolForTask4A {
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nRECALCULATING\r\n\r\n");
                 writer.write("List of recalculated D-Records in result file:\r\n");
-                for (String d : protocol.getRecalculatedDRecords()) {
-                    writer.write(d + "\r\n");
+                for(Map.Entry<String, HW> hw : D_HW.entrySet()) {
+                    writer.write("D : " + hw.getKey() + "\r\n");
+                    writer.write("HW1 : " + hw.getValue().getHW1() + "\r\n");
+                    writer.write("HW2 : " + hw.getValue().getHW2() + "\r\n");
+                    writer.write("HW3 : " + hw.getValue().getHW3() + "\r\n");
+                    writer.write("HW4 : " + hw.getValue().getHW4() + "\r\n");
+                    writer.write("HW5 : " + hw.getValue().getHW5() + "\r\n");
                 }
             }
         } catch (IOException ex) {
