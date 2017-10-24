@@ -305,7 +305,7 @@ public class CSVReaderMain {
             //Protocol
             calculateDAmount(fullFile);
             writeProtocolToFileTask2("Protocol Task5.txt", taskNumber, inputFileForTask5,
-                    task2ResultFileName, errorMessage);
+                    task5ResultFileName, errorMessage);
 
         } else {
 
