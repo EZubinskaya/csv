@@ -64,10 +64,10 @@ public class ProtocolForTask4A {
                 writer.write("C : " + C_Additional_5Count_1 + "\r\n");
                 writer.write("Input file name: " + C_Additional_5_2 + "\r\n");
                 writer.write("C : " + C_Additional_5Count_2 + "\r\n");
-                writer.write("Resultfile\r\n");
-                writer.write("B : " + protocol.getResultAmountB() + "\r\n");
-                writer.write("C : " + protocol.getResultAmountC() + "\r\n");
-                writer.write("D : " + protocol.getResultAmountD() + "\r\n");
+//                writer.write("Resultfile\r\n");
+//                writer.write("B : " + protocol.getResultAmountB() + "\r\n");
+//                writer.write("C : " + protocol.getResultAmountC() + "\r\n");
+//                writer.write("D : " + protocol.getResultAmountD() + "\r\n");
 
                 writer.write("\r\n=============================================================================\r\n");
                 writer.write("\r\nMERGING\r\n\r\n");
@@ -88,11 +88,6 @@ public class ProtocolForTask4A {
                 writer.write("List of recalculated D-Records in result file:\r\n");
                 for(Map.Entry<String, HW> hw : D_HW.entrySet()) {
                     writer.write("D : " + hw.getKey() + "\r\n");
-                    writer.write("HW1 : " + hw.getValue().getHW1() + "\r\n");
-                    writer.write("HW2 : " + hw.getValue().getHW2() + "\r\n");
-                    writer.write("HW3 : " + hw.getValue().getHW3() + "\r\n");
-                    writer.write("HW4 : " + hw.getValue().getHW4() + "\r\n");
-                    writer.write("HW5 : " + hw.getValue().getHW5() + "\r\n");
                 }
             }
         } catch (IOException ex) {
@@ -103,4 +98,5 @@ public class ProtocolForTask4A {
             } catch (Exception ex) {/*ignore*/}
         }
     }
+
 }

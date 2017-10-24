@@ -145,8 +145,6 @@ public class Task4A {
         entry_cArr[20] = C20_Version5_1(entry_cArr[20], entry_cArr[21], clientB[13], clientB[15]);
         List<String> curClientCList = new LinkedList<>();
         curClientCList.addAll(Arrays.asList(entry_cArr));
-        curClientCList.add("");
-        curClientCList.add("");
         curClientCList.add(c_extraData.getC24());
         curClientCList.add(c_extraData.getC25());
         curClientCList.add(c_extraData.getC26());

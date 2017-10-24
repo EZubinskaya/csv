@@ -40,16 +40,16 @@ public class CSVReaderMain {
 
         String inputFileForMerge1 = System.getProperty("file1");
         String inputFileForMerge2 = System.getProperty("file2");
-//        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
+        String inputFileAfterMerge = System.getProperty("EinreicherdateiGesamt41");
         String A_Additional_5 = System.getProperty("A_Additional5");
         String inputFileForTask3 = System.getProperty("Einreicherdatei41");
         String inputFileForTask5 = System.getProperty("EinreicherdateiGesamt50");
 
-//        String Additional_CRecord_Data_Task1a = System.getProperty("Additional_CRecord_Data_Task1a");
+        String Additional_CRecord_Data_Task1a = System.getProperty("Additional_CRecord_Data_Task1a");
         String B_Additional_5 = System.getProperty("B_Additional5");
-//        String C_Additional_5 = System.getProperty("C_Additional5");
-//        String C_Additional_5_2 = System.getProperty("C_Additional5_2");
-//        String taskNumber = System.getProperty("taskNumber");
+        String C_Additional_5 = System.getProperty("C_Additional5");
+        String C_Additional_5_2 = System.getProperty("C_Additional5_2");
+        String taskNumber = System.getProperty("taskNumber");
 
         String task1ResultFileName = "EinreicherdateiB11_Gesamt_4.1.csv";
         String task1aResultFileName = "EinreicherdateiB11_Gesamt_4.1_add_additional_C.csv";
@@ -74,14 +74,12 @@ public class CSVReaderMain {
 //        String C_Additional_5 = "src/main/resources/ED_Test_GEMKD/C_Zusatz5.0_883_1210.csv";
 //        String taskNumber = "Task4";
 //        String inputFileForTask5 = "src/main/resources/ED_Test_GEMKD/res.csv";
-//
-        String taskNumber = "Task4A";
-        String inputFileAfterMerge =  "src/main/resources/task4ANew/task4.csv";
-//        String Additional_CRecord_Data_Task1a = "src/main/resources/task4A/Additional_CRecord_Data_Task1a_new.csv";
-//        String C_Additional_5 = "src/main/resources/task4A/C_Additional_5.0.csv";
-        String Additional_CRecord_Data_Task1a = "src/main/resources/task4ANew/Additional_CRecord_Data_Task1a_new.csv";
-        String C_Additional_5 = "src/main/resources/task4ANew/C_Zusatz5.0_121_1210.csv";
-        String C_Additional_5_2 = "src/main/resources/task4ANew/C_Zusatz5.0_883_1210.csv";
+
+//        String taskNumber = "Task4A";
+//        String inputFileAfterMerge =  "src/main/resources/task4ANew/task4.csv";
+//        String Additional_CRecord_Data_Task1a = "src/main/resources/task4ANew/Additional_CRecord_Data_Task1a_new.csv";
+//        String C_Additional_5 = "src/main/resources/task4ANew/C_Zusatz5.0_121_1210.csv";
+//        String C_Additional_5_2 = "src/main/resources/task4ANew/C_Zusatz5.0_883_1210.csv";
 
         if(taskNumber.equalsIgnoreCase("Task1") && inputFileForMerge1!= null & inputFileForMerge2 != null) {
             Map<B, CVSClient> readFile1 = null;
@@ -279,11 +277,16 @@ public class CSVReaderMain {
                 throw ex;
             }
 
+            int additional_cRecordSize = 0;
+            for(Map.Entry<String, List<Additional_A_C_Record>> el : additional_cRecord.entrySet()) {
+                additional_cRecordSize += el.getValue().size();
+            }
+
             //Protocol
             writeProtocolToFileTask4A("Protocol Task4a.txt", taskNumber, inputFileAfterMerge, Additional_CRecord_Data_Task1a, C_Additional_5, C_Additional_5_2,
                     task4AResultFileName, fileInfo1,
                     additional_cRecord_Withought_C_Extra_Data, mergingCRecords,
-                    errorMessage, additional_cRecord.size(), C_ExtraData_1.size(), C_ExtraData_2.size());
+                    errorMessage, additional_cRecordSize, C_ExtraData_1.size(), C_ExtraData_2.size());
 
         } else if(taskNumber.equalsIgnoreCase("Task5") && inputFileForTask5 != null) {
             String errorMessage = null;
